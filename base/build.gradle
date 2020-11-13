@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply from: '../libs/util_libs.gradle'
+apply from: '../libs/base_libs.gradle'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: '../libs', include: ['*.jar'])
+
+    implementation 'com.github.zouli:KotlinSLog:v1.0'
+
+    debugImplementation project(path: ':util')
+    releaseImplementation project(path: ':util')
+}

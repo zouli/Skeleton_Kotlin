@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_host" translatable="false" />
+    <integer name="connect_time_out">15</integer>
+    <integer name="connect_retry_count">3</integer>
+    <integer name="connect_retry_delay">3000</integer>
+    <string-array name="http_header" translatable="false">
+        <item>Content-Type:application/x-www-form-urlencoded; charset=UTF-8</item>
+        <item>Accept-Encoding:deflate</item>
+        <item>Connection:keep-alive</item>
+        <item>Accept:*/*</item>
+    </string-array>
+    <string name="session_save_point" translatable="false" />
+</resources>

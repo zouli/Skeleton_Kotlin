@@ -1,0 +1,26 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.riverside.skeleton.kotlin.net">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application>
+        <meta-data
+                android:name="SERVER_HOST"
+                android:value="@string/server_host" />
+        <meta-data
+                android:name="CONNECT_TIME_OUT"
+                android:value="@integer/connect_time_out" />
+        <meta-data
+                android:name="CONNECT_RETRY_COUNT"
+                android:value="@integer/connect_retry_count" />
+        <meta-data
+                android:name="CONNECT_RETRY_DELAY"
+                android:value="@integer/connect_retry_delay" />
+        <meta-data
+                android:name="HTTP_HEADER"
+                android:resource="@array/http_header" />
+        <meta-data
+                android:name="SESSION_SAVE_POINT"
+                android:value="@string/session_save_point" />
+    </application>
+</manifest>

@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: '../libs/util_libs.gradle'
+apply from: '../libs/base_libs.gradle'
+apply from: '../libs/net_libs.gradle'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.riverside.skeleton.kotlin"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir dirs: ["../libs"]
+}
+
+dependencies {
+    implementation fileTree(dir: '../libs', include: ['*.jar'])
+    implementation "org.jetbrains.anko:anko:0.10.8"
+    // Appcompat-v7 (Anko Layouts)
+    implementation "org.jetbrains.anko:anko-appcompat-v7:0.10.8"
+    implementation "org.jetbrains.anko:anko-coroutines:0.10.8"
+    // Design
+    implementation "org.jetbrains.anko:anko-design:0.10.8"
+    implementation "org.jetbrains.anko:anko-design-coroutines:0.10.8"
+
+    debugImplementation project(path: ':util')
+    releaseImplementation project(path: ':util')
+    debugImplementation project(path: ':base')
+    releaseImplementation project(path: ':base')
+    debugImplementation project(path: ':net')
+    releaseImplementation project(path: ':net')
+
+    //UI验证框架
+    implementation 'com.github.yoojia:next-inputs-android:1.7.2'
+    implementation 'com.github.zouli:KotlinNextInputs:v1.0'
+    implementation 'com.github.zouli:KotlinSLog:v1.0'
+}

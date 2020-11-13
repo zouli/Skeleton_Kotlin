@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_host" translatable="false">http://192.168.1.81:5000/</string>
+    <integer name="connect_time_out">15</integer>
+    <integer name="connect_retry_count">5</integer>
+    <integer name="connect_retry_delay">1500</integer>
+    <string-array name="http_header">
+        <item>Content-Type:application/x-www-form-urlencoded; charset=UTF-8</item>
+        <item>Accept-Encoding:deflate</item>
+        <item>Connection:keep-alive</item>
+        <item>Accept:*/*</item>
+        <item>phone_flag:1</item>
+        <item>X-TOKEN:${xToken}</item>
+    </string-array>
+    <string name="session_save_point">com.riverside.skeleton.kotlin.net.handler.LoginChecker</string>
+</resources>
