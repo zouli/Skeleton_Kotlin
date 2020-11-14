@@ -49,10 +49,12 @@ object RxBus {
     /**
      * 注册接收者
      */
-    inline fun <reified T : Any> register(noinline next: (T) -> Unit, scheduler: Scheduler? = null): Disposable =
+    inline fun <reified T : Any> register(
+        scheduler: Scheduler? = null, crossinline next: (T) -> Unit
+    ): Disposable =
         toStickyFlowable<T>().apply {
             scheduler?.let { this.observeOn(it) }
-        }.subscribe(next)
+        }.subscribe { next(it) }
 
     /**
      * 注销观察者

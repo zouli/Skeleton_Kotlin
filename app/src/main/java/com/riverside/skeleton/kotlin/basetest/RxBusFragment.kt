@@ -26,9 +26,9 @@ class RxBusFragment : SBaseFragment() {
         }.view
 
     override fun initView() {
-        bus = RxBus.register<String>(next = {
+        bus = RxBus.register<String> {
             tv_title.text = it
-        })
+        }
     }
 
     override fun onDestroyView() {
