@@ -7,8 +7,8 @@ import kotlin.reflect.KClass
  * 网络连接服务类 1.0
  * b_e  2020/11/14
  */
-fun <T : Any> retrofit(restService: KClass<T>): T =
-    RetrofitBindHelper.getInstance().doBind(restService.java)
+inline fun <reified T : Any> retrofit(): T =
+    RetrofitBindHelper.getInstance().doBind(T::class.java)
 
 fun <T> Flowable<T>.startReading(): Flowable<T> = this.compose(ObservableHelper.startReading())
 

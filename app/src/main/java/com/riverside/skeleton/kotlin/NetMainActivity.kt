@@ -18,7 +18,7 @@ class NetMainActivity : SBaseActivity() {
 
             button("login") {
                 onClick {
-                    retrofit(CommonRestService::class)
+                    retrofit<CommonRestService>()
                         .login()
                         .next { checkResult() }
                         .subscribe({}, { t -> SLog.e("onError", t) })
@@ -27,7 +27,7 @@ class NetMainActivity : SBaseActivity() {
 
             button("logout") {
                 onClick {
-                    retrofit(CommonRestService::class)
+                    retrofit<CommonRestService>()
                         .logout()
                         .next { checkResult() }
                         .subscribe { }
@@ -36,7 +36,7 @@ class NetMainActivity : SBaseActivity() {
 
             button("session_timeout") {
                 onClick {
-                    retrofit(CommonRestService::class)
+                    retrofit<CommonRestService>()
                         .sessionTimeout()
                         .next {
                             checkResult().checkSessionTimeout()
@@ -47,8 +47,8 @@ class NetMainActivity : SBaseActivity() {
 
             button("get_list") {
                 onClick {
-                    retrofit(CommonRestService::class)
-                        .getList(HashMap())
+                    retrofit<CommonRestService>()
+                        .getList(mapOf())
                         .next { checkResult().iterate() }
                         .subscribe { SLog.w(it) }
                 }
@@ -56,7 +56,7 @@ class NetMainActivity : SBaseActivity() {
 
             button("retry") {
                 onClick {
-                    retrofit(CommonRestService::class)
+                    retrofit<CommonRestService>()
                         .retry()
                         .next { checkResult() }
                         .subscribe { }
