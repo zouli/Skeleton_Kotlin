@@ -2,10 +2,8 @@ package com.riverside.skeleton.kotlin
 
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.net.rest.CommonRestService
-import com.riverside.skeleton.kotlin.net.rest.ObservableHelper2
-import com.riverside.skeleton.kotlin.net.rest.utils.ObservableHelper
-import com.riverside.skeleton.kotlin.net.rest.utils.RestSubscriber
-import com.riverside.skeleton.kotlin.net.rest.utils.RetrofitBindHelper
+import com.riverside.skeleton.kotlin.net.rest.checkResult
+import com.riverside.skeleton.kotlin.net.rest.utils.*
 import com.riverside.skeleton.kotlin.slog.SLog
 import org.jetbrains.anko.button
 import org.jetbrains.anko.matchParent
@@ -20,72 +18,48 @@ class NetMainActivity : SBaseActivity() {
 
             button("login") {
                 onClick {
-                    RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java)
+                    retrofit(CommonRestService::class)
                         .login()
-                        .compose(ObservableHelper.startReading())
-                        .compose(ObservableHelper2.checkResult())
-                        .compose(ObservableHelper.toMainThread())
-                        .subscribe(object : RestSubscriber<String>() {
-                            override fun onError(t: Throwable) {
-                                SLog.e("onError", t)
-                            }
-                        })
+                        .next { checkResult() }
+                        .subscribe({}, { t -> SLog.e("onError", t) })
                 }
             }.lparams(matchParent, wrapContent)
 
             button("logout") {
                 onClick {
-                    RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java)
+                    retrofit(CommonRestService::class)
                         .logout()
-                        .compose(ObservableHelper.startReading())
-                        .compose(ObservableHelper2.checkResult())
-                        .compose(ObservableHelper.toMainThread())
-                        .subscribe(object : RestSubscriber<String>() {
-
-                        })
+                        .next { checkResult() }
+                        .subscribe { }
                 }
             }.lparams(matchParent, wrapContent)
 
             button("session_timeout") {
                 onClick {
-                    RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java)
+                    retrofit(CommonRestService::class)
                         .sessionTimeout()
-                        .compose(ObservableHelper.startReading())
-                        .compose(ObservableHelper2.checkResult())
-                        .compose(ObservableHelper.checkSessionTimeout())
-                        .compose(ObservableHelper.toMainThread())
-                        .subscribe(object : RestSubscriber<String>() {
-
-                        })
+                        .next {
+                            checkResult().checkSessionTimeout()
+                        }
+                        .subscribe { }
                 }
             }.lparams(matchParent, wrapContent)
 
             button("get_list") {
                 onClick {
-                    RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java)
+                    retrofit(CommonRestService::class)
                         .getList(HashMap())
-                        .compose(ObservableHelper.startReading())
-                        .compose(ObservableHelper2.checkResult())
-                        .compose(ObservableHelper.forEach())
-                        .compose(ObservableHelper.toMainThread())
-                        .subscribe(object : RestSubscriber<String>() {
-                            override fun onNext(t: String) {
-                                SLog.w(t)
-                            }
-                        })
+                        .next { checkResult().iterate() }
+                        .subscribe { SLog.w(it) }
                 }
             }.lparams(matchParent, wrapContent)
 
             button("retry") {
                 onClick {
-                    RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java)
+                    retrofit(CommonRestService::class)
                         .retry()
-                        .compose(ObservableHelper.startReading())
-                        .compose(ObservableHelper2.checkResult())
-                        .compose(ObservableHelper.toMainThread())
-                        .subscribe(object : RestSubscriber<String>() {
-
-                        })
+                        .next { checkResult() }
+                        .subscribe { }
                 }
             }.lparams(matchParent, wrapContent)
         }
