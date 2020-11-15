@@ -13,6 +13,9 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
+import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
+import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.widget.R
 import com.riverside.skeleton.kotlin.widget.captcha.CaptchaView.InputChangedListener
 import kotlinx.android.synthetic.main.view_box_captcha.view.*
@@ -31,53 +34,53 @@ class BoxCaptchaView(context: Context, attrs: AttributeSet?) :
     private lateinit var tv_shows: List<TextView>
 
     //输入框个数
-    var charNumber = 0
-        set(value) {
-            field = value
-            initTextViews()
-        }
+    @Attr(AttrType.INTEGER)
+    private val charNumber: Int by AttributeSetInfo(
+        attrs, R.styleable.BoxCaptchaView,
+        R.styleable.BoxCaptchaView_bcv_charNumber, 6
+    )
+
+    fun setCharNumber(value: Int) {
+        initTextViews(value, divideWidth, itemStyle)
+    }
 
     //输入框间隔
-    var divideWidth = 0
-        set(value) {
-            field = value
-            initTextViews()
-        }
+    @Attr(AttrType.DIMENSION)
+    private val divideWidth: Int by AttributeSetInfo(
+        attrs, R.styleable.BoxCaptchaView,
+        R.styleable.BoxCaptchaView_bcv_divideWidth, 0
+    )
+
+    fun setDivideWidth(value: Int) {
+        initTextViews(charNumber, value, itemStyle)
+    }
 
     //显示框样式
-    var itemStyle = R.style.BoxCaptcha_Item
-        set(value) {
-            field = value
-            initTextViews()
-        }
+    @Attr(AttrType.REFERENCE)
+    private val itemStyle: Int by AttributeSetInfo(
+        attrs, R.styleable.BoxCaptchaView,
+        R.styleable.BoxCaptchaView_bcv_itemStyle, R.style.BoxCaptcha_Item
+    )
+
+    fun setItemStyle(value: Int) {
+        initTextViews(charNumber, divideWidth, value)
+    }
 
     //回调函数
     private lateinit var inputChangedListener: InputChangedListener
 
     init {
-        attrs?.let { getAttrs(it) }
         initView()
     }
 
     fun initView() {
         LayoutInflater.from(context).inflate(R.layout.view_box_captcha, this@BoxCaptchaView)
 
-        initTextViews()
+        initTextViews(charNumber, divideWidth, itemStyle)
         setListener()
     }
 
-    private fun getAttrs(attrs: AttributeSet) {
-        with(context.obtainStyledAttributes(attrs, R.styleable.BoxCaptchaView)) {
-            charNumber = getInt(R.styleable.BoxCaptchaView_bcv_charNumber, 6)
-            divideWidth = getDimensionPixelSize(R.styleable.BoxCaptchaView_bcv_divideWidth, 0)
-            itemStyle =
-                getResourceId(R.styleable.BoxCaptchaView_bcv_itemStyle, R.style.BoxCaptcha_Item)
-
-            recycle()
-        }
-    }
-
-    private fun initTextViews() {
+    private fun initTextViews(charNumber: Int, divideWidth: Int, itemStyle: Int) {
         et_input?.let {
             it.isCursorVisible = false
             it.filters = arrayOf(InputFilter.LengthFilter(charNumber))

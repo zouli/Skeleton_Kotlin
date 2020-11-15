@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import com.riverside.skeleton.kotlin.base.utils.KeyboardHelper
+import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
+import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
+import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.widget.R
 import com.riverside.skeleton.kotlin.widget.captcha.CaptchaView.ResultListener
 import kotlinx.android.synthetic.main.view_input_captcha.view.*
@@ -28,28 +31,39 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     private lateinit var onResultListener: ResultListener
 
     //获取验证码间隔时间（秒）
-    var sleepSecond = 0
-        set(value) {
-            count = value
-            field = value
-        }
+    @Attr(AttrType.INTEGER)
+    private val sleepSecond: Int by AttributeSetInfo(
+        attrs, R.styleable.InputCaptchaView,
+        R.styleable.InputCaptchaView_icv_sleepSecond, 60
+    )
+
+    fun setSleepSecond(value: Int) {
+        count = value
+    }
 
     //验证码输入框长度
-    var maxLength = 0
-        set(value) {
-            if (value > 0) et_vc?.let { it.filters = arrayOf(InputFilter.LengthFilter(maxLength)) }
-            field = value
-        }
+    @Attr(AttrType.INTEGER)
+    private val maxLength: Int by AttributeSetInfo(
+        attrs, R.styleable.InputCaptchaView,
+        R.styleable.InputCaptchaView_icv_maxLength, 0
+    )
+
+    fun setMaxLength(value: Int) {
+        if (value > 0) et_vc?.let { it.filters = arrayOf(InputFilter.LengthFilter(maxLength)) }
+    }
 
     //设置Hint
-    var textHint = ""
-        set(value) {
-            et_vc?.let { it.hint = value }
-            field = value
-        }
+    @Attr(AttrType.STRING)
+    private val textHint: String by AttributeSetInfo(
+        attrs, R.styleable.InputCaptchaView,
+        R.styleable.InputCaptchaView_icv_textHint, ""
+    )
+
+    fun setTextHint(value: String) {
+        et_vc?.let { it.hint = value }
+    }
 
     init {
-        attrs?.let { getAttrs(it) }
         initView()
     }
 
@@ -59,17 +73,9 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
             et_vc.filters = arrayOf(InputFilter.LengthFilter(maxLength))
         et_vc.hint = textHint
 
+        count = sleepSecond
+
         setListener()
-    }
-
-    private fun getAttrs(attrs: AttributeSet) {
-        with(context.obtainStyledAttributes(attrs, R.styleable.InputCaptchaView)) {
-            sleepSecond = getInt(R.styleable.InputCaptchaView_icv_sleepSecond, 60)
-            maxLength = getInt(R.styleable.InputCaptchaView_icv_maxLength, 0)
-            getString(R.styleable.InputCaptchaView_icv_textHint)?.let { textHint = it }
-
-            recycle()
-        }
     }
 
     private fun setListener() {
