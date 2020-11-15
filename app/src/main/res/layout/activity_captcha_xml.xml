@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <EditText
+            android:id="@+id/et_phone"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
+            android:id="@+id/icv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icv_sleepSecond="30"
+            app:icv_textHint="请输入手机验证码" />
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+
+            android:text="Box" />
+
+    <com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
+            android:id="@+id/bcv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:bcv_charNumber="6"
+            app:bcv_divideWidth="10dp"/>
+</LinearLayout>

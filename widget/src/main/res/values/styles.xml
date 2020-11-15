@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="InputCaptcha" />
+
+    <style name="InputCaptcha.Code">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:inputType">number</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColorHint">#999999</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="InputCaptcha.Button">
+        <item name="android:text">@string/button_view_send_verification_code</item>
+        <item name="android:background">@drawable/button_send_verification_code_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BoxCaptcha" />
+
+    <style name="BoxCaptcha.Item">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#999999</item>
+        <item name="android:background">@drawable/box_captcha_item_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:width">40dp</item>
+        <item name="android:height">40dp</item>
+    </style>
+</resources>

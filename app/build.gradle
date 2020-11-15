@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../libs/util_libs.gradle'
 apply from: '../libs/base_libs.gradle'
 apply from: '../libs/net_libs.gradle'
+apply from: '../libs/widget_libs.gradle'
 
 android {
     compileSdkVersion 28
@@ -44,6 +45,8 @@ dependencies {
     releaseImplementation project(path: ':base')
     debugImplementation project(path: ':net')
     releaseImplementation project(path: ':net')
+    debugImplementation project(path: ':widget')
+    releaseImplementation project(path: ':widget')
 
     //UI验证框架
     implementation 'com.github.yoojia:next-inputs-android:1.7.2'

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BoxCaptchaView">
+        <attr name="bcv_charNumber" format="integer" />
+        <attr name="bcv_divideWidth" format="dimension" />
+        <attr name="bcv_itemStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="InputCaptchaView">
+        <attr name="icv_phoneNumberId" format="reference" />
+        <attr name="icv_textHint" format="reference|string" />
+        <attr name="icv_sleepSecond" format="integer" />
+        <attr name="icv_maxLength" format="integer" />
+    </declare-styleable>
+</resources>

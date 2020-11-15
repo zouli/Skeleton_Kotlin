@@ -1,0 +1,16 @@
+dependencies {
+    //picasso图片加载框架
+    implementation "com.squareup.picasso:picasso:2.71828"
+
+    //图片浏览控件
+    //https://github.com/chrisbanes/PhotoView
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+
+    //时间选择控件
+    //https://github.com/vikramkakkar/SublimePicker
+    implementation 'com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.2'
+
+    //上拉下滑刷新控件
+    //https://github.com/omadahealth/SwipyRefreshLayout
+    implementation 'com.github.omadahealth:swipy:1.2.3@aar'
+}

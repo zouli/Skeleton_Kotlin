@@ -29,7 +29,19 @@ class MainActivity : SBaseActivity() {
                 onClick {
                     startActivity<NetMainActivity>()
                 }
-            }
+            }.lparams(matchParent, wrapContent)
+
+            button("widget anko") {
+                onClick {
+                    startActivity<WidgetAnkoMainActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("widget xml") {
+                onClick {
+                    startActivity<WidgetXmlMainActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
 
         SLog.w(AppVersionInfo.info(this@MainActivity).getString("versionName"))

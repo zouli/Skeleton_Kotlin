@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: '../libs/util_libs.gradle'
+apply from: '../libs/base_libs.gradle'
+apply from: '../libs/widget_libs.gradle'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: '../libs', include: ['*.jar'])
+
+    debugImplementation project(path: ':util')
+    releaseImplementation project(path: ':util')
+    debugImplementation project(path: ':base')
+    releaseImplementation project(path: ':base')
+}
