@@ -17,6 +17,7 @@ class CaptchaActivity : SBaseActivity() {
             icvValidate().apply { }
         }
 
+        bcv.setCharNumber(5)
         bcv.setOnInputChangedListener {
             it.toast(this@CaptchaActivity)
         }

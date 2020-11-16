@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="CheckableLinearLayout">
+        <attr name="cll_checkedChild" format="boolean" />
+    </declare-styleable>
+
     <declare-styleable name="BoxCaptchaView">
         <attr name="bcv_charNumber" format="integer" />
         <attr name="bcv_divideWidth" format="dimension" />
