@@ -17,30 +17,33 @@ class AttributeSetInfo<T>(
     private val attrId: Int, private val default: T
 ) : ReadOnlyProperty<Any?, T> {
     private val context = ContextHolder.applicationContext
+    private val attrMap = mutableMapOf<Int, T>()
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {
         val attr = property.findAnnotation<Attr>()
-        return with(context.obtainStyledAttributes(attrs, styleableId)) {
-            if (attr != null) {
-                @Suppress("IMPLICIT_CAST_TO_ANY")
-                val res = when (attr.type) {
-                    AttrType.INTEGER -> getInt(attrId, default as Int)
-                    AttrType.STRING -> getString(attrId)
-                    AttrType.DIMENSION -> getDimensionPixelSize(attrId, default as Int)
-                    AttrType.REFERENCE -> getResourceId(attrId, default as Int)
-                    AttrType.COLOR -> getColor(attrId, default as Int)
-                    AttrType.BOOLEAN -> getBoolean(attrId, default as Boolean)
-                    AttrType.FLOAT -> getFloat(attrId, default as Float)
-                    AttrType.FRACTION -> getFraction(
-                        attrId, attr.fraction_base, attr.fraction_pbase, default as Float
-                    )
-                    AttrType.ENUM -> getInt(attrId, default as Int)
-                    AttrType.FLAG -> getInt(attrId, default as Int)
-                }
-                recycle()
+        return attrMap.getOrPut(attrId) {
+            with(context.obtainStyledAttributes(attrs, styleableId, 0, 0)) {
+                if (attr != null) {
+                    @Suppress("IMPLICIT_CAST_TO_ANY")
+                    val res = when (attr.type) {
+                        AttrType.INTEGER -> getInt(attrId, default as Int)
+                        AttrType.STRING -> getString(attrId)
+                        AttrType.DIMENSION -> getDimensionPixelSize(attrId, default as Int)
+                        AttrType.REFERENCE -> getResourceId(attrId, default as Int)
+                        AttrType.COLOR -> getColor(attrId, default as Int)
+                        AttrType.BOOLEAN -> getBoolean(attrId, default as Boolean)
+                        AttrType.FLOAT -> getFloat(attrId, default as Float)
+                        AttrType.FRACTION -> getFraction(
+                            attrId, attr.fraction_base, attr.fraction_pbase, default as Float
+                        )
+                        AttrType.ENUM -> getInt(attrId, default as Int)
+                        AttrType.FLAG -> getInt(attrId, default as Int)
+                    }
+                    recycle()
 
-                res as T
-            } else default
+                    res as T
+                } else default
+            }
         }
     }
 }
