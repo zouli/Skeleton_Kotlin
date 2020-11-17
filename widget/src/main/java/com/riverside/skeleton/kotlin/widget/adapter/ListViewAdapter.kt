@@ -13,16 +13,18 @@ import com.riverside.skeleton.kotlin.widget.adapter.viewholders.ListViewHolder
 class ListViewAdapter<D>() : BaseAdapter() {
     var mItemLayout: Int? = null
 
+    //数据集
     private var mDataSet = ArrayList<D>()
 
     private var _onGetView: ((position: Int, item: D) -> View)? = null
 
     private var _onBindData: ((viewHolder: ListViewHolder, position: Int, item: D) -> Unit)? = null
 
-    constructor(
-        datas: List<D>,
-        onGetView: (position: Int, item: D) -> View
-    ) : this() {
+    constructor(layoutId: Int) : this() {
+        mItemLayout = layoutId
+    }
+
+    constructor(datas: List<D>, onGetView: (position: Int, item: D) -> View) : this() {
         mDataSet.addAll(datas)
         _onGetView = onGetView
     }

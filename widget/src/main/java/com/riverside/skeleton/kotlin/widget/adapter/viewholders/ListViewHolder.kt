@@ -20,9 +20,8 @@ import android.widget.AdapterView.*
 class ListViewHolder private constructor(itemView: View) {
     val mHolderImpl: ViewHolderImpl = ViewHolderImpl(itemView)
 
-    inline fun <reified T : View> findViewById(viewId: Int): T {
-        return mHolderImpl.findViewById(viewId)
-    }
+    inline fun <reified T : View> findViewById(viewId: Int): T =
+        mHolderImpl.findViewById(viewId)
 
     val context: Context
         get() = mHolderImpl.mItemView.context

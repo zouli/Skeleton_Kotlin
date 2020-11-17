@@ -13,13 +13,11 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
     override fun initView() {
         val datas = listOf("aa", "bb", "cc", "dd")
 
-        val adapter =
-            ListViewAdapter(
-                R.layout.list_item_checkable_linearlayout,
-                datas
-            ) { viewHolder, position, item ->
-                viewHolder.setText(R.id.tv_text, item)
-            }
+        val adapter = ListViewAdapter(
+            R.layout.list_item_checkable_linearlayout, datas
+        ) { viewHolder, position, item ->
+            viewHolder.setText(R.id.tv_text, item)
+        }
         lv_list.choiceMode = ListView.CHOICE_MODE_SINGLE
         lv_list.adapter = adapter
     }

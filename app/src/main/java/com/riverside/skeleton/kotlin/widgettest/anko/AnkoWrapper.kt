@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.CheckableLinearLayout
@@ -43,7 +45,7 @@ var BoxCaptchaView.itemStyle: Int get() = 0; set(value) = setItemStyle(value)
 
 open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         c: Context?,
         attrs: AttributeSet?,
         init: LinearLayout.LayoutParams.() -> Unit
@@ -54,7 +56,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         c: Context?,
         attrs: AttributeSet?
     ): T {
@@ -63,7 +65,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         width: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         height: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         init: LinearLayout.LayoutParams.() -> Unit
@@ -74,7 +76,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         width: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         height: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT
     ): T {
@@ -83,7 +85,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         width: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         height: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         weight: Float,
@@ -95,7 +97,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         width: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         height: Int = android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
         weight: Float
@@ -105,7 +107,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         p: ViewGroup.LayoutParams?,
         init: LinearLayout.LayoutParams.() -> Unit
     ): T {
@@ -115,7 +117,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         p: ViewGroup.LayoutParams?
     ): T {
         val layoutParams = LinearLayout.LayoutParams(p!!)
@@ -123,7 +125,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         source: ViewGroup.MarginLayoutParams?,
         init: LinearLayout.LayoutParams.() -> Unit
     ): T {
@@ -133,7 +135,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
         return this
     }
 
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         source: ViewGroup.MarginLayoutParams?
     ): T {
         val layoutParams = LinearLayout.LayoutParams(source!!)
@@ -142,7 +144,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         source: LinearLayout.LayoutParams?,
         init: LinearLayout.LayoutParams.() -> Unit
     ): T {
@@ -153,7 +155,7 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    inline fun <T: View> T.lparams(
+    inline fun <T : View> T.lparams(
         source: LinearLayout.LayoutParams?
     ): T {
         val layoutParams = LinearLayout.LayoutParams(source!!)
@@ -164,5 +166,9 @@ open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
 
 inline fun Context.checkableLinearLayout(init: _CheckableLinearLayout.() -> Unit): CheckableLinearLayout {
     return ankoView({ ctx: Context -> _CheckableLinearLayout(ctx) }, theme = 0) { init() }
+}
+
+inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView {
+    return ankoView({ RecyclerView(ContextHolder.applicationContext, null) }, 0, init)
 }
 

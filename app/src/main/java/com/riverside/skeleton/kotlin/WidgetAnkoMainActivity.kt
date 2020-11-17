@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.widgettest.anko.CaptchaActivity
 import com.riverside.skeleton.kotlin.widgettest.anko.CheckableLinearLayoutActivity
+import com.riverside.skeleton.kotlin.widgettest.anko.RecyclerViewActivity
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
@@ -19,6 +20,12 @@ class WidgetAnkoMainActivity : SBaseActivity() {
             button("CheckableLinearLayout") {
                 onClick {
                     startActivity<CheckableLinearLayoutActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("RecyclerView") {
+                onClick {
+                    startActivity<RecyclerViewActivity>()
                 }
             }.lparams(matchParent, wrapContent)
         }

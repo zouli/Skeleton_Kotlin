@@ -64,5 +64,11 @@
         <activity
                 android:name=".widgettest.anko.CheckableLinearLayoutActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.RecyclerViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.RecyclerViewActivity"
+                android:screenOrientation="portrait" />
     </application>
 </manifest>

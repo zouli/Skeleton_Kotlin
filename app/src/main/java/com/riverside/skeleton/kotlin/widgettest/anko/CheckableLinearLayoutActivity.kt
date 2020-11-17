@@ -1,9 +1,8 @@
 package com.riverside.skeleton.kotlin.widgettest.anko
 
-import android.view.Gravity
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import org.jetbrains.anko.*
@@ -35,29 +34,13 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
             ListViewAdapter(
                 datas
             ) { position: Int, item: String ->
-                with(lv_list.context) {
-                    checkableLinearLayout {
-                        lparams(matchParent, wrapContent)
-                        orientation = LinearLayout.HORIZONTAL
-                        checkedChild = true
-
-                        radioButton {
-                            isClickable = false
-                            isDuplicateParentStateEnabled = true
-                            isFocusable = false
-                            isFocusableInTouchMode = false
-                        }.lparams(wrapContent, wrapContent) {
-                            gravity = Gravity.CENTER
-                        }
-
-                        val tv_text = textView {
-                            isClickable = false
-                        }.lparams(matchParent, wrapContent) {
-                            gravity = Gravity.CENTER
-                        }
-
-                        tv_text.text = item
-                    }
+                ListItemCheckableLinearLayout<CheckableLinearLayoutActivity>().createView(
+                    AnkoContext.create(
+                        this@CheckableLinearLayoutActivity,
+                        CheckableLinearLayoutActivity()
+                    )
+                ).apply {
+                    findViewById<TextView>(ListItemCheckableLinearLayout.TV_TEXT).text = item
                 }
             }
         lv_list.choiceMode = ListView.CHOICE_MODE_SINGLE
