@@ -24,13 +24,14 @@ class ListViewAdapter<D>() : BaseAdapter() {
         mItemLayout = layoutId
     }
 
-    constructor(datas: List<D>, onGetView: (position: Int, item: D) -> View) : this() {
+    constructor(datas: List<D> = listOf(),
+                onGetView: (position: Int, item: D) -> View): this() {
         mDataSet.addAll(datas)
         _onGetView = onGetView
     }
 
     constructor(
-        layoutId: Int, datas: List<D>,
+        layoutId: Int, datas: List<D> = listOf(),
         onBindData: (viewHolder: ListViewHolder, position: Int, item: D) -> Unit
     ) : this() {
         mItemLayout = layoutId

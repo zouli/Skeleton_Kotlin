@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:icv_sleepSecond="30"
+            app:icv_maxLength="4"
             app:icv_textHint="请输入手机验证码" />
 
     <TextView

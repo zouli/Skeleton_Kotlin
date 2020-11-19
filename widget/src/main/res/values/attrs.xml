@@ -16,4 +16,25 @@
         <attr name="icv_sleepSecond" format="integer" />
         <attr name="icv_maxLength" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="RefreshListView">
+        <attr name="rlv_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+        <attr name="rlv_divider" format="reference" />
+        <attr name="rlv_dividerHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="RefreshGridView">
+        <attr name="rgv_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+        <attr name="rgv_numColumns" format="integer" />
+        <attr name="rgv_horizontalSpacing" format="dimension" />
+        <attr name="rgv_verticalSpacing" format="dimension" />
+    </declare-styleable>
 </resources>

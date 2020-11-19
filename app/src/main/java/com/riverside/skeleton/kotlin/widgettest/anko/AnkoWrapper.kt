@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewManager
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.CheckableLinearLayout
+import com.riverside.skeleton.kotlin.widget.containers.RefreshGridView
+import com.riverside.skeleton.kotlin.widget.containers.RefreshListView
 import org.jetbrains.anko.custom.ankoView
 
 inline fun ViewManager.inputCaptchaView(init: InputCaptchaView.() -> Unit): InputCaptchaView =
@@ -172,3 +175,12 @@ inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView
     return ankoView({ RecyclerView(ContextHolder.applicationContext, null) }, 0, init)
 }
 
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+inline fun ViewManager.refreshListView(init: RefreshListView.() -> Unit): RefreshListView {
+    return ankoView({ RefreshListView(ContextHolder.applicationContext, null) }, 0, init)
+}
+
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+inline fun ViewManager.refreshGridView(init: RefreshGridView.() -> Unit): RefreshGridView {
+    return ankoView({ RefreshGridView(ContextHolder.applicationContext, null) }, 0, init)
+}

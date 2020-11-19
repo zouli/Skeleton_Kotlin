@@ -70,5 +70,17 @@
         <activity
                 android:name=".widgettest.anko.RecyclerViewActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.RefreshListViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.RefreshListViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.RefreshGridViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.RefreshGridViewActivity"
+                android:screenOrientation="portrait" />
     </application>
 </manifest>

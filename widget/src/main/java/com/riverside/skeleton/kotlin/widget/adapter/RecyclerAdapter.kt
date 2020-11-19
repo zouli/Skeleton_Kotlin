@@ -30,7 +30,7 @@ class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
     }
 
     constructor(
-        datas: List<D>,
+        datas: List<D> = listOf(),
         onGetView: (viewGroup: ViewGroup, viewType: Int) -> View,
         onBindData: (viewHolder: RecyclerViewHolder, position: Int, item: D) -> Unit
     ) : this() {
@@ -40,7 +40,7 @@ class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
     }
 
     constructor(
-        layoutId: Int, datas: List<D>,
+        layoutId: Int, datas: List<D> = listOf(),
         onBindData: (viewHolder: RecyclerViewHolder, position: Int, item: D) -> Unit
     ) : this() {
         mItemLayout = layoutId

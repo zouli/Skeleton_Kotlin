@@ -38,6 +38,7 @@ class AttributeSetInfo<T>(
                         )
                         AttrType.ENUM -> getInt(attrId, default as Int)
                         AttrType.FLAG -> getInt(attrId, default as Int)
+                        AttrType.DRAWABLE -> getDrawable(attrId)
                     }
                     recycle()
 
@@ -67,5 +68,6 @@ enum class AttrType(type: String) {
     FLOAT("float"),
     FRACTION("fraction"),
     ENUM("enum"),
-    FLAG("flag")
+    FLAG("flag"),
+    DRAWABLE("drawable")
 }
