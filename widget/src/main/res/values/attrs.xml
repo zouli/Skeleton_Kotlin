@@ -37,4 +37,9 @@
         <attr name="rgv_horizontalSpacing" format="dimension" />
         <attr name="rgv_verticalSpacing" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="CompleteListView">
+        <attr name="clv_divider" format="reference" />
+        <attr name="clv_dividerHeight" format="dimension" />
+    </declare-styleable>
 </resources>

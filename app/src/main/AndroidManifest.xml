@@ -82,5 +82,11 @@
         <activity
                 android:name=".widgettest.anko.RefreshGridViewActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.CompleteViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.CompleteViewActivity"
+                android:screenOrientation="portrait" />
     </application>
 </manifest>

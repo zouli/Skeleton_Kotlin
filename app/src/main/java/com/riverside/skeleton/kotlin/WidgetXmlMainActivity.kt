@@ -38,6 +38,12 @@ class WidgetXmlMainActivity : SBaseActivity() {
                     startActivity<RefreshGridViewActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("Complete View") {
+                onClick {
+                    startActivity<CompleteViewActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
     }
 }

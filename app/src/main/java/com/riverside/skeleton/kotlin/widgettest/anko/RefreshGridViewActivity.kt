@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin.widgettest.anko
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.Gravity
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.toColorInt
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
@@ -40,20 +41,12 @@ class RefreshGridViewActivity : SBaseActivity() {
         }
 
         val adapter = ListViewAdapter<String> { position, item ->
-            with(rgv.context) {
-                verticalLayout {
-                    lparams(matchParent, wrapContent)
-                    background = ColorDrawable(0xffffffff.toInt())
-
-                    val tv_title = textView {
-                        gravity = Gravity.CENTER
-                        padding = 16.dip
-                        textColor = "#333333".toColorInt()
-                        textSize = 14F
-                    }.lparams(matchParent, wrapContent)
-
-                    tv_title.text = item
-                }
+            ListItemRefreshListView<RefreshGridViewActivity>().createView(
+                AnkoContext.create(
+                    this@RefreshGridViewActivity, RefreshGridViewActivity()
+                )
+            ).apply {
+                findViewById<TextView>(ListItemRefreshListView.TV_TITLE).text = item
             }
         }
 
