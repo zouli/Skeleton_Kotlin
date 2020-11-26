@@ -31,8 +31,6 @@ android {
 dependencies {
     implementation fileTree(dir: '../libs', include: ['*.jar'])
 
-    implementation 'com.github.zouli:KotlinSLog:v1.0'
-
     debugImplementation project(path: ':util')
     releaseImplementation project(path: ':util')
 }

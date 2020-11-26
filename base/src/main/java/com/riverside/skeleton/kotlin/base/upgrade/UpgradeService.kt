@@ -2,7 +2,6 @@ package com.riverside.skeleton.kotlin.base.upgrade
 
 import android.Manifest
 import android.app.DownloadManager
-import android.app.IntentService
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -14,30 +13,39 @@ import android.text.TextUtils
 import com.riverside.skeleton.kotlin.base.R
 import com.riverside.skeleton.kotlin.base.activity.ActivityStackManager
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
+import com.riverside.skeleton.kotlin.base.service.SBaseService
+import com.riverside.skeleton.kotlin.util.extras.Extra
 import com.riverside.skeleton.kotlin.util.file.*
 import com.riverside.skeleton.kotlin.util.packageinfo.hasPermission
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
- * 自动升级服务   1.0
- * b_e  2019/09/25
+ * 自动升级服务   1.1
+ * b_e                2019/09/25
+ * 继承SBaseService   2020/11/25
  */
-class UpgradeService : IntentService(UpgradeService::class.simpleName) {
+class UpgradeService : SBaseService() {
     /**
      * 引用系统下载服务
      */
     lateinit var downloadManager: DownloadManager
+
     // 下载窗口标题
-    private lateinit var title: String
+    private val title: String by Extra(TITLE_EXTRA, "")
+
     // 下载窗口信息
-    private lateinit var message: String
+    private val message: String by Extra(MESSAGE_EXTRA, "")
+
     // 下载地址
-    private lateinit var downloadUrl: String
+    private val downloadUrl: String by Extra(DOWNLOAD_URL_EXTRA, "")
+
     // 文件下载ID，用于和系统下载服务通信
     private var lastDownloadId: Long = 0
+
     // 文件下载监控服务
     private lateinit var downloadObserver: DownloadChangeObserver
+
     // 下载窗口
     private lateinit var downloadDialog: ProgressDialog
 
@@ -46,23 +54,7 @@ class UpgradeService : IntentService(UpgradeService::class.simpleName) {
         super.onCreate()
     }
 
-    override fun onHandleIntent(intent: Intent) {
-        if (intent.action == ACTION_DOWNLOAD_URL) {
-            intent.extras?.let {
-                downloadUrl(
-                    it.getString(TITLE_EXTRA) ?: "",
-                    it.getString(MESSAGE_EXTRA) ?: "",
-                    it.getString(DOWNLOAD_URL_EXTRA) ?: ""
-                )
-            }
-        }
-    }
-
-    private fun downloadUrl(title: String, message: String, downloadUrl: String) {
-        this.title = title
-        this.message = message
-        this.downloadUrl = downloadUrl
-
+    override fun onCall(flags: Int, startId: Int) {
         //显示下载窗口
         showDialog()
         //启动下载服务
@@ -329,6 +321,7 @@ class UpgradeService : IntentService(UpgradeService::class.simpleName) {
          * 系统下载服务上下文URI
          */
         val CONTENT_URI = Uri.parse("content://downloads/my_downloads")
+
         /**
          * 下载出现错误
          */

@@ -11,11 +11,9 @@ import com.riverside.skeleton.kotlin.base.activity.TransferListener
 import com.riverside.skeleton.kotlin.base.activity.activityStaticMonitor
 import com.riverside.skeleton.kotlin.base.upgrade.UpgradeHelper
 import com.riverside.skeleton.kotlin.base.utils.BackButtonHelper
-import com.riverside.skeleton.kotlin.basetest.MultipleFinishActivity
-import com.riverside.skeleton.kotlin.basetest.RxBusActivity
-import com.riverside.skeleton.kotlin.basetest.ValidateAnkoActivity
-import com.riverside.skeleton.kotlin.basetest.ValidateXmlActivity
+import com.riverside.skeleton.kotlin.basetest.*
 import com.riverside.skeleton.kotlin.slog.SLog
+import com.riverside.skeleton.kotlin.util.extras.startActivity
 import com.riverside.skeleton.kotlin.util.notice.toast
 import com.riverside.skeleton.kotlin.util.preference.Preference
 import com.riverside.skeleton.kotlin.util.preference.PreferenceHelper
@@ -100,6 +98,12 @@ class BaseMainActivity : SBaseActivity() {
                         "",
                         "http://www.915guo.com.cn/EXAM/upload/MedicalExam_CSTP.apk"
                     )
+                }
+            }
+
+            button("Extras") {
+                onClick {
+                    startActivity<ExtrasActivity>()
                 }
             }
         }

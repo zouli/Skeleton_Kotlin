@@ -4,6 +4,7 @@ import android.view.Gravity
 import android.widget.TextView
 import com.riverside.skeleton.kotlin.base.activity.ActivityStackManager
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.util.extras.startActivity
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
