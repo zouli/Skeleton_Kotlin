@@ -29,7 +29,7 @@ class UpgradeService : SBaseService() {
     /**
      * 引用系统下载服务
      */
-    lateinit var downloadManager: DownloadManager
+    private lateinit var downloadManager: DownloadManager
 
     // 下载窗口标题
     private val title: String by Extra(TITLE_EXTRA, "")
@@ -327,9 +327,9 @@ class UpgradeService : SBaseService() {
          */
         val DOWNLOAD_ERROR = "${SBaseApplication.instance.packageName}.download_error"
 
-        val ACTION_DOWNLOAD_URL = "DownloadUrl"
-        val TITLE_EXTRA = "title"
-        val MESSAGE_EXTRA = "message"
-        val DOWNLOAD_URL_EXTRA = "downloadUrl"
+        const val ACTION_DOWNLOAD_URL = "DownloadUrl"
+        const val TITLE_EXTRA = "title"
+        const val MESSAGE_EXTRA = "message"
+        const val DOWNLOAD_URL_EXTRA = "downloadUrl"
     }
 }

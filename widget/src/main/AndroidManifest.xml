@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="com.riverside.skeleton.kotlin.widget" />
+        package="com.riverside.skeleton.kotlin.widget">
+
+    <application
+            android:allowBackup="true"
+            android:supportsRtl="true">
+        <activity
+                android:name=".gallery.FullScreenActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+</manifest>

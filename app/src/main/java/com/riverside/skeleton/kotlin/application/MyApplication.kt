@@ -1,13 +1,52 @@
 package com.riverside.skeleton.kotlin.application
 
+import android.content.Context
+import android.net.Uri
+import android.widget.ImageView
+import com.imnjh.imagepicker.ImageLoader
+import com.imnjh.imagepicker.PickerConfig
+import com.imnjh.imagepicker.SImagePicker
+import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
+import com.riverside.skeleton.kotlin.util.file.CreateNomediaFile
+import com.squareup.picasso.Picasso
 
-class MyApplication: SBaseApplication() {
-    init{
+class MyApplication : SBaseApplication() {
+    init {
         moduleApplications = arrayOf(SBaseApplication::class.java)
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        this.CreateNomediaFile()
+
+        SImagePicker.init(
+            PickerConfig.Builder().setAppContext(this)
+                .setImageLoader(object : ImageLoader {
+                    override fun bindImage(
+                        imageView: ImageView?, uri: Uri?, width: Int, height: Int
+                    ) {
+                        Picasso.get().load(uri).resize(width, height)
+                            .centerCrop().into(imageView)
+                    }
+
+                    override fun bindImage(imageView: ImageView?, uri: Uri?) {
+                        Picasso.get().load(uri).into(imageView)
+                    }
+
+                    override fun createImageView(context: Context?): ImageView? {
+                        val imageView = ImageView(context)
+                        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+                        return imageView
+                    }
+
+                    override fun createFakeImageView(context: Context?): ImageView? {
+                        return ImageView(context)
+                    }
+                })
+                .setToolbaseColor(resources.getColor(R.color.colorPrimary))
+                .build()
+        )
     }
 }

@@ -89,7 +89,13 @@
                 android:name=".widgettest.anko.CompleteViewActivity"
                 android:screenOrientation="portrait" />
         <activity
+                android:name=".widgettest.xml.ImageGridViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
                 android:name=".basetest.ExtrasActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.ImageGridViewActivity"
                 android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />

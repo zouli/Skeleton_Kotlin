@@ -39,6 +39,10 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:0.10.8"
     implementation "org.jetbrains.anko:anko-design-coroutines:0.10.8"
 
+    //图片选择控件
+    //https://github.com/martin90s/ImagePicker
+    implementation 'com.github.martin90s:ImagePicker:v1.3.2'
+
     debugImplementation project(path: ':util')
     releaseImplementation project(path: ':util')
     debugImplementation project(path: ':base')
@@ -51,5 +55,4 @@ dependencies {
     //UI验证框架
     implementation 'com.github.yoojia:next-inputs-android:1.7.2'
     implementation 'com.github.zouli:KotlinNextInputs:v1.0'
-    implementation 'com.github.zouli:KotlinSLog:v1.0'
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <com.riverside.skeleton.kotlin.widget.containers.ImageGridView
+                    android:id="@+id/igv_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F3F3F3"
+                    android:columnCount="4"
+                    app:igv_addButtonIcon="@drawable/image_grid_add_image"
+                    app:igv_dividerSize="2dp" />
+
+            <com.riverside.skeleton.kotlin.widget.containers.ImageGridView
+                    android:id="@+id/igv_image1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="3"
+                    app:igv_dividerSize="2dp"
+                    app:igv_readOnly="true"
+                    app:igv_smartColumnCount="true" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

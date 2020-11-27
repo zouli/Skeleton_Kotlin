@@ -48,6 +48,12 @@ class WidgetAnkoMainActivity : SBaseActivity() {
                     startActivity<CompleteViewActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("ImageGridView") {
+                onClick {
+                    startActivity<ImageGridViewActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
     }
 }

@@ -190,3 +190,7 @@ inline fun ViewManager.completeListView(init: CompleteListView.() -> Unit): Comp
 inline fun ViewManager.completeGridView(init: CompleteGridView.() -> Unit): CompleteGridView {
     return ankoView({ CompleteGridView(ContextHolder.applicationContext, null) }, 0, init)
 }
+
+inline fun ViewManager.imageGridView(init: ImageGridView.() -> Unit): ImageGridView {
+    return ankoView({ ImageGridView(ContextHolder.applicationContext, null) }, 0, init)
+}
