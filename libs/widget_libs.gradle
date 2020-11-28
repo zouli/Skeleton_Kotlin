@@ -13,4 +13,8 @@ dependencies {
     //上拉下滑刷新控件
     //https://github.com/omadahealth/SwipyRefreshLayout
     implementation 'com.github.omadahealth:swipy:1.2.3@aar'
+
+    //UI验证框架
+    implementation 'com.github.yoojia:next-inputs-android:1.7.2'
+    implementation 'com.github.zouli:KotlinNextInputs:v1.0'
 }

@@ -20,7 +20,7 @@ interface CaptchaView {
     /**
      * 结果回调接口
      */
-    interface ResultListener {
+    interface OnSendListener {
         fun onClick(): Boolean
     }
 }

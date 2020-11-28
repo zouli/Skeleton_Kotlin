@@ -51,8 +51,4 @@ dependencies {
     releaseImplementation project(path: ':net')
     debugImplementation project(path: ':widget')
     releaseImplementation project(path: ':widget')
-
-    //UI验证框架
-    implementation 'com.github.yoojia:next-inputs-android:1.7.2'
-    implementation 'com.github.zouli:KotlinNextInputs:v1.0'
 }

@@ -19,7 +19,7 @@ import org.jetbrains.anko.custom.ankoView
 inline fun ViewManager.inputCaptchaView(init: InputCaptchaView.() -> Unit): InputCaptchaView =
     ankoView({ InputCaptchaView(it) }, theme = 0, init = init)
 
-fun InputCaptchaView.onClick(handler: () -> Boolean) = setOnResultListener {
+fun InputCaptchaView.onSend(handler: () -> Boolean) = setOnSendListener {
     handler()
 }
 

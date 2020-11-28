@@ -7,16 +7,16 @@
 
     <EditText
             android:id="@+id/et_phone"
-            android:inputType="phone"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
 
     <com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
             android:id="@+id/icv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:icv_sleepSecond="30"
             app:icv_maxLength="4"
+            app:icv_sleepSecond="30"
             app:icv_textHint="请输入手机验证码" />
 
     <TextView
@@ -30,5 +30,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:bcv_charNumber="6"
-            app:bcv_divideWidth="10dp"/>
+            app:bcv_divideWidth="10dp" />
+
+    <Button
+            android:id="@+id/btn_val"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Validate" />
 </LinearLayout>

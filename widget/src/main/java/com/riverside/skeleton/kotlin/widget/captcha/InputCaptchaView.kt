@@ -12,7 +12,7 @@ import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.widget.R
-import com.riverside.skeleton.kotlin.widget.captcha.CaptchaView.ResultListener
+import com.riverside.skeleton.kotlin.widget.captcha.CaptchaView.OnSendListener
 import kotlinx.android.synthetic.main.view_input_captcha.view.*
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
@@ -28,7 +28,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     constructor(context: Context) : this(context, null)
 
     //回调函数
-    private lateinit var onResultListener: ResultListener
+    private lateinit var onSendListener: OnSendListener
 
     //获取验证码间隔时间（秒）
     @Attr(AttrType.INTEGER)
@@ -91,16 +91,16 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
      */
     private fun doClick(v: View) {
         KeyboardHelper.init(context as Activity).hideKeyboard()
-        if (::onResultListener.isInitialized)
-            if (onResultListener.onClick()) //调用获取验证码点击事件
+        if (::onSendListener.isInitialized)
+            if (onSendListener.onClick()) //调用获取验证码点击事件
                 startCount()    //开始计时
     }
 
     /**
      * 设置回调接口
      */
-    fun setOnResultListener(block: () -> Boolean) {
-        this.onResultListener = object : ResultListener {
+    fun setOnSendListener(block: () -> Boolean) {
+        this.onSendListener = object : OnSendListener {
             override fun onClick(): Boolean = block()
         }
     }
