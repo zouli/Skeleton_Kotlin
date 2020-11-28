@@ -2,6 +2,7 @@ package com.riverside.skeleton.kotlin
 
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.extras.startActivity
+import com.riverside.skeleton.kotlin.widget.web.WebBrowserActivity
 import com.riverside.skeleton.kotlin.widgettest.xml.*
 import org.jetbrains.anko.button
 import org.jetbrains.anko.matchParent
@@ -52,6 +53,14 @@ class WidgetXmlMainActivity : SBaseActivity() {
             button("ImageGridView") {
                 onClick {
                     startActivity<ImageGridViewActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("Web Browser") {
+                onClick {
+                    startActivity<WebBrowserActivity>(
+                        WebBrowserActivity.LOCATION to "https://www.baidu.com"
+                    )
                 }
             }.lparams(matchParent, wrapContent)
         }

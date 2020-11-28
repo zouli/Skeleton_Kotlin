@@ -12,6 +12,15 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
+    <style name="AppTheme.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:weightSum">1</item>
+        <item name="contentInsetLeft">0dp</item>
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
     <style name="InputCaptcha" />
 
     <style name="InputCaptcha.Code">

@@ -8,5 +8,11 @@
                 android:name=".gallery.FullScreenActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".web.WebBrowserActivity"
+                android:process=":web"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>
