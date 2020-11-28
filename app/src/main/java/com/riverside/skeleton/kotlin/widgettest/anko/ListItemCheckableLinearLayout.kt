@@ -1,17 +1,22 @@
 package com.riverside.skeleton.kotlin.widgettest.anko
 
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import com.riverside.skeleton.kotlin.util.converter.dip
 import org.jetbrains.anko.*
 
 class ListItemCheckableLinearLayout<T> : AnkoComponent<T> {
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun createView(ui: AnkoContext<T>): View =
         ui.ctx.checkableLinearLayout {
             lparams(matchParent, wrapContent)
             orientation = LinearLayout.HORIZONTAL
             checkedChild = true
+            background = ColorDrawable(0xFFFFFFFF.toInt())
 
             radioButton {
                 isClickable = false
