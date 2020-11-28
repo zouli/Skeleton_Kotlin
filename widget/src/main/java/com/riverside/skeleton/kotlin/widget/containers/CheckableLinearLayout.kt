@@ -50,7 +50,7 @@ open class CheckableLinearLayout(context: Context, attrs: AttributeSet?) :
     private fun setChildChecked(checked: Boolean) =
         (0 until childCount).forEach { i ->
             with(getChildAt(i)) {
-                if (this is Checkable) this.isChecked = checked
+                if (this is Checkable) this.isChecked = checked else this.isSelected = checked
             }
         }
 

@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin.widgettest.xml
 import android.widget.ListView
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.util.image.tintDrawable
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import kotlinx.android.synthetic.main.activity_checkable_linearlayout.*
 
@@ -17,6 +18,10 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
             R.layout.list_item_checkable_linearlayout, datas
         ) { viewHolder, position, item ->
             viewHolder.setText(R.id.tv_text, item)
+            viewHolder.setImageDrawable(
+                R.id.iv_image,
+                resources.getDrawable(R.mipmap.ic_launcher).tintDrawable(R.color.checkable_image_selector)
+            )
         }
         lv_list.choiceMode = ListView.CHOICE_MODE_SINGLE
         lv_list.adapter = adapter

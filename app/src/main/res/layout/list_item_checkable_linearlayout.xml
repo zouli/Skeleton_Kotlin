@@ -16,7 +16,15 @@
             android:focusable="false"
             android:focusableInTouchMode="false" />
 
+    <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true" />
+
     <TextView
+            android:layout_marginLeft="4dp"
             android:id="@+id/tv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
