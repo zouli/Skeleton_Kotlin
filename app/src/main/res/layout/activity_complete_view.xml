@@ -10,6 +10,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+        <EditText
+                android:id="@+id/et_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="6"
+                android:scrollbars="vertical" />
+
         <com.riverside.skeleton.kotlin.widget.containers.CompleteListView
                 android:id="@+id/clv_list"
                 android:layout_width="match_parent"

@@ -7,15 +7,16 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.dip
+import com.riverside.skeleton.kotlin.util.view.strongRequestTouch
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import com.riverside.skeleton.kotlin.widget.containers.CompleteGridView
 import com.riverside.skeleton.kotlin.widget.containers.CompleteListView
-import kotlinx.android.synthetic.main.activity_complete_view.*
 import org.jetbrains.anko.*
 
 class CompleteViewActivity : SBaseActivity() {
     private lateinit var clv_list: CompleteListView
     private lateinit var cgv: CompleteGridView
+    private lateinit var tv_text: TextView
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun initView() {
@@ -25,6 +26,11 @@ class CompleteViewActivity : SBaseActivity() {
             isVerticalScrollBarEnabled = false
 
             verticalLayout {
+                tv_text = textView {
+                    lines = 6
+                    isVerticalScrollBarEnabled = true
+                }.lparams(matchParent, wrapContent)
+
                 clv_list = completeListView {
                     orientation = LinearLayout.VERTICAL
                     divider = ColorDrawable(0xffffff00.toInt())
@@ -36,6 +42,9 @@ class CompleteViewActivity : SBaseActivity() {
                 }.lparams(matchParent, wrapContent)
             }.lparams(matchParent, wrapContent)
         }
+        val allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
+        tv_text.setText((1..500).map { allowedChars.random() }.joinToString(""))
+        tv_text.strongRequestTouch()
 
         val datas = mutableListOf("aa", "bb", "cc", "dd")
         datas.add("ee")
