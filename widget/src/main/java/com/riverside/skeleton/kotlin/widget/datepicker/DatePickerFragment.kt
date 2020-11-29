@@ -86,7 +86,7 @@ class DatePickerFragment : SBaseDialogFragment() {
         }
     }
 
-    class Create(private val supportFragmentManager: FragmentManager) {
+    class Creator(private val supportFragmentManager: FragmentManager) {
         private val sublimeOptions = SublimeOptions()
         private var displayOption = SublimeOptions.Picker.DATE_PICKER.ordinal
         private var startDate: Calendar = Date().calendar

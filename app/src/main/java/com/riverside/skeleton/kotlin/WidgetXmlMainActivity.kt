@@ -71,7 +71,7 @@ class WidgetXmlMainActivity : SBaseActivity() {
 
             button("Date Picker") {
                 onClick {
-                    DatePickerFragment.Create(supportFragmentManager)
+                    DatePickerFragment.Creator(supportFragmentManager)
                         .setDate(Calendar.getInstance().apply { set(1989, 4, 15, 5, 21) })
                         .showDate()
                         .showTime()
