@@ -9,23 +9,27 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.ServiceConnection
+import android.os.Bundle
+import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.base.fragment.SBaseFragment
+import com.riverside.skeleton.kotlin.base.service.SBaseService
 import com.riverside.skeleton.kotlin.base.service.SBaseServiceConnection
 
 /**
  * StartActivity封装  1.0
  * b_e      2020/11/26
  */
-inline fun <reified T : Activity> Context.startActivity(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseActivity> Context.startActivity(vararg params: Pair<String, Any?>) =
     IntentsHelper.startActivity(this, T::class.java, params)
 
-inline fun <reified T : Activity> Fragment.startActivity(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseActivity> Fragment.startActivity(vararg params: Pair<String, Any?>) =
     context?.let { IntentsHelper.startActivity(it, T::class.java, params) }
 
-inline fun <reified T : Activity> Activity.startActivityForResult(
+inline fun <reified T : SBaseActivity> Activity.startActivityForResult(
     requestCode: Int, vararg params: Pair<String, Any?>
 ) = IntentsHelper.startActivityForResult(this, T::class.java, params, requestCode)
 
-inline fun <reified T : Activity> Fragment.startActivityForResult(
+inline fun <reified T : SBaseActivity> Fragment.startActivityForResult(
     requestCode: Int, vararg params: Pair<String, Any?>
 ) = IntentsHelper.startActivityForResult(activity as Activity, T::class.java, params, requestCode)
 
@@ -37,19 +41,19 @@ fun Activity.finishResult(requestCode: Int, vararg params: Pair<String, Any?>) {
 fun Activity.finishResultOK(vararg params: Pair<String, Any?>) =
     finishResult(Activity.RESULT_OK, *params)
 
-inline fun <reified T : Service> Context.startService(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseService> Context.startService(vararg params: Pair<String, Any?>) =
     IntentsHelper.startService(this, T::class.java, params)
 
-inline fun <reified T : Service> Fragment.startService(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseService> Fragment.startService(vararg params: Pair<String, Any?>) =
     context?.let { IntentsHelper.startService(it, T::class.java, params) }
 
-inline fun <reified T : Service> Context.stopService(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseService> Context.stopService(vararg params: Pair<String, Any?>) =
     IntentsHelper.stopService(this, T::class.java, params)
 
-inline fun <reified T : Service> Fragment.stopService(vararg params: Pair<String, Any?>) =
+inline fun <reified T : SBaseService> Fragment.stopService(vararg params: Pair<String, Any?>) =
     context?.let { IntentsHelper.stopService(it, T::class.java, params) }
 
-inline fun <reified T : Service> Context.bindingService(
+inline fun <reified T : SBaseService> Context.bindingService(
     flag: Int, vararg params: Pair<String, Any?>,
     noinline onConnected: (name: ComponentName, service: T) -> Unit,
     noinline onDisconnected: (name: ComponentName) -> Unit
@@ -59,7 +63,7 @@ inline fun <reified T : Service> Context.bindingService(
     this.setOnDisconnected(onDisconnected)
 }
 
-inline fun <reified T : Service> Fragment.bindingService(
+inline fun <reified T : SBaseService> Fragment.bindingService(
     flag: Int, vararg params: Pair<String, Any?>,
     noinline onConnected: (name: ComponentName, service: T) -> Unit,
     noinline onDisconnected: (name: ComponentName) -> Unit
@@ -73,6 +77,14 @@ inline fun <reified T : Service> Fragment.bindingService(
 
 fun Fragment.unbindService(conn: ServiceConnection) =
     IntentsHelper.unbindService(activity as Activity, conn)
+
+fun SBaseFragment.setArguments(vararg params: Pair<String, Any?>): SBaseFragment = this.apply {
+    this.arguments = Bundle().apply {
+        if (params.isNotEmpty()) params.forEach { (name, value) ->
+            BundleHelper.putValue(this, name, value)
+        }
+    }
+}
 
 object IntentsHelper {
     fun startActivity(
@@ -116,7 +128,7 @@ object IntentsHelper {
 
     fun createIntent(params: Array<out Pair<String, Any?>>) = Intent().apply {
         if (params.isNotEmpty()) params.forEach { (name, value) ->
-            ExtrasHelper.pushExtra(this, name, value)
+            ExtrasHelper.putExtra(this, name, value)
         }
     }
 }

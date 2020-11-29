@@ -20,7 +20,7 @@ class Extra<T>(private val name: String, private val default: T) :
 object ExtrasHelper {
     lateinit var intent: Intent
 
-    internal fun <T> pushExtra(intent: Intent, name: String, value: T) {
+    internal fun <T> putExtra(intent: Intent, name: String, value: T) {
         when (value) {
             is Int -> intent.putExtra(name, value)
             is Long -> intent.putExtra(name, value)

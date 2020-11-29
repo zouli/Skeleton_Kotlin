@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.base.rxbus.RxBus
+import com.riverside.skeleton.kotlin.util.extras.setArguments
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -42,7 +43,7 @@ class RxBusActivity : SBaseActivity() {
             button("add fragment") {
                 onClick {
                     tabTitles.add(index++.toString())
-                    fragments.add(RxBusFragment())
+                    fragments.add(RxBusFragment().setArguments("value" to -4))
                     mSectionsPagerAdapter.notifyDataSetChanged()
                 }
             }
@@ -57,11 +58,11 @@ class RxBusActivity : SBaseActivity() {
         }
 
         tabTitles.add(index++.toString())
-        fragments.add(RxBusFragment())
+        fragments.add(RxBusFragment().setArguments("value" to -1))
         tabTitles.add(index++.toString())
-        fragments.add(RxBusFragment())
+        fragments.add(RxBusFragment().setArguments("value" to -2))
         tabTitles.add(index++.toString())
-        fragments.add(RxBusFragment())
+        fragments.add(RxBusFragment().setArguments("value" to -3))
 
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
         mViewPager.adapter = mSectionsPagerAdapter

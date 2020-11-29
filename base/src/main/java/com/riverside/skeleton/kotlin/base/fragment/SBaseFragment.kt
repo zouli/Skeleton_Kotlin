@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.util.extras.BundleHelper
 import com.riverside.skeleton.kotlin.util.extras.IntentsHelper
 
 /**
@@ -31,6 +32,8 @@ abstract class SBaseFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sBaseActivity = activity as SBaseActivity
+        arguments?.let { BundleHelper.bundle = it }
+
         initView()
     }
 
