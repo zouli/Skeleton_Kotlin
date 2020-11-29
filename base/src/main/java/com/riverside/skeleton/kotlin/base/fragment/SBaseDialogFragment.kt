@@ -4,19 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.extras.BundleHelper
 import com.riverside.skeleton.kotlin.util.extras.IntentsHelper
 
 /**
- * Fragment基类 1.0
+ * DialogFragment基类 1.0
  * <p>
- * b_e                      2019/09/23
- * 封装ForResult            2020/11/26
- * 添加ISBaseFragment接口   2020/11/29
+ * b_e      2020/11/29
  */
-abstract class SBaseFragment : Fragment(), ISBaseFragment {
+abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
     lateinit var sBaseActivity: SBaseActivity
 
     override fun onCreateView(
@@ -71,11 +69,4 @@ abstract class SBaseFragment : Fragment(), ISBaseFragment {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackList[requestCode]?.let { it(resultCode, data) }
     }
-}
-
-interface ISBaseFragment {
-    fun setLayoutID(): Int
-    fun setView(container: ViewGroup?): View?
-    fun initView()
-    fun setMenuID(): Int
 }

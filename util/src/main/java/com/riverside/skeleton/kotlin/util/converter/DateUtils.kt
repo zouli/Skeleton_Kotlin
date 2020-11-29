@@ -39,12 +39,19 @@ fun String.toCalendar(pattern: String): Calendar = this.toDate(pattern).calendar
 val Calendar.timeZero: Calendar
     get() = Calendar.getInstance().apply {
         set(
-            this@timeZero.get(Calendar.YEAR),
-            this@timeZero.get(Calendar.MONTH),
-            this@timeZero.get(Calendar.DAY_OF_MONTH),
+            this@timeZero.year, this@timeZero.month, this@timeZero.dayOfMonth,
             0, 0, 0
         )
     }
+
+val Calendar.year get() = this.get(Calendar.YEAR)
+val Calendar.month get() = this.get(Calendar.MONTH)
+val Calendar.dayOfMonth get() = this.get(Calendar.DAY_OF_MONTH)
+val Calendar.hourOfDay get() = this.get(Calendar.HOUR_OF_DAY)
+val Calendar.minute get() = this.get(Calendar.MINUTE)
+val Calendar.second get() = this.get(Calendar.SECOND)
+val Calendar.milliSecond get() = this.get(Calendar.MILLISECOND)
+val Calendar.dayOfWeek get() = this.get(Calendar.DAY_OF_WEEK)
 
 operator fun Calendar.minus(cal2: Calendar): TimeInterval =
     TimeInterval(this.timeInMillis - cal2.timeInMillis)

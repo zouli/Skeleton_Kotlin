@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin.basetest
 import android.app.Activity
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import com.riverside.skeleton.kotlin.base.fragment.SBaseFragment
 import com.riverside.skeleton.kotlin.base.service.SBaseServiceConnection
 import com.riverside.skeleton.kotlin.slog.SLog
@@ -16,7 +17,7 @@ class ExtrasFragment : SBaseFragment() {
     var i = 1
     private var conn = SBaseServiceConnection<TestService>()
 
-    override fun setView(): View? {
+    override fun setView(container: ViewGroup?): View? {
         return UI {
             verticalLayout {
                 lparams(matchParent, matchParent)

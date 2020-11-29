@@ -1,6 +1,8 @@
 package com.riverside.skeleton.kotlin.basetest
 
 import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.riverside.skeleton.kotlin.base.fragment.SBaseFragment
 import com.riverside.skeleton.kotlin.base.rxbus.RxBus
@@ -18,7 +20,7 @@ class RxBusFragment : SBaseFragment() {
 
     private val value: Int by FragmentArgument("value", -1)
 
-    override fun setView() =
+    override fun setView(container: ViewGroup?): View? =
         UI {
             verticalLayout {
                 lparams(matchParent, matchParent)

@@ -3,15 +3,15 @@
 package com.riverside.skeleton.kotlin.util.extras
 
 import android.app.Activity
-import android.content.Intent
-import androidx.fragment.app.Fragment
 import android.app.Service
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.base.fragment.SBaseFragment
+import com.riverside.skeleton.kotlin.base.fragment.ISBaseFragment
 import com.riverside.skeleton.kotlin.base.service.SBaseService
 import com.riverside.skeleton.kotlin.base.service.SBaseServiceConnection
 
@@ -78,13 +78,14 @@ inline fun <reified T : SBaseService> Fragment.bindingService(
 fun Fragment.unbindService(conn: ServiceConnection) =
     IntentsHelper.unbindService(activity as Activity, conn)
 
-fun SBaseFragment.setArguments(vararg params: Pair<String, Any?>): SBaseFragment = this.apply {
-    this.arguments = Bundle().apply {
-        if (params.isNotEmpty()) params.forEach { (name, value) ->
-            BundleHelper.putValue(this, name, value)
+fun ISBaseFragment.setArguments(vararg params: Pair<String, Any?>): Fragment =
+    (this as Fragment).apply {
+        this.arguments = Bundle().apply {
+            if (params.isNotEmpty()) params.forEach { (name, value) ->
+                BundleHelper.putValue(this, name, value)
+            }
         }
     }
-}
 
 object IntentsHelper {
     fun startActivity(
