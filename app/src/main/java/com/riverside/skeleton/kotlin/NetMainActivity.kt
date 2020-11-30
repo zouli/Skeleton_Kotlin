@@ -13,6 +13,8 @@ import org.jetbrains.anko.wrapContent
 
 class NetMainActivity : SBaseActivity() {
     override fun initView() {
+        title = "Net"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

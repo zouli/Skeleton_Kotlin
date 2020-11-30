@@ -17,6 +17,8 @@ class ValidateAnkoActivity : SBaseActivity() {
     lateinit var gl_1: GridLayout
 
     override fun initView() {
+        title = "Validate Anko"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

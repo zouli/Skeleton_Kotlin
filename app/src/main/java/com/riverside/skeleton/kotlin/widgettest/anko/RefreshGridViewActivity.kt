@@ -24,6 +24,8 @@ class RefreshGridViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initView() {
+        title = "Refresh GridView"
+
         verticalLayout {
             val tv_empty = textView("Empty List") {
                 gravity = Gravity.CENTER

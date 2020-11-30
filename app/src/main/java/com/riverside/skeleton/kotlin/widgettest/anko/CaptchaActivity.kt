@@ -22,6 +22,8 @@ class CaptchaActivity : SBaseActivity() {
     lateinit var bcv: BoxCaptchaView
 
     override fun initView() {
+        title = "Captcha"
+
         verticalLayout {
             lparams(matchParent, matchParent)
             et_phone = editText {

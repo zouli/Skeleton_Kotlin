@@ -23,6 +23,8 @@ class ExtrasActivity : SBaseActivity() {
     private var conn = SBaseServiceConnection<TestService>()
 
     override fun initView() {
+        title = "Extras"
+
         scrollView {
             isVerticalScrollBarEnabled = false
             isHorizontalScrollBarEnabled = false

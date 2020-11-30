@@ -14,6 +14,8 @@ class ValidateXmlActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_validate_xml
 
     override fun initView() {
+        title = "Validate XML"
+
         for (i in 0 until 6) {
             val cb = CheckBox(activity)
             cb.id = R.id.cb_1

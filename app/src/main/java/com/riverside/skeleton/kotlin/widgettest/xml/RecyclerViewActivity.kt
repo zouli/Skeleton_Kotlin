@@ -13,6 +13,8 @@ class RecyclerViewActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_recycler_view
 
     override fun initView() {
+        title = "RecyclerAdapter"
+
         val datas = listOf("aa", "bb", "cc", "dd")
 
         val adapter = RecyclerAdapter(

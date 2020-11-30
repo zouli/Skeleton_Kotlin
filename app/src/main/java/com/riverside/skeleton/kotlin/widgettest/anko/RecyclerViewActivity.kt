@@ -21,6 +21,8 @@ class RecyclerViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun initView() {
+        title = "RecyclerAdapter"
+
         verticalLayout {
             lparams(matchParent, matchParent)
             background = ColorDrawable(0xFFDDDDDD.toInt())

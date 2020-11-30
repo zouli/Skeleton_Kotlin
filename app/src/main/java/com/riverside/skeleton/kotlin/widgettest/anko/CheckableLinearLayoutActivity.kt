@@ -15,6 +15,8 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
     lateinit var lv_list: ListView
 
     override fun initView() {
+        title = "Checkable LinearLayout"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

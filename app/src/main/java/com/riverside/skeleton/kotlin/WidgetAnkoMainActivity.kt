@@ -11,6 +11,8 @@ import org.jetbrains.anko.wrapContent
 
 class WidgetAnkoMainActivity : SBaseActivity() {
     override fun initView() {
+        title = "Widget Anko"
+
         verticalLayout {
             lparams(matchParent, matchParent)
             button("captcha") {

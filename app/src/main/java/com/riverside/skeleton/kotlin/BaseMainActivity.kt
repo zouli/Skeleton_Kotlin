@@ -45,6 +45,8 @@ class BaseMainActivity : SBaseActivity() {
     }
 
     override fun initView() {
+        title = "Base"
+
         verticalLayout {
             lparams(matchParent, matchParent)
             button("rxbus") {

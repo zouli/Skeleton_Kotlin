@@ -20,6 +20,8 @@ class CompleteViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun initView() {
+        title = "Complete View"
+
         scrollView {
             lparams(matchParent, matchParent)
             isHorizontalScrollBarEnabled = false

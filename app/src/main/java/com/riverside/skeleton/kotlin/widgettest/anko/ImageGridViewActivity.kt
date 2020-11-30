@@ -26,6 +26,8 @@ class ImageGridViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun initView() {
+        title = "ImageGridView"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

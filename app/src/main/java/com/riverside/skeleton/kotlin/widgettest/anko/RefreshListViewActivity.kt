@@ -24,6 +24,8 @@ class RefreshListViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initView() {
+        title = "Refresh ListView"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

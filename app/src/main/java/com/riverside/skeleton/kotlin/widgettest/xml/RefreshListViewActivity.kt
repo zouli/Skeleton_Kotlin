@@ -17,6 +17,8 @@ class RefreshListViewActivity : SBaseActivity() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initView() {
+        title = "Refresh ListView"
+
         val adapter =
             ListViewAdapter<String>(R.layout.list_item_refresh_listview) { viewHolder, position, item ->
                 viewHolder.setText(R.id.tv_title, item)

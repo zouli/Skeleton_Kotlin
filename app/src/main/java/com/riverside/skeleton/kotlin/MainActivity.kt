@@ -42,6 +42,12 @@ class MainActivity : SBaseActivity() {
                     startActivity<WidgetXmlMainActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("widget UI") {
+                onClick {
+                    startActivity<WidgetUIMainActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
 
         SLog.w(AppVersionInfo.info(this@MainActivity).getString("versionName"))

@@ -21,7 +21,11 @@ import java.util.*
  * b_e      2020/11/29
  */
 class DatePickerFragment : SBaseDialogFragment() {
-    private val options: SublimeOptions by FragmentArgument("SUBLIME_OPTIONS", SublimeOptions())
+    companion object {
+        const val SUBLIME_OPTIONS = "SUBLIME_OPTIONS"
+    }
+
+    private val options: SublimeOptions by FragmentArgument(SUBLIME_OPTIONS, SublimeOptions())
 
     private lateinit var onCancelledListener: () -> Unit
     private lateinit var onDateTimeRecurrenceSetListener: (
@@ -134,7 +138,7 @@ class DatePickerFragment : SBaseDialogFragment() {
             sublimeOptions.setDateParams(startDate, endDate)
             if (SublimeOptions.ACTIVATE_TIME_PICKER.and(displayOption) == SublimeOptions.ACTIVATE_TIME_PICKER)
                 sublimeOptions.setTimeParams(startDate.hourOfDay, startDate.minute, true)
-            setArguments("SUBLIME_OPTIONS" to sublimeOptions)
+            setArguments(SUBLIME_OPTIONS to sublimeOptions)
             if (::_onCancelledListener.isInitialized) setOnCancelledListener { _onCancelledListener() }
             if (::_onDateTimeRecurrenceSetListener.isInitialized)
                 setOnDateTimeRecurrenceSetListener { selectedDate, hourOfDay, minute, recurrenceOption, recurrenceRule ->

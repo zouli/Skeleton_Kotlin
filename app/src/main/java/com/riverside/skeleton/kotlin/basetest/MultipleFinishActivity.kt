@@ -12,6 +12,8 @@ class MultipleFinishActivity : SBaseActivity() {
     lateinit var tv_title: TextView
 
     override fun initView() {
+        title = "Multiple Finish"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 

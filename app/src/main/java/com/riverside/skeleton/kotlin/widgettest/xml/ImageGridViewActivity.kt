@@ -21,6 +21,8 @@ class ImageGridViewActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_imagegridview
 
     override fun initView() {
+        title = "ImageGridView"
+
         initIGV()
         initIGV1()
     }

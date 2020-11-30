@@ -16,6 +16,8 @@ class CaptchaActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_captcha_xml
 
     override fun initView() {
+        title = "Captcha"
+
         icv.setOnSendListener {
             icvValidate().apply { }
         }

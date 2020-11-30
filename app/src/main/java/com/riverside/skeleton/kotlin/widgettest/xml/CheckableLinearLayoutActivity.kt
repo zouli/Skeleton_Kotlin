@@ -12,6 +12,8 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_checkable_linearlayout
 
     override fun initView() {
+        title = "Checkable LinearLayout"
+
         val datas = listOf("aa", "bb", "cc", "dd")
 
         val adapter = ListViewAdapter(

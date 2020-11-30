@@ -10,6 +10,8 @@ class CompleteViewActivity : SBaseActivity() {
     override fun setLayoutID() = R.layout.activity_complete_view
 
     override fun initView() {
+        title = "Complete View"
+
         val allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
         et_edit.setText((1..500).map { allowedChars.random() }.joinToString(""))
         et_edit.strongRequestTouch()

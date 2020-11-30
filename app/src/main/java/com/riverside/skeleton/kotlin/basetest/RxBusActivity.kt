@@ -25,6 +25,8 @@ class RxBusActivity : SBaseActivity() {
     var index = 1
 
     override fun initView() {
+        title = "RxBus"
+
         verticalLayout {
             lparams(matchParent, matchParent)
 
