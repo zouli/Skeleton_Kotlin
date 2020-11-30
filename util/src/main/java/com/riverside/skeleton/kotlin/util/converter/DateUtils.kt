@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 /**
- * 日期工具    1.0
- * b_e  2019/05/07
+ * 日期工具    1.0.1
+ * b_e                2019/05/07
+ * 添加日期时间变量     2020/11/30
  */
 class DateUtils {
     companion object {
@@ -44,14 +45,30 @@ val Calendar.timeZero: Calendar
         )
     }
 
-val Calendar.year get() = this.get(Calendar.YEAR)
-val Calendar.month get() = this.get(Calendar.MONTH)
-val Calendar.dayOfMonth get() = this.get(Calendar.DAY_OF_MONTH)
-val Calendar.hourOfDay get() = this.get(Calendar.HOUR_OF_DAY)
-val Calendar.minute get() = this.get(Calendar.MINUTE)
-val Calendar.second get() = this.get(Calendar.SECOND)
-val Calendar.milliSecond get() = this.get(Calendar.MILLISECOND)
-val Calendar.dayOfWeek get() = this.get(Calendar.DAY_OF_WEEK)
+var Calendar.year
+    get() = this.get(Calendar.YEAR)
+    set(value) = this.set(Calendar.YEAR, value)
+var Calendar.month
+    get() = this.get(Calendar.MONTH)
+    set(value) = this.set(Calendar.MONTH, value)
+var Calendar.dayOfMonth
+    get() = this.get(Calendar.DAY_OF_MONTH);
+    set(value) = this.set(Calendar.DAY_OF_MONTH, value)
+var Calendar.hourOfDay
+    get() = this.get(Calendar.HOUR_OF_DAY);
+    set(value) = this.set(Calendar.HOUR_OF_DAY, value)
+var Calendar.minute
+    get() = this.get(Calendar.MINUTE)
+    set(value) = this.set(Calendar.MINUTE, value)
+var Calendar.second
+    get() = this.get(Calendar.SECOND)
+    set(value) = this.set(Calendar.SECOND, value)
+var Calendar.milliSecond
+    get() = this.get(Calendar.MILLISECOND)
+    set(value) = this.set(Calendar.MILLISECOND, value)
+var Calendar.dayOfWeek
+    get() = this.get(Calendar.DAY_OF_WEEK)
+    set(value) = this.set(Calendar.DAY_OF_WEEK, value)
 
 operator fun Calendar.minus(cal2: Calendar): TimeInterval =
     TimeInterval(this.timeInMillis - cal2.timeInMillis)

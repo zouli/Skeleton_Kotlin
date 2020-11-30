@@ -2,6 +2,8 @@ package com.riverside.skeleton.kotlin
 
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.DateUtils
+import com.riverside.skeleton.kotlin.util.converter.hourOfDay
+import com.riverside.skeleton.kotlin.util.converter.minute
 import com.riverside.skeleton.kotlin.util.converter.toString
 import com.riverside.skeleton.kotlin.util.extras.startActivity
 import com.riverside.skeleton.kotlin.util.notice.toast
@@ -77,7 +79,10 @@ class WidgetXmlMainActivity : SBaseActivity() {
                         .showTime()
                         .setOnCancelled { "取消".toast(activity) }
                         .setOnDateTimeRecurrenceSet { selectedDate, hourOfDay, minute, recurrenceOption, recurrenceRule ->
-                            selectedDate.firstDate.toString(DateUtils.DATE_FORMAT_PATTERN2)
+                            selectedDate.firstDate.apply {
+                                this.hourOfDay = hourOfDay
+                                this.minute = minute
+                            }.toString(DateUtils.DATE_FORMAT_PATTERN2)
                                 .toast(activity)
                         }
                         .show()
