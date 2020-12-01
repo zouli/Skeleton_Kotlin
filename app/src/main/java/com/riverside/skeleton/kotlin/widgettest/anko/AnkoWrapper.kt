@@ -9,11 +9,12 @@ import android.view.ViewGroup
 import android.view.ViewManager
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.*
+import com.riverside.skeleton.kotlin.widget.toolbar.AlignCenterToolbar
 import org.jetbrains.anko.custom.ankoView
 
 inline fun ViewManager.inputCaptchaView(init: InputCaptchaView.() -> Unit): InputCaptchaView =
@@ -170,27 +171,31 @@ inline fun Context.checkableLinearLayout(init: _CheckableLinearLayout.() -> Unit
 }
 
 inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView {
-    return ankoView({ RecyclerView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ RecyclerView(it, null) }, 0, init)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 inline fun ViewManager.refreshListView(init: RefreshListView.() -> Unit): RefreshListView {
-    return ankoView({ RefreshListView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ RefreshListView(it, null) }, 0, init)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 inline fun ViewManager.refreshGridView(init: RefreshGridView.() -> Unit): RefreshGridView {
-    return ankoView({ RefreshGridView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ RefreshGridView(it, null) }, 0, init)
 }
 
 inline fun ViewManager.completeListView(init: CompleteListView.() -> Unit): CompleteListView {
-    return ankoView({ CompleteListView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ CompleteListView(it, null) }, 0, init)
 }
 
 inline fun ViewManager.completeGridView(init: CompleteGridView.() -> Unit): CompleteGridView {
-    return ankoView({ CompleteGridView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ CompleteGridView(it, null) }, 0, init)
 }
 
 inline fun ViewManager.imageGridView(init: ImageGridView.() -> Unit): ImageGridView {
-    return ankoView({ ImageGridView(ContextHolder.applicationContext, null) }, 0, init)
+    return ankoView({ ImageGridView(it, null) }, 0, init)
+}
+
+inline fun ViewManager.alignCenterToolbar(init: AlignCenterToolbar.() -> Unit): AlignCenterToolbar {
+    return ankoView({ AlignCenterToolbar(it as AppCompatActivity, null) }, 0, init)
 }

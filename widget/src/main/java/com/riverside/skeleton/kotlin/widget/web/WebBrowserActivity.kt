@@ -72,13 +72,10 @@ class WebBrowserActivity : SBaseActivity() {
     private val titleName: String by Extra(TITLE_NAME, "")
 
     override fun initView() {
-        toolbar.title = ""
-        toolbar_title.text = titleName
-        setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener {
+        acToolbar.title = titleName
+        acToolbar.setNavigation(R.drawable.web_toolbar_back) {
             actionKey(KeyEvent.KEYCODE_BACK)
         }
-        toolbar.setNavigationIcon(R.drawable.web_toolbar_back)
 
         // 覆盖WebView默认使用第三方或系统默认浏览器打开网页的行为，使网页用WebView打开
         wvContent.webViewClient = nativeWebViewClient
@@ -123,7 +120,7 @@ class WebBrowserActivity : SBaseActivity() {
     private val nativeWebViewClient = object : WebViewClient() {
         override fun onPageFinished(view: WebView, url: String) {
             super.onPageFinished(view, url)
-            if (titleName.isEmpty()) toolbar_title.text = view.title
+            if (titleName.isEmpty()) acToolbar.title = view.title
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -183,7 +180,7 @@ class WebBrowserActivity : SBaseActivity() {
         override fun onJsAlert(
             view: WebView, url: String, message: String, result: JsResult
         ): Boolean {
-            AlertDialog.Builder(activity).setTitle(toolbar_title.text)
+            AlertDialog.Builder(activity).setTitle(acToolbar.title)
                 .setMessage(message)
                 .setPositiveButton("确定") { dialog, which ->
                     result.confirm()
@@ -196,7 +193,7 @@ class WebBrowserActivity : SBaseActivity() {
         override fun onJsConfirm(
             view: WebView, url: String, message: String, result: JsResult
         ): Boolean {
-            AlertDialog.Builder(activity).setTitle(toolbar_title.text)
+            AlertDialog.Builder(activity).setTitle(acToolbar.title)
                 .setMessage(message)
                 .setPositiveButton("确定") { dialog, which ->
                     result.confirm()

@@ -1,36 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.riverside.skeleton.kotlin.widget.toolbar.AlignCenterToolbar
+            android:id="@+id/acToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contextClickable="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/AppTheme.Toolbar"
-                app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                    android:id="@+id/toolbar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:text=""
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="@dimen/toolbar_title_font_size" />
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+            android:layout_height="wrap_content" />
 
     <ProgressBar
             android:id="@+id/pb_loading"
