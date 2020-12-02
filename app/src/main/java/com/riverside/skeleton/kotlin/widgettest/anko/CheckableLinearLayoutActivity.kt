@@ -1,9 +1,11 @@
 package com.riverside.skeleton.kotlin.widgettest.anko
 
+import android.os.Build
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.image.tintDrawable
@@ -32,13 +34,12 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
         initData()
     }
 
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     private fun initData() {
-        val datas = listOf("aa", "bb", "cc", "dd")
+        val data = listOf("aa", "bb", "cc", "dd")
 
         val adapter =
-            ListViewAdapter(
-                datas
-            ) { position: Int, item: String ->
+            ListViewAdapter(data) { position: Int, item: String ->
                 ListItemCheckableLinearLayout<CheckableLinearLayoutActivity>().createView(
                     AnkoContext.create(
                         this@CheckableLinearLayoutActivity,

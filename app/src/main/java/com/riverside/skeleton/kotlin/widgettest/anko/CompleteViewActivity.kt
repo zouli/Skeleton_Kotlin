@@ -48,14 +48,14 @@ class CompleteViewActivity : SBaseActivity() {
         tv_text.setText((1..500).map { allowedChars.random() }.joinToString(""))
         tv_text.strongRequestTouch()
 
-        val datas = mutableListOf("aa", "bb", "cc", "dd")
-        datas.add("ee")
-        datas.add("ff")
-        datas.add("gg")
-        datas.add("hh")
-        datas.add("ii")
+        val data = mutableListOf("aa", "bb", "cc", "dd")
+        data.add("ee")
+        data.add("ff")
+        data.add("gg")
+        data.add("hh")
+        data.add("ii")
 
-        val adapterList = ListViewAdapter(datas) { position, item ->
+        val adapterList = ListViewAdapter(data) { position, item ->
             ListItemRefreshListView<CompleteViewActivity>().createView(
                 AnkoContext.create(
                     this@CompleteViewActivity, CompleteViewActivity()
@@ -68,7 +68,7 @@ class CompleteViewActivity : SBaseActivity() {
         clv_list.adapter = adapterList
         adapterList.notifyDataSetChanged()
 
-        val adapterGrid = ListViewAdapter(datas) { position, item ->
+        val adapterGrid = ListViewAdapter(data) { position, item ->
             ListItemRefreshListView<CompleteViewActivity>().createView(
                 AnkoContext.create(
                     this@CompleteViewActivity, CompleteViewActivity()

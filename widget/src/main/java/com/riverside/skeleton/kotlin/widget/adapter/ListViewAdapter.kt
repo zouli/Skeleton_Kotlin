@@ -6,12 +6,12 @@ import android.widget.BaseAdapter
 import com.riverside.skeleton.kotlin.widget.adapter.viewholders.ListViewHolder
 
 /**
- * 适用于ListView的 通用 Adapter
+ * 适用于ListView的通用Adapter
  *
  * b_e      2020/11/16
  */
 class ListViewAdapter<D>() : BaseAdapter() {
-    var mItemLayout: Int? = null
+    private var mItemLayout: Int? = null
 
     //数据集
     private var mDataSet = ArrayList<D>()
@@ -20,22 +20,20 @@ class ListViewAdapter<D>() : BaseAdapter() {
 
     private var _onBindData: ((viewHolder: ListViewHolder, position: Int, item: D) -> Unit)? = null
 
-    constructor(layoutId: Int) : this() {
-        mItemLayout = layoutId
-    }
-
-    constructor(datas: List<D> = listOf(),
-                onGetView: (position: Int, item: D) -> View): this() {
-        mDataSet.addAll(datas)
+    constructor(
+        data: List<D> = listOf(),
+        onGetView: (position: Int, item: D) -> View
+    ) : this() {
+        mDataSet.addAll(data)
         _onGetView = onGetView
     }
 
     constructor(
-        layoutId: Int, datas: List<D> = listOf(),
+        layoutId: Int, data: List<D> = listOf(),
         onBindData: (viewHolder: ListViewHolder, position: Int, item: D) -> Unit
     ) : this() {
         mItemLayout = layoutId
-        mDataSet.addAll(datas)
+        mDataSet.addAll(data)
         _onBindData = onBindData
     }
 

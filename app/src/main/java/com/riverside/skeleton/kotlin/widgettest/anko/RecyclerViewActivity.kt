@@ -11,7 +11,6 @@ import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.image.tintDrawable
 import com.riverside.skeleton.kotlin.util.view.SpacesItemDecoration
 import com.riverside.skeleton.kotlin.widget.adapter.RecyclerAdapter
-import kotlinx.android.synthetic.main.activity_recycler_view.*
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.verticalLayout
@@ -31,9 +30,9 @@ class RecyclerViewActivity : SBaseActivity() {
             }.lparams(matchParent, matchParent)
         }
 
-        val datas = listOf("aa", "bb", "cc", "dd")
+        val data = listOf("aa", "bb", "cc", "dd")
 
-        val adapter = RecyclerAdapter(datas, { viewGroup, viewType ->
+        val adapter = RecyclerAdapter(data, { viewGroup, viewType ->
             ListItemCheckableLinearLayout<RecyclerViewActivity>().createView(
                 AnkoContext.create(
                     this@RecyclerViewActivity,

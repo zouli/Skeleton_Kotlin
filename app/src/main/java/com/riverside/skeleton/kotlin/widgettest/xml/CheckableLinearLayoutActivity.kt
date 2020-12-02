@@ -14,10 +14,10 @@ class CheckableLinearLayoutActivity : SBaseActivity() {
     override fun initView() {
         title = "Checkable LinearLayout"
 
-        val datas = listOf("aa", "bb", "cc", "dd")
+        val data = listOf("aa", "bb", "cc", "dd")
 
         val adapter = ListViewAdapter(
-            R.layout.list_item_checkable_linearlayout, datas
+            R.layout.list_item_checkable_linearlayout, data
         ) { viewHolder, position, item ->
             viewHolder.setText(R.id.tv_text, item)
             viewHolder.setImageDrawable(

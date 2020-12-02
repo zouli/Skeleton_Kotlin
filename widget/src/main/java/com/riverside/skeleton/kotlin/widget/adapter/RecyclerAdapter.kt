@@ -12,7 +12,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.viewholders.RecyclerViewHold
  * b_e      2020/11/16
  */
 class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
-    var mItemLayout: Int? = null
+    private var mItemLayout: Int? = null
 
     //单击事件
     var mOnItemClickListener: ((position: Int) -> Unit)? = null
@@ -25,26 +25,22 @@ class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
     private var _onBindData: ((viewHolder: RecyclerViewHolder, position: Int, item: D) -> Unit)? =
         null
 
-    constructor(layoutId: Int) : this() {
-        mItemLayout = layoutId
-    }
-
     constructor(
-        datas: List<D> = listOf(),
+        data: List<D> = listOf(),
         onGetView: (viewGroup: ViewGroup, viewType: Int) -> View,
         onBindData: (viewHolder: RecyclerViewHolder, position: Int, item: D) -> Unit
     ) : this() {
-        mDataSet.addAll(datas)
+        mDataSet.addAll(data)
         _onGetView = onGetView
         _onBindData = onBindData
     }
 
     constructor(
-        layoutId: Int, datas: List<D> = listOf(),
+        layoutId: Int, data: List<D> = listOf(),
         onBindData: (viewHolder: RecyclerViewHolder, position: Int, item: D) -> Unit
     ) : this() {
         mItemLayout = layoutId
-        mDataSet.addAll(datas)
+        mDataSet.addAll(data)
         _onBindData = onBindData
     }
 
@@ -111,7 +107,7 @@ class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
     }
 
     private fun setupItemClickListener(holder: RecyclerViewHolder, position: Int) {
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener { _ ->
             mOnItemClickListener?.let { it(position) }
         }
     }

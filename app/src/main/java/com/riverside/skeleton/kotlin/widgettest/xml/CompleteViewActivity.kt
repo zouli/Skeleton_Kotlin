@@ -16,15 +16,15 @@ class CompleteViewActivity : SBaseActivity() {
         et_edit.setText((1..500).map { allowedChars.random() }.joinToString(""))
         et_edit.strongRequestTouch()
 
-        val datas = mutableListOf("aa", "bb", "cc", "dd")
-        datas.add("ee")
-        datas.add("ff")
-        datas.add("gg")
-        datas.add("hh")
-        datas.add("ii")
+        val data = mutableListOf("aa", "bb", "cc", "dd")
+        data.add("ee")
+        data.add("ff")
+        data.add("gg")
+        data.add("hh")
+        data.add("ii")
 
         val adapterList = ListViewAdapter(
-            R.layout.list_item_refresh_listview, datas
+            R.layout.list_item_refresh_listview, data
         ) { viewHolder, position, item ->
             viewHolder.setText(R.id.tv_title, item)
         }
@@ -33,7 +33,7 @@ class CompleteViewActivity : SBaseActivity() {
         adapterList.notifyDataSetChanged()
 
         val adapterGrid = ListViewAdapter(
-            R.layout.list_item_refresh_listview, datas
+            R.layout.list_item_refresh_listview, data
         ) { viewHolder, position, item ->
             viewHolder.setText(R.id.tv_title, item)
         }
