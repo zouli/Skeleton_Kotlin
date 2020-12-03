@@ -90,18 +90,22 @@
                 android:screenOrientation="portrait" />
         <activity
                 android:name=".widgettest.xml.ImageGridViewActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".basetest.ExtrasActivity"
                 android:screenOrientation="portrait" />
         <activity
                 android:name=".widgettest.anko.ImageGridViewActivity"
-                android:theme="@style/AppTheme.NoActionBar"
-                android:screenOrientation="portrait" />
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".WidgetUIMainActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.SelectorActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".basetest.TestService" />
     </application>

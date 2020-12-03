@@ -14,5 +14,15 @@
                 android:process=":web"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".selector.SBaseSelectorActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".selector.CommonSelectorActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
     </application>
 </manifest>

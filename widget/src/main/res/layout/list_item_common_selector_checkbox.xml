@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.riverside.skeleton.kotlin.widget.containers.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:cll_checkedChild="true">
+
+    <CheckBox
+            android:id="@+id/selector"
+            style="@style/SBaseSelector.CheckBoxButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text=""
+            android:theme="@style/SBaseSelector.CheckBoxButton" />
+
+    <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="#000000" />
+
+    <TextView
+            android:id="@+id/tv_subTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="#000000" />
+</com.riverside.skeleton.kotlin.widget.containers.CheckableLinearLayout>
