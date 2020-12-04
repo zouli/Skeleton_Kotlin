@@ -15,6 +15,7 @@ import com.riverside.skeleton.kotlin.widget.selector.CommonSelectorBiz
 import com.riverside.skeleton.kotlin.widget.selector.CommonSelectorOptions
 import com.riverside.skeleton.kotlin.widget.web.WebBrowserActivity
 import com.riverside.skeleton.kotlin.widgettest.CommonSelectorTestBiz
+import com.riverside.skeleton.kotlin.widgettest.PicassoActivity
 import com.riverside.skeleton.kotlin.widgettest.SelectorActivity
 import org.jetbrains.anko.button
 import org.jetbrains.anko.matchParent
@@ -79,6 +80,12 @@ class WidgetUIMainActivity : SBaseActivity() {
                     startActivity<SelectorActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("Picasso") {
+                onClick {
+                    startActivity<PicassoActivity>()
+                }
+            }
         }
     }
 }

@@ -106,6 +106,9 @@
                 android:name=".widgettest.SelectorActivity"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".widgettest.PicassoActivity"
+                android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />
     </application>

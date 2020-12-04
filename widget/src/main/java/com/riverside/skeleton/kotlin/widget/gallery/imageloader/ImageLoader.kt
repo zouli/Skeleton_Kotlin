@@ -1,9 +1,9 @@
 package com.riverside.skeleton.kotlin.widget.gallery.imageloader
 
 import android.widget.ImageView
-import com.riverside.skeleton.kotlin.util.file.exists
+import com.riverside.skeleton.kotlin.util.picasso.read
 import com.squareup.picasso.Picasso
-import java.io.File
+import com.squareup.picasso.RequestCreator
 
 /**
  * 图片加载器    1.0
@@ -19,14 +19,18 @@ interface ImageLoader {
  * 图片加载器Picasso版
  */
 class PicassoImageLoader : ImageLoader {
+    private lateinit var funs: RequestCreator.(width: Int, height: Int) -> Unit
+
+    fun function(block: RequestCreator.(width: Int, height: Int) -> Unit) {
+        funs = block
+    }
+
     override fun loadImage(imageView: ImageView, url: String, width: Int, height: Int) {
-        Picasso.get().run {
-            if (url.exists()) this.load(File(url)) else this.load(url)
-        }.let {
+        Picasso.get().read(url).let {
             if (width > -1 && height > -1) {
                 it.resize(width, height).centerCrop()
             } else it
-        }.into(imageView)
+        }.apply { if (::funs.isInitialized) funs(width, height) }.into(imageView)
     }
 
     override fun loadImage(imageView: ImageView, url: String) {
