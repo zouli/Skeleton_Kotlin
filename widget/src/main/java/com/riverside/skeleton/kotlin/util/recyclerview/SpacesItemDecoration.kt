@@ -1,4 +1,4 @@
-package com.riverside.skeleton.kotlin.util.view
+package com.riverside.skeleton.kotlin.util.recyclerview
 
 import android.graphics.Rect
 import android.view.View

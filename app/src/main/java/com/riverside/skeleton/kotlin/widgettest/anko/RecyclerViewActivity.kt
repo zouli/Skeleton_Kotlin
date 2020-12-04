@@ -1,23 +1,25 @@
 package com.riverside.skeleton.kotlin.widgettest.anko
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.view.Gravity
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.image.tintDrawable
-import com.riverside.skeleton.kotlin.util.view.SpacesItemDecoration
+import com.riverside.skeleton.kotlin.util.recyclerview.FlowLayoutManager
+import com.riverside.skeleton.kotlin.util.recyclerview.SpacesItemDecoration
 import com.riverside.skeleton.kotlin.widget.adapter.RecyclerAdapter
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.*
 
 class RecyclerViewActivity : SBaseActivity() {
     lateinit var rv_list: RecyclerView
 
+    @SuppressLint("ResourceType")
     @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     override fun initView() {
         title = "RecyclerAdapter"
@@ -30,25 +32,30 @@ class RecyclerViewActivity : SBaseActivity() {
             }.lparams(matchParent, matchParent)
         }
 
-        val data = listOf("aa", "bb", "cc", "dd")
+        val data = mutableListOf("aaaaaaaaaaaaaa", "bbbbbbbb", "ccccccccccc", "ddddd")
+        data.add("eeeeeeeeee")
+        data.add("ff")
+        data.add("ggggggg")
 
         val adapter = RecyclerAdapter(data, { viewGroup, viewType ->
-            ListItemCheckableLinearLayout<RecyclerViewActivity>().createView(
-                AnkoContext.create(
-                    this@RecyclerViewActivity,
-                    RecyclerViewActivity()
-                )
-            )
+            with(rv_list.context) {
+                verticalLayout {
+                    lparams(wrapContent, wrapContent)
+                    background = ColorDrawable("#FFFFFF".toColorInt())
+                    padding = 8.dip
+
+                    textView {
+                        id = 101
+                    }.lparams(matchParent, wrapContent) {
+                        gravity = Gravity.CENTER
+                    }
+                }
+            }
         }, { viewHolder, position, item ->
-            viewHolder.setText(ListItemCheckableLinearLayout.TV_TEXT, item)
-            viewHolder.setImageDrawable(
-                ListItemCheckableLinearLayout.IV_IMAGE,
-                resources.getDrawable(R.mipmap.ic_launcher)
-                    .tintDrawable(R.color.checkable_image_selector)
-            )
+            viewHolder.setText(101, item)
         })
 
-        rv_list.layoutManager = LinearLayoutManager(this@RecyclerViewActivity)
+        rv_list.layoutManager = FlowLayoutManager()
         rv_list.addItemDecoration(SpacesItemDecoration(1.dip))
         rv_list.adapter = adapter
         adapter.addItem("eee")
