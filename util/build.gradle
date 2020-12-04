@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply from: '../libs/util_libs.gradle'
+apply from: '../libs/dokka.gradle'
 
 android {
     compileSdkVersion 28

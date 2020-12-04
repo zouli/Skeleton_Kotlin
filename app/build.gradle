@@ -5,6 +5,7 @@ apply from: '../libs/util_libs.gradle'
 apply from: '../libs/base_libs.gradle'
 apply from: '../libs/net_libs.gradle'
 apply from: '../libs/widget_libs.gradle'
+apply from: '../libs/dokka.gradle'
 
 android {
     compileSdkVersion 28
