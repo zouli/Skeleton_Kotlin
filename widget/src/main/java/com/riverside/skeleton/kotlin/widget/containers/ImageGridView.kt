@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -13,11 +13,14 @@ import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.widget.R
+import com.riverside.skeleton.kotlin.widget.gallery.imageloader.ImageLoader
 import com.riverside.skeleton.kotlin.widget.gallery.imageloader.PicassoImageLoader
+import kotlin.math.abs
 
 /**
- * 图片显示Grid控件   1.0
- * b_e      2020/11/23
+ * 图片显示Grid控件   1.1
+ * b_e                      2020/11/23
+ * 添加SmartColumn加载器     2020/12/05
  */
 class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context, attrs) {
     constructor(context: Context) : this(context, null)
@@ -117,11 +120,10 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      * 动态列数
      */
     private val smartColumnCount by lazy {
-        if (isReadOnly && isSmartColumnCount) when (imageList.size) {
-            1 -> 1
-            2, 4 -> 2
-            else -> 3
-        } else this.columnCount
+        if (isReadOnly && isSmartColumnCount)
+            smartColumnLoader.getColumnCount(imageList.size)
+        else
+            this.columnCount
     }
 
     /**
@@ -129,37 +131,60 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     private fun showImage() {
         this.post {
-            columnCount = smartColumnCount
+            columnCount = abs(smartColumnCount)
             removeAllViews()
 
             (0 until imageList.count()).forEach { i ->
-                this.addView(getImageView(i))
+                this.addView(getImageView(i).apply {
+                    getLayoutParams(layoutParams, i)
+                })
             }
 
             //判断是否显示默认添加图片按钮
             if (!isReadOnly && addButtonIcon != null && childCount < imageCount) {
-                this.addView(getAddImageView())
+                this.addView(getAddImageView().apply {
+                    getLayoutParams(layoutParams, imageList.size)
+                })
             }
+        }
+    }
+
+    /**
+     * 取得LayoutParams
+     */
+    private fun getLayoutParams(layoutParams: ViewGroup.LayoutParams, position: Int) {
+        with(layoutParams as LayoutParams) {
+            val (row, col, spec) = smartColumnLoader.getCoordinate(
+                position, columnCount, smartColumnCount
+            )
+
+            this.rowSpec = spec(row, spec)
+            this.columnSpec = spec(col, spec)
+
+            val width =
+                this@ImageGridView.width - this@ImageGridView.paddingLeft - this@ImageGridView.paddingRight
+            val itemWidth =
+                (width - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
+            this.width = itemWidth
+            this.height = itemWidth
+
+            if (col > 0) this.leftMargin = dividerSize
+            if (row > 0) this.topMargin = dividerSize
         }
     }
 
     /**
      * 生成图片容器
      */
-    private val rl_image
+    private val rlImage
         get() = RelativeLayout(context).apply {
-            layoutParams =
-                LayoutParams(
-                    this@ImageGridView.width / smartColumnCount,
-                    this@ImageGridView.width / smartColumnCount
-                )
-            setPadding(dividerSize, dividerSize, dividerSize, dividerSize)
+            layoutParams = LayoutParams()
         }
 
     /**
      * 生成图片控件
      */
-    private val iv_image
+    private val ivImage
         get() = ImageView(context).apply {
             layoutParams =
                 RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
@@ -171,10 +196,10 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     /**
      * 取得图片控件
      */
-    private fun getImageView(position: Int) = rl_image.apply {
-        val iWidth = this@ImageGridView.width / smartColumnCount
-        addView(iv_image.apply {
-            imageLoader.loadImage(this@apply, imageList[position], iWidth, iWidth)
+    private fun getImageView(position: Int) = rlImage.apply {
+        val iWidth = this@ImageGridView.width / abs(smartColumnCount)
+        addView(ivImage.apply {
+            imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
             this.tag = position
             setOnClickListener { v ->
                 if (::imageClickListener.isInitialized)
@@ -192,7 +217,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             scaleType = ImageView.ScaleType.FIT_CENTER
             setImageResource(R.drawable.imagegrid_delete_image)
             tag = position
-            setOnClickListener { v ->
+            setOnClickListener {
                 if (::deleteImageClickListener.isInitialized)
                     deleteImageClickListener(position, imageList[position])
             }
@@ -202,8 +227,8 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     /**
      * 生成默认添加图片按钮
      */
-    private fun getAddImageView() = rl_image.apply {
-        addView(iv_image.apply {
+    private fun getAddImageView() = rlImage.apply {
+        addView(ivImage.apply {
             setImageDrawable(addButtonIcon)
             setOnClickListener {
                 if (::addImageClickListener.isInitialized) addImageClickListener()
@@ -222,7 +247,12 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     /**
      * 图片加载器
      */
-    var imageLoader = PicassoImageLoader()
+    var imageLoader: ImageLoader = PicassoImageLoader()
+
+    /**
+     * SmartColumn加载器
+     */
+    var smartColumnLoader: SmartColumnLoader = DefaultSmartColumnLoader()
 
     private lateinit var imageClickListener: (v: View, position: Int, url: String) -> Unit
 
@@ -240,5 +270,57 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
 
     fun setAddImageClickListener(block: () -> Unit) {
         addImageClickListener = block
+    }
+
+    /**
+     * SmartColumn加载接口
+     */
+    interface SmartColumnLoader {
+        /**
+         * 取得行数
+         */
+        fun getColumnCount(size: Int): Int
+
+        /**
+         * 取得坐标
+         */
+        fun getCoordinate(
+            position: Int, columnCount: Int, smartColumnCount: Int
+        ): Triple<Int, Int, Int>
+    }
+
+    /**
+     * 默认SmartColumn加载器
+     */
+    class DefaultSmartColumnLoader : SmartColumnLoader {
+        override fun getColumnCount(size: Int) = when (size) {
+            1 -> 1
+            2, 4 -> 2
+            3, 5, 6 -> -3
+            else -> 3
+        }
+
+        override fun getCoordinate(
+            position: Int, columnCount: Int, smartColumnCount: Int
+        ): Triple<Int, Int, Int> {
+            var spec = 1
+            var row = position / columnCount
+            var col = position % columnCount
+            if (smartColumnCount < 0) {
+                spec = if (position == 0) columnCount - 1 else 1
+                row = when {
+                    position == 0 -> 0
+                    position < columnCount -> position - 1
+                    else -> (position / columnCount) + columnCount - 1
+                }
+                col = when {
+                    position == 0 -> 0
+                    row < columnCount - 1 -> columnCount - 1
+                    else -> position % columnCount
+                }
+            }
+
+            return Triple(row, col, spec)
+        }
     }
 }

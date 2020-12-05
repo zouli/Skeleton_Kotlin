@@ -18,6 +18,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:orientation="vertical">
 
             <com.riverside.skeleton.kotlin.widget.containers.ImageGridView
@@ -26,6 +27,7 @@
                     android:layout_height="wrap_content"
                     android:background="#F3F3F3"
                     android:columnCount="4"
+                    android:padding="4dp"
                     app:igv_addButtonIcon="@drawable/image_grid_add_image"
                     app:igv_dividerSize="2dp" />
 
@@ -34,7 +36,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:columnCount="3"
-                    app:igv_dividerSize="2dp"
                     app:igv_readOnly="true"
                     app:igv_smartColumnCount="true" />
         </LinearLayout>
