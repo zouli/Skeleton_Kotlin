@@ -16,9 +16,8 @@ import com.riverside.skeleton.kotlin.base.application.SBaseApplication
 import com.riverside.skeleton.kotlin.base.service.SBaseService
 import com.riverside.skeleton.kotlin.util.extras.Extra
 import com.riverside.skeleton.kotlin.util.file.*
+import com.riverside.skeleton.kotlin.util.looper.runOnUi
 import com.riverside.skeleton.kotlin.util.packageinfo.hasPermission
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 
 /**
  * 自动升级服务   1.1
@@ -65,27 +64,25 @@ class UpgradeService : SBaseService() {
      * 显示下载窗口
      */
     private fun showDialog() {
-        Observable.just("")
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                downloadDialog = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ProgressDialog(
-                        ActivityStackManager.currentActivity,
-                        R.style.Colored_Dialog_Alert
-                    )
-                } else {
-                    ProgressDialog(ActivityStackManager.currentActivity)
-                }
-                downloadDialog.setTitle(title)
-                if (!TextUtils.isEmpty(message)) {
-                    downloadDialog.setMessage(message)
-                }
-                downloadDialog.setOnCancelListener { cancelDownload() }
-                downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
-                downloadDialog.setCanceledOnTouchOutside(false)
-                downloadDialog.setProgressNumberFormat("")
-                downloadDialog.show()
+        runOnUi {
+            downloadDialog = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ProgressDialog(
+                    ActivityStackManager.currentActivity,
+                    R.style.Colored_Dialog_Alert
+                )
+            } else {
+                ProgressDialog(ActivityStackManager.currentActivity)
             }
+            downloadDialog.setTitle(title)
+            if (!TextUtils.isEmpty(message)) {
+                downloadDialog.setMessage(message)
+            }
+            downloadDialog.setOnCancelListener { cancelDownload() }
+            downloadDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
+            downloadDialog.setCanceledOnTouchOutside(false)
+            downloadDialog.setProgressNumberFormat("")
+            downloadDialog.show()
+        }
     }
 
     /**
@@ -106,11 +103,9 @@ class UpgradeService : SBaseService() {
      * @param progress 当前进度 1~100
      */
     private fun setProgress(progress: Int) {
-        Observable.just("")
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                downloadDialog.progress = progress
-            }
+        runOnUi {
+            downloadDialog.progress = progress
+        }
     }
 
     /**
@@ -170,21 +165,19 @@ class UpgradeService : SBaseService() {
      * 下载完成
      */
     private fun downloadOver(filename: String) {
-        Observable.just("")
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                //关闭下载窗口
-                downloadDialog.dismiss()
+        runOnUi {
+            //关闭下载窗口
+            downloadDialog.dismiss()
 
-                //取消系统下载任务
-                //downloadManager.remove(lastDownloadId);
+            //取消系统下载任务
+            //downloadManager.remove(lastDownloadId);
 
-                // 发送文件下载完成消息
-                val intent = Intent(UpgradeReceiver.DOWNLOAD_UPGRADE_OVER)
-                intent.setPackage(packageName)
-                intent.putExtra("path", filename)
-                sendBroadcast(intent)
-            }
+            // 发送文件下载完成消息
+            val intent = Intent(UpgradeReceiver.DOWNLOAD_UPGRADE_OVER)
+            intent.setPackage(packageName)
+            intent.putExtra("path", filename)
+            sendBroadcast(intent)
+        }
     }
 
     /**
