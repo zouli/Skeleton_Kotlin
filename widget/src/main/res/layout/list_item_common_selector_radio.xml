@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:clickable="false"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:padding="8dp"
         app:cll_checkedChild="true">
 
     <RadioButton

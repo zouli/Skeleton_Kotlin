@@ -49,7 +49,7 @@ class BaseMainActivity : SBaseActivity() {
 
         verticalLayout {
             lparams(matchParent, matchParent)
-            button("rxbus") {
+            button("eventbus") {
                 onClick {
                     startActivity<RxBusActivity>()
                 }

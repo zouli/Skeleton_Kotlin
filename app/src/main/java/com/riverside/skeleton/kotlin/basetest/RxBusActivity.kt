@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.base.rxbus.RxBus
+import com.riverside.skeleton.kotlin.base.eventbus.EventBus
 import com.riverside.skeleton.kotlin.util.extras.setArguments
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.tabLayout
@@ -34,12 +34,16 @@ class RxBusActivity : SBaseActivity() {
 
             button("普通") {
                 onClick {
-                    RxBus.post(et_text.text.toString())
+//                    RxBus.post(et_text.text.toString())
+                    EventBus.post(et_text.text.toString())
                 }
             }.lparams(matchParent, wrapContent)
 
             button("粘滞") {
-                onClick { RxBus.postSticky(et_text.text.toString()) }
+                onClick {
+//                    RxBus.postSticky(et_text.text.toString())
+                    EventBus.postSticky(et_text.text.toString())
+                }
             }
 
             button("add fragment") {
@@ -73,7 +77,8 @@ class RxBusActivity : SBaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        RxBus.removeSticky<String>()
+//        RxBus.removeSticky<String>()
+        EventBus.removeSticky<String>()
     }
 
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

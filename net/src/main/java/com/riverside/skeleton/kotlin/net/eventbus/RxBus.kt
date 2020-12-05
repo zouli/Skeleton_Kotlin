@@ -1,4 +1,4 @@
-package com.riverside.skeleton.kotlin.base.rxbus
+package com.riverside.skeleton.kotlin.net.eventbus
 
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
@@ -8,6 +8,7 @@ import io.reactivex.processors.PublishProcessor
 /**
  * RxBus 1.1
  * 支持Sticky模式
+ *
  * b_e  2019/07/25
  */
 object RxBus {
