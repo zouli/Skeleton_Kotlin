@@ -8,7 +8,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_picasso.*
 
 class PicassoActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_picasso
+    override val layoutId: Int get() = R.layout.activity_picasso
 
     override fun initView() {
         title = "Picasso"

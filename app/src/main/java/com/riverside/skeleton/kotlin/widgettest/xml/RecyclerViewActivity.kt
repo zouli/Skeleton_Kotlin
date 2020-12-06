@@ -10,7 +10,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.RecyclerAdapter
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 
 class RecyclerViewActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_recycler_view
+    override val layoutId: Int get() = R.layout.activity_recycler_view
 
     override fun initView() {
         title = "RecyclerAdapter"

@@ -11,7 +11,7 @@ import com.riverside.skeleton.kotlin.kotlinnextinputs.*
 import kotlinx.android.synthetic.main.activity_validate_xml.*
 
 class ValidateXmlActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_validate_xml
+    override val layoutId: Int get() = R.layout.activity_validate_xml
 
     override fun initView() {
         title = "Validate XML"

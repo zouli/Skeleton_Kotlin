@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.activity_checkable_linearlayout.*
 
 
 class CheckableLinearLayoutActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_checkable_linearlayout
+    override val layoutId: Int get() = R.layout.activity_checkable_linearlayout
 
     override fun initView() {
         title = "Checkable LinearLayout"

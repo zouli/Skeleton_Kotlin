@@ -20,12 +20,12 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        setMenuID().takeIf { it != 0 }?.let { setHasOptionsMenu(true) }
+        menuId.takeIf { it != 0 }?.let { setHasOptionsMenu(true) }
         arguments?.let { BundleHelper.bundle = it }
-        return setView(container) ?: inflater.inflate(setLayoutID(), container)
+        return setView(container) ?: inflater.inflate(layoutId, container)
     }
 
-    override fun setLayoutID(): Int = 0
+    override val layoutId: Int get() = 0
 
     override fun setView(container: ViewGroup?): View? = null
 
@@ -39,13 +39,13 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
     abstract override fun initView()
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        setMenuID().takeIf { it != 0 }?.let {
+        menuId.takeIf { it != 0 }?.let {
             inflater.inflate(it, menu)
             super.onCreateOptionsMenu(menu, inflater)
         }
     }
 
-    override fun setMenuID(): Int = 0
+    override val menuId: Int get() = 0
 
     /**
      * 封装ForResult

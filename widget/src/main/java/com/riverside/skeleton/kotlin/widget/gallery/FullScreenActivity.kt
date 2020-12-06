@@ -20,7 +20,7 @@ import java.lang.Exception
  * b_e      2020/11/26
  */
 class FullScreenActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_full_screen
+    override val layoutId: Int get() = R.layout.activity_full_screen
 
     private lateinit var imageLoader: ImageLoader
 

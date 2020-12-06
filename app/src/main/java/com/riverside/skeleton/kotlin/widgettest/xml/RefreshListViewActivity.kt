@@ -13,7 +13,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import kotlinx.android.synthetic.main.activity_refresh_listview.*
 
 class RefreshListViewActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_refresh_listview
+    override val layoutId: Int get() = R.layout.activity_refresh_listview
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initView() {

@@ -13,7 +13,7 @@ import com.riverside.skeleton.kotlin.widget.captcha.kotlinnextinputs.findInputCa
 import kotlinx.android.synthetic.main.activity_captcha_xml.*
 
 class CaptchaActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_captcha_xml
+    override val layoutId: Int get() = R.layout.activity_captcha_xml
 
     override fun initView() {
         title = "Captcha"

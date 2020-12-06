@@ -7,7 +7,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import kotlinx.android.synthetic.main.activity_complete_view.*
 
 class CompleteViewActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_complete_view
+    override val layoutId: Int get() = R.layout.activity_complete_view
 
     override fun initView() {
         title = "Complete View"

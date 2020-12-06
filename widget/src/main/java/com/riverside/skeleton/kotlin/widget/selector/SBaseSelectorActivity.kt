@@ -30,9 +30,9 @@ abstract class SBaseSelectorActivity : SBaseActivity(), SearchView.OnQueryTextLi
             invalidateOptionsMenu()
         }
 
-    override fun setLayoutID() = R.layout.activity_sbase_common_selector
+    override val layoutId: Int get() = R.layout.activity_sbase_common_selector
 
-    override fun setMenuID() = R.menu.menu_sbase_common_selector
+    override val menuId: Int get() = R.menu.menu_sbase_common_selector
 
     override fun initView() {
         // 初始化List

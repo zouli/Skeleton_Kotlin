@@ -26,7 +26,7 @@ class ImageGridViewActivity : SBaseActivity() {
         private const val REQUEST_CODE_IMAGE = 100
     }
 
-    override fun setLayoutID() = R.layout.activity_imagegridview
+    override val layoutId: Int get() = R.layout.activity_imagegridview
 
     override fun initView() {
         acToolbar.title = "ImageGridView"

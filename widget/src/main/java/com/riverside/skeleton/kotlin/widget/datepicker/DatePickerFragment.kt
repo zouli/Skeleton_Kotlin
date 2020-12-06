@@ -33,7 +33,7 @@ class DatePickerFragment : SBaseDialogFragment() {
         recurrenceOption: RecurrenceOption?, recurrenceRule: String?
     ) -> Unit
 
-    override fun setLayoutID() = R.layout.sublime_picker
+    override val layoutId: Int get() = R.layout.sublime_picker
 
     override fun initView() {
         with(view as SublimePicker) {

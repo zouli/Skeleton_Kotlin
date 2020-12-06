@@ -2,6 +2,7 @@ package com.riverside.skeleton.kotlin.base.eventbus
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -11,6 +12,7 @@ import kotlinx.coroutines.launch
  *
  * b_e      2020/12/05
  */
+@ExperimentalCoroutinesApi
 data class EventConsumer<T>(
     val coroutineScope: CoroutineScope, val dispatcher: CoroutineDispatcher,
     val next: (T) -> Unit, val exception: ((Throwable) -> Unit)? = null

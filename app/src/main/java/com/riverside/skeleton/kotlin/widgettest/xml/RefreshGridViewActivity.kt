@@ -13,7 +13,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import kotlinx.android.synthetic.main.activity_refresh_gridview.*
 
 class RefreshGridViewActivity : SBaseActivity() {
-    override fun setLayoutID(): Int = R.layout.activity_refresh_gridview
+    override val layoutId: Int get() = R.layout.activity_refresh_gridview
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun initView() {

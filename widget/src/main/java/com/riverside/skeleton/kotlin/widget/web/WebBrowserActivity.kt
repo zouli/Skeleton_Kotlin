@@ -28,7 +28,7 @@ import kotlin.system.exitProcess
  */
 @SuppressLint("SetJavaScriptEnabled")
 class WebBrowserActivity : SBaseActivity() {
-    override fun setLayoutID() = R.layout.activity_web_browser
+    override val layoutId: Int get() = R.layout.activity_web_browser
 
     private val wvContent: WebView by lazy {
         WebView(ContextHolder.applicationContext).apply {

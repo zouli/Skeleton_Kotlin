@@ -24,7 +24,7 @@ abstract class SBaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         activity = this
-        if (setLayoutID() > 0) setContentView(setLayoutID())
+        if (layoutId > 0) setContentView(layoutId)
 
         ExtrasHelper.intent = intent
         initView()
@@ -38,12 +38,12 @@ abstract class SBaseActivity : AppCompatActivity() {
 
     abstract fun initView()
 
-    open fun setLayoutID(): Int = 0
+    open val layoutId: Int get() = 0
 
-    open fun setMenuID(): Int = 0
+    open val menuId: Int get() = 0
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return setMenuID().let {
+        return menuId.let {
             if (it == 0) {
                 super.onCreateOptionsMenu(menu)
             } else {
