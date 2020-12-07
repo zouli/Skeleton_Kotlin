@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.telephony.TelephonyManager
-import androidx.core.content.ContextCompat
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
+import com.riverside.skeleton.kotlin.base.utils.permission.hasPermissions
 import java.lang.reflect.Field
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
@@ -61,13 +61,9 @@ object OSVersionInfo : InfoSource {
  * 取得话机信息   1.0
  */
 object TelephonyInfo : InfoSource {
-    @SuppressLint("HardwareIds")
+    @SuppressLint("HardwareIds", "MissingPermission")
     override fun info(context: Context): JSONObject = JSONObject().also { json ->
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.READ_PHONE_STATE
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (context.hasPermissions(Manifest.permission.READ_PHONE_STATE)) {
             val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 json["PhoneCount"] = tm.phoneCount

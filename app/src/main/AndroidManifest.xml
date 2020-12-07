@@ -3,6 +3,7 @@
         package="com.riverside.skeleton.kotlin">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
             android:name=".application.MyApplication"
@@ -108,6 +109,9 @@
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".widgettest.PicassoActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".basetest.PermissionsActivity"
                 android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />

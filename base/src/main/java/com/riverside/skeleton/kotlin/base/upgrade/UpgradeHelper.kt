@@ -6,10 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
+import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
-import com.tbruyelle.rxpermissions2.RxPermissions
+import com.riverside.skeleton.kotlin.base.utils.permission.requestPermissions
 
 /**
  * 自动升级服务   1.0
@@ -57,23 +56,15 @@ class UpgradeHelper(val activity: Activity) {
      * 开始下载APK
      */
     private fun doUpgrade() {
-        val permissions = RxPermissions(activity as FragmentActivity)
-        permissions.request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .subscribe {
-                if (it) {
-                    intent.action = UpgradeService.ACTION_DOWNLOAD_URL
-                    intent.putExtra(UpgradeService.TITLE_EXTRA, title)
-                    intent.putExtra(UpgradeService.MESSAGE_EXTRA, message)
-                    intent.putExtra(UpgradeService.DOWNLOAD_URL_EXTRA, downloadUrl)
-                    activity.startService(intent)
-                } else {
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        101
-                    )
-                }
+        (activity as SBaseActivity).requestPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+            onGranted {
+                intent.action = UpgradeService.ACTION_DOWNLOAD_URL
+                intent.putExtra(UpgradeService.TITLE_EXTRA, title)
+                intent.putExtra(UpgradeService.MESSAGE_EXTRA, message)
+                intent.putExtra(UpgradeService.DOWNLOAD_URL_EXTRA, downloadUrl)
+                activity.startService(intent)
             }
+        }
     }
 
     /**

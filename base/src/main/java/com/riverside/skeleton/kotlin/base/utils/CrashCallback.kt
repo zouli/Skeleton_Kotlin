@@ -4,11 +4,11 @@ import android.Manifest
 import com.alibaba.fastjson.JSON
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
 import com.riverside.skeleton.kotlin.base.utils.collectinfo.CollectInfoHelper
+import com.riverside.skeleton.kotlin.base.utils.permission.hasPermissions
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.converter.toString
 import com.riverside.skeleton.kotlin.util.file.mkdirs
 import com.riverside.skeleton.kotlin.util.file.unaryPlus
-import com.riverside.skeleton.kotlin.util.packageinfo.hasPermission
 import com.zxy.recovery.callback.RecoveryCallback
 import java.io.FileOutputStream
 import java.util.*
@@ -62,7 +62,7 @@ class CrashCallback : RecoveryCallback {
 
         //取得日志文件保存路径
         var path =
-            if (SBaseApplication.instance.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE))
+            if (SBaseApplication.instance.hasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 SBaseApplication.instance.mkdirs(+"crash")
             else
                 SBaseApplication.instance.cacheDir.path

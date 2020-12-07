@@ -44,12 +44,3 @@ object PackageInfoHelper {
 fun Context.isAvailable(packageName: String): Boolean =
     this.packageManager.getInstalledPackages(0)
         .find { it.packageName == packageName } != null
-
-/**
- * 判断是否有权限
- */
-fun Context.hasPermission(permission: String): Boolean =
-    ContextCompat.checkSelfPermission(
-        this,
-        permission
-    ) == PackageManager.PERMISSION_GRANTED

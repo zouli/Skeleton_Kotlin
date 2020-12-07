@@ -108,6 +108,12 @@ class BaseMainActivity : SBaseActivity() {
                     startActivity<ExtrasActivity>()
                 }
             }
+
+            button("Permissions") {
+                onClick {
+                    startActivity<PermissionsActivity>()
+                }
+            }
         }
     }
 

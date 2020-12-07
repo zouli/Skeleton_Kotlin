@@ -14,10 +14,10 @@ import com.riverside.skeleton.kotlin.base.R
 import com.riverside.skeleton.kotlin.base.activity.ActivityStackManager
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
 import com.riverside.skeleton.kotlin.base.service.SBaseService
+import com.riverside.skeleton.kotlin.base.utils.permission.hasPermissions
 import com.riverside.skeleton.kotlin.util.extras.Extra
 import com.riverside.skeleton.kotlin.util.file.*
 import com.riverside.skeleton.kotlin.util.looper.runOnUi
-import com.riverside.skeleton.kotlin.util.packageinfo.hasPermission
 
 /**
  * 自动升级服务   1.1
@@ -134,7 +134,7 @@ class UpgradeService : SBaseService() {
         down.setVisibleInDownloadsUi(true)
 
         with(SBaseApplication.instance) {
-            if (this.hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (this.hasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 //设置文件保存路径
                 this.mkdirs("upgrade")
                 val filepath = this.getPath("upgrade")
