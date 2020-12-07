@@ -22,7 +22,9 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
     ): View? {
         menuId.takeIf { it != 0 }?.let { setHasOptionsMenu(true) }
         arguments?.let { BundleHelper.bundle = it }
-        return setView(container) ?: inflater.inflate(layoutId, container)
+        return setView(container) ?: if (layoutId != 0) inflater.inflate(
+            layoutId, container
+        ) else null
     }
 
     override val layoutId: Int get() = 0
