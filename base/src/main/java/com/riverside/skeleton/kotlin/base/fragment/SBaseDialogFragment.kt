@@ -15,7 +15,7 @@ import com.riverside.skeleton.kotlin.util.extras.IntentsHelper
  * b_e      2020/11/29
  */
 abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
-    lateinit var sBaseActivity: SBaseActivity
+    override val sBaseActivity: SBaseActivity get() = activity as SBaseActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,7 +31,6 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sBaseActivity = activity as SBaseActivity
 
         initView()
     }

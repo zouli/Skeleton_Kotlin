@@ -41,7 +41,7 @@ class DatePickerFragment : SBaseDialogFragment() {
         }
 
         dialog?.setCanceledOnTouchOutside(false)
-        dialog?.setOnKeyListener { dialog, keyCode, event ->
+        dialog?.setOnKeyListener { _, keyCode, _ ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 if (::onCancelledListener.isInitialized) onCancelledListener()
 

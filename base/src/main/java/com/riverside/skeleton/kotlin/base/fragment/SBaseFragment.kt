@@ -17,7 +17,7 @@ import com.riverside.skeleton.kotlin.util.extras.IntentsHelper
  * 添加ISBaseFragment接口   2020/11/29
  */
 abstract class SBaseFragment : Fragment(), ISBaseFragment {
-    lateinit var sBaseActivity: SBaseActivity
+    override val sBaseActivity: SBaseActivity get() = activity as SBaseActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,7 +33,6 @@ abstract class SBaseFragment : Fragment(), ISBaseFragment {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sBaseActivity = activity as SBaseActivity
 
         initView()
     }
@@ -78,4 +77,5 @@ interface ISBaseFragment {
     fun setView(container: ViewGroup?): View?
     fun initView()
     val menuId: Int
+    val sBaseActivity: SBaseActivity
 }
