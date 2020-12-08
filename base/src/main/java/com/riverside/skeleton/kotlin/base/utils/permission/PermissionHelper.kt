@@ -60,6 +60,7 @@ class PermissionHelper(val activity: SBaseActivity) {
     ) {
         if (!activity.hasPermissions(*permissions)) {
             runOnUi {
+                removeFragment()
                 activity.supportFragmentManager.beginTransaction()
                     .add(
                         RequestPermissionFragment().apply {
@@ -74,5 +75,13 @@ class PermissionHelper(val activity: SBaseActivity) {
             permissionCallback.callback()
             permissionCallback.onGranted(permissions.toMutableList())
         }
+    }
+
+    private fun removeFragment() {
+        activity.supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
+            ?.also {
+                activity.supportFragmentManager.beginTransaction().remove(it)
+                    .commitNowAllowingStateLoss()
+            }
     }
 }

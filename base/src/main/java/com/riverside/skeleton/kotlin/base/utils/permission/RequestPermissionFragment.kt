@@ -12,7 +12,7 @@ import pub.devrel.easypermissions.PermissionRequest
  * b_e      2020/12/07
  */
 class RequestPermissionFragment : SBaseFragment(), EasyPermissions.PermissionCallbacks {
-    private val permissions: Array<String> by FragmentArgument(PERMISSIONS, arrayOf())
+    private val permissions: Array<String> by FragmentArgument()
     private lateinit var onPermissionCallback: PermissionCallback
 
     @SuppressLint("RestrictedApi")
@@ -37,14 +37,12 @@ class RequestPermissionFragment : SBaseFragment(), EasyPermissions.PermissionCal
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (::onPermissionCallback.isInitialized) onPermissionCallback.onDenied(perms)
-            removeFragment()
         }
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (::onPermissionCallback.isInitialized) onPermissionCallback.onGranted(perms)
-            removeFragment()
         }
     }
 
@@ -54,14 +52,6 @@ class RequestPermissionFragment : SBaseFragment(), EasyPermissions.PermissionCal
     fun setOnPermissionCallback(callback: PermissionCallback.() -> Unit) {
         onPermissionCallback = PermissionCallback()
         onPermissionCallback.callback()
-    }
-
-    private fun removeFragment() {
-        sBaseActivity.supportFragmentManager.findFragmentByTag(PermissionHelper.FRAGMENT_TAG)
-            ?.also {
-                sBaseActivity.supportFragmentManager.beginTransaction().remove(it)
-                    .commitNowAllowingStateLoss()
-            }
     }
 
     /**
