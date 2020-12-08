@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.app.Instrumentation
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -66,10 +65,10 @@ class WebBrowserActivity : SBaseActivity() {
     }
 
     //访问地址
-    private val location: String by Extra(LOCATION, "")
+    private val location: String by Extra()
 
     //标题名
-    private val titleName: String by Extra(TITLE_NAME, "")
+    private val titleName: String by Extra()
 
     override fun initView() {
         acToolbar.title = titleName
@@ -182,7 +181,7 @@ class WebBrowserActivity : SBaseActivity() {
         ): Boolean {
             AlertDialog.Builder(activity).setTitle(acToolbar.title)
                 .setMessage(message)
-                .setPositiveButton("确定") { dialog, which ->
+                .setPositiveButton("确定") { _, _ ->
                     result.confirm()
                 }
                 .setCancelable(false)
@@ -195,10 +194,10 @@ class WebBrowserActivity : SBaseActivity() {
         ): Boolean {
             AlertDialog.Builder(activity).setTitle(acToolbar.title)
                 .setMessage(message)
-                .setPositiveButton("确定") { dialog, which ->
+                .setPositiveButton("确定") { _, _ ->
                     result.confirm()
                 }
-                .setNegativeButton("取消") { dialog, which ->
+                .setNegativeButton("取消") { _, _ ->
                     result.cancel()
                 }
                 .setCancelable(false)

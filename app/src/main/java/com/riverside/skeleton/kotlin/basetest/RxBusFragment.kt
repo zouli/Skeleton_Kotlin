@@ -20,7 +20,7 @@ class RxBusFragment : SBaseFragment() {
     //    lateinit var bus: Disposable
     lateinit var bus: EventConsumer<String>
 
-    private val value: Int by FragmentArgument("value", -1)
+    private val value: Int by FragmentArgument(default = -1)
 
     override fun setView(container: ViewGroup?): View? =
         UI {

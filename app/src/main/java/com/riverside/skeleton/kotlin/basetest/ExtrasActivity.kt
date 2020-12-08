@@ -14,16 +14,48 @@ import com.riverside.skeleton.kotlin.util.extras.startActivity
 import com.riverside.skeleton.kotlin.util.extras.startService
 import com.riverside.skeleton.kotlin.util.extras.stopService
 import com.riverside.skeleton.kotlin.util.notice.toast
+import com.riverside.skeleton.kotlin.widget.selector.CommonSelectorOptions
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class ExtrasActivity : SBaseActivity() {
-    private val flag: Int by Extra("flag", 0)
+    private val testInt: Int by Extra()
+    private val testLong: Int by Extra()
+    private val testCharSequence: CharSequence by Extra()
+    private val testString: String by Extra()
+    private val testFloat: Float by Extra()
+    private val testDouble: Double by Extra()
+    private val testChar: Char by Extra()
+    private val testShort: Short by Extra()
+    private val testBoolean: Boolean by Extra()
+    private val testListString: List<String> by Extra()
+    private val testListInt: List<Int> by Extra()
+    private val testObject: CommonSelectorOptions by Extra()
+    private val testIntArray: IntArray by Extra()
+    private val testLongArray: LongArray by Extra()
+    private val testFloatArray: FloatArray by Extra()
+    private val testDoubleArray: DoubleArray by Extra()
+    private val testCharArray: CharArray by Extra()
+    private val testShortArray: ShortArray by Extra()
+    private val testBooleanArray: BooleanArray by Extra()
+    private val testArrayInt: Array<Int> by Extra()
+    private val testArrayLong: Array<Long> by Extra()
+    private val testArrayFloat: Array<Float> by Extra()
+    private val testArrayDouble: Array<Double> by Extra()
+    private val testArrayChar: Array<Char> by Extra()
+    private val testArrayShort: Array<Short> by Extra()
+    private val testArrayBoolean: Array<Boolean> by Extra()
+
+    private val flag: Int by Extra()
     var i = 1
     private var conn = SBaseServiceConnection<TestService>()
 
     override fun initView() {
         title = "Extras"
+
+        SLog.w("testInt=$testInt,testLong=$testLong,testCharSequence=$testCharSequence,testString=$testString,testFloat=$testFloat,testDouble=$testDouble,testChar=$testChar,testShort=$testShort,testBoolean=$testBoolean,testListString=$testListString,testListInt=$testListInt,testObject=$testObject")
+        SLog.w("testIntArray=$testIntArray,testLongArray=$testLongArray,testFloatArray=$testFloatArray,testDoubleArray=$testDoubleArray,testCharArray=$testCharArray,testShortArray=$testShortArray,testBooleanArray=$testBooleanArray")
+        SLog.w("testArrayInt=$testArrayInt,testArrayLong=$testArrayLong,testArrayFloat=$testArrayFloat,testArrayDouble=$testArrayDouble,testArrayChar=$testArrayChar,testArrayShort=$testArrayShort,testArrayBoolean=$testArrayBoolean")
 
         scrollView {
             isVerticalScrollBarEnabled = false

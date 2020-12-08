@@ -25,7 +25,7 @@ class DatePickerFragment : SBaseDialogFragment() {
         const val SUBLIME_OPTIONS = "SUBLIME_OPTIONS"
     }
 
-    private val options: SublimeOptions by FragmentArgument(SUBLIME_OPTIONS, SublimeOptions())
+    private val options: SublimeOptions by FragmentArgument(SUBLIME_OPTIONS)
 
     private lateinit var onCancelledListener: () -> Unit
     private lateinit var onDateTimeRecurrenceSetListener: (

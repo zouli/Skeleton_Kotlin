@@ -27,16 +27,16 @@ class FullScreenActivity : SBaseActivity() {
     private lateinit var pagerView: PagerView
 
     //图片地址
-    private val image_url: List<String> by Extra(IMAGE_URL, listOf())
+    private val image_url: List<String> by Extra()
 
     //默认图片index
-    private val default_index: Int by Extra(DEFAULT_INDEX, 0)
+    private val default_index: Int by Extra()
 
     //图片加载器
-    private val image_loader: String by Extra(IMAGE_LOADER, PicassoImageLoader::class.java.name)
+    private val image_loader: String by Extra(default = PicassoImageLoader::class.java.name)
 
     //分页显示器
-    private val pager_view: String by Extra(PAGER_VIEW, "")
+    private val pager_view: String by Extra()
 
     override fun initView() {
         if (pager_view.isNotEmpty()) pagerView =

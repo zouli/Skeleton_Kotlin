@@ -11,13 +11,22 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 /**
- * FragmentArgument处理类     1.0
- * b_e      2020/11/29
+ * FragmentArgument处理类     1.1
+ *
+ * b_e                           2020/11/29
+ * 1.1  可以使用变量名为关键字      2020/12/08
+ * 1.1  自动生成默认值             2020/12/08
  */
-class FragmentArgument<T>(private val name: String, private val default: T) :
+class FragmentArgument<T>(private val name: String = "", private val default: T? = null) :
     ReadOnlyProperty<Any?, T> {
-    override fun getValue(thisRef: Any?, property: KProperty<*>): T =
-        BundleHelper.findValue(name, default)
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        try {
+            val value = default ?: property.returnType.default as T
+            return BundleHelper.findValue(name.ifEmpty { property.name }, value)
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("无法生成默认值，请设置default!")
+        }
+    }
 }
 
 object BundleHelper {
@@ -70,49 +79,49 @@ object BundleHelper {
     }
 
     internal fun <T> findValue(name: String, default: T): T =
-        if (bundle.containsKey(name)) {
+        getKeyNames(name).firstOrNull { bundle.containsKey(name) }?.let { keyName ->
             when (default) {
-                is Boolean -> bundle.getBoolean(name, default)
-                is Byte -> bundle.getByte(name, default)
-                is Char -> bundle.getChar(name, default)
-                is Short -> bundle.getShort(name, default)
-                is Int -> bundle.getInt(name, default)
-                is Long -> bundle.getLong(name, default)
-                is Float -> bundle.getFloat(name, default)
-                is Double -> bundle.getDouble(name, default)
-                is String -> bundle.getString(name, default)
-                is CharSequence -> bundle.getCharSequence(name, default)
-                is Serializable -> bundle.getSerializable(name) ?: default
-                is Parcelable -> bundle.getParcelable(name) ?: default
-                is Bundle -> bundle.getBundle(name) ?: default
+                is Boolean -> bundle.getBoolean(keyName, default)
+                is Byte -> bundle.getByte(keyName, default)
+                is Char -> bundle.getChar(keyName, default)
+                is Short -> bundle.getShort(keyName, default)
+                is Int -> bundle.getInt(keyName, default)
+                is Long -> bundle.getLong(keyName, default)
+                is Float -> bundle.getFloat(keyName, default)
+                is Double -> bundle.getDouble(keyName, default)
+                is String -> bundle.getString(keyName, default)
+                is CharSequence -> bundle.getCharSequence(keyName, default)
+                is Serializable -> bundle.getSerializable(keyName) ?: default
+                is Parcelable -> bundle.getParcelable(keyName) ?: default
+                is Bundle -> bundle.getBundle(keyName) ?: default
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 -> {
                     when (default) {
-                        is IBinder -> bundle.getBinder(name) ?: default
+                        is IBinder -> bundle.getBinder(keyName) ?: default
                         else -> default
                     }
                 }
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                     when (default) {
-                        is Size -> bundle.getSize(name) ?: default
-                        is SizeF -> bundle.getSizeF(name) ?: default
+                        is Size -> bundle.getSize(keyName) ?: default
+                        is SizeF -> bundle.getSizeF(keyName) ?: default
                         else -> default
                     }
                 }
                 is Array<*> -> when {
-                    default.isArrayOf<Boolean>() -> bundle.getBooleanArray(name)
-                    default.isArrayOf<Byte>() -> bundle.getByteArray(name)
-                    default.isArrayOf<Short>() -> bundle.getShortArray(name)
-                    default.isArrayOf<Char>() -> bundle.getCharArray(name)
-                    default.isArrayOf<Int>() -> bundle.getIntArray(name)
-                    default.isArrayOf<Long>() -> bundle.getLongArray(name)
-                    default.isArrayOf<Float>() -> bundle.getFloatArray(name)
-                    default.isArrayOf<Double>() -> bundle.getDoubleArray(name)
-                    default.isArrayOf<String>() -> bundle.getStringArray(name)
-                    default.isArrayOf<CharSequence>() -> bundle.getCharSequenceArray(name)
-                    default.isArrayOf<Parcelable>() -> bundle.getParcelableArray(name)
+                    default.isArrayOf<Boolean>() -> bundle.getBooleanArray(keyName)
+                    default.isArrayOf<Byte>() -> bundle.getByteArray(keyName)
+                    default.isArrayOf<Short>() -> bundle.getShortArray(keyName)
+                    default.isArrayOf<Char>() -> bundle.getCharArray(keyName)
+                    default.isArrayOf<Int>() -> bundle.getIntArray(keyName)
+                    default.isArrayOf<Long>() -> bundle.getLongArray(keyName)
+                    default.isArrayOf<Float>() -> bundle.getFloatArray(keyName)
+                    default.isArrayOf<Double>() -> bundle.getDoubleArray(keyName)
+                    default.isArrayOf<String>() -> bundle.getStringArray(keyName)
+                    default.isArrayOf<CharSequence>() -> bundle.getCharSequenceArray(keyName)
+                    default.isArrayOf<Parcelable>() -> bundle.getParcelableArray(keyName)
                     else -> default
                 }
                 else -> default
             } as T
-        } else default
+        } ?: default
 }

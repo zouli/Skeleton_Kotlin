@@ -8,13 +8,22 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 /**
- * Extra处理类     1.0
- * b_e      2020/11/26
+ * Extra处理类     1.1
+ *
+ * b_e                           2020/11/26
+ * 1.1  可以使用变量名为关键字      2020/12/08
+ * 1.1  自动生成默认值             2020/12/08
  */
-class Extra<T>(private val name: String, private val default: T) :
+class Extra<T>(private val name: String = "", private val default: T? = null) :
     ReadOnlyProperty<Any?, T> {
-    override fun getValue(thisRef: Any?, property: KProperty<*>): T =
-        ExtrasHelper.findExtra(name, default)
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        try {
+            val value = default ?: property.returnType.default as T
+            return ExtrasHelper.findExtra(name.ifEmpty { property.name }, value)
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("无法生成默认值，请设置default!")
+        }
+    }
 }
 
 object ExtrasHelper {
@@ -52,36 +61,36 @@ object ExtrasHelper {
     }
 
     internal fun <T> findExtra(name: String, default: T): T =
-        if (intent.hasExtra(name)) {
+        getKeyNames(name).firstOrNull { intent.hasExtra(name) }?.let { keyName ->
             when (default) {
-                is Int -> intent.getIntExtra(name, default)
-                is Long -> intent.getLongExtra(name, default)
-                is CharSequence -> intent.getCharSequenceExtra(name) ?: default
-                is String -> intent.getStringExtra(name) ?: default
-                is Float -> intent.getFloatExtra(name, default)
-                is Double -> intent.getDoubleExtra(name, default)
-                is Char -> intent.getCharExtra(name, default)
-                is Short -> intent.getShortExtra(name, default)
-                is Boolean -> intent.getBooleanExtra(name, default)
-                is Serializable -> intent.getSerializableExtra(name) ?: default
-                is Bundle -> intent.getBundleExtra(name) ?: default
-                is Parcelable -> intent.getParcelableExtra(name) ?: default
+                is Int -> intent.getIntExtra(keyName, default)
+                is Long -> intent.getLongExtra(keyName, default)
+                is CharSequence -> intent.getCharSequenceExtra(keyName) ?: default
+                is String -> intent.getStringExtra(keyName) ?: default
+                is Float -> intent.getFloatExtra(keyName, default)
+                is Double -> intent.getDoubleExtra(keyName, default)
+                is Char -> intent.getCharExtra(keyName, default)
+                is Short -> intent.getShortExtra(keyName, default)
+                is Boolean -> intent.getBooleanExtra(keyName, default)
+                is Serializable -> intent.getSerializableExtra(keyName) ?: default
+                is Bundle -> intent.getBundleExtra(keyName) ?: default
+                is Parcelable -> intent.getParcelableExtra(keyName) ?: default
                 is Array<*> -> when {
-                    default.isArrayOf<Int>() -> intent.getIntArrayExtra(name)
-                    default.isArrayOf<Long>() -> intent.getLongArrayExtra(name)
-                    default.isArrayOf<Float>() -> intent.getFloatArrayExtra(name)
-                    default.isArrayOf<Double>() -> intent.getDoubleArrayExtra(name)
-                    default.isArrayOf<Char>() -> intent.getCharArrayExtra(name)
-                    default.isArrayOf<Short>() -> intent.getShortArrayExtra(name)
-                    default.isArrayOf<Boolean>() -> intent.getBooleanArrayExtra(name)
-                    default.isArrayOf<CharSequence>() -> intent.getCharSequenceArrayExtra(name)
-                    default.isArrayOf<String>() -> intent.getStringArrayExtra(name)
-                    default.isArrayOf<Parcelable>() -> intent.getParcelableArrayExtra(name)
-                    default.isArrayOf<Byte>() -> intent.getByteArrayExtra(name)
+                    default.isArrayOf<Int>() -> intent.getIntArrayExtra(keyName)
+                    default.isArrayOf<Long>() -> intent.getLongArrayExtra(keyName)
+                    default.isArrayOf<Float>() -> intent.getFloatArrayExtra(keyName)
+                    default.isArrayOf<Double>() -> intent.getDoubleArrayExtra(keyName)
+                    default.isArrayOf<Char>() -> intent.getCharArrayExtra(keyName)
+                    default.isArrayOf<Short>() -> intent.getShortArrayExtra(keyName)
+                    default.isArrayOf<Boolean>() -> intent.getBooleanArrayExtra(keyName)
+                    default.isArrayOf<CharSequence>() -> intent.getCharSequenceArrayExtra(keyName)
+                    default.isArrayOf<String>() -> intent.getStringArrayExtra(keyName)
+                    default.isArrayOf<Parcelable>() -> intent.getParcelableArrayExtra(keyName)
+                    default.isArrayOf<Byte>() -> intent.getByteArrayExtra(keyName)
                     else -> default
                 }
-                is Byte -> intent.getByteExtra(name, default)
+                is Byte -> intent.getByteExtra(keyName, default)
                 else -> default
             } as T
-        } else default
+        } ?: default
 }

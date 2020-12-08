@@ -31,13 +31,13 @@ class UpgradeService : SBaseService() {
     private lateinit var downloadManager: DownloadManager
 
     // 下载窗口标题
-    private val title: String by Extra(TITLE_EXTRA, "")
+    private val title: String by Extra()
 
     // 下载窗口信息
-    private val message: String by Extra(MESSAGE_EXTRA, "")
+    private val message: String by Extra()
 
     // 下载地址
-    private val downloadUrl: String by Extra(DOWNLOAD_URL_EXTRA, "")
+    private val downloadUrl: String by Extra()
 
     // 文件下载ID，用于和系统下载服务通信
     private var lastDownloadId: Long = 0

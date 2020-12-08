@@ -5,7 +5,7 @@ import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.extras.Extra
 
 class TestService : SBaseService() {
-    private val flag: Int by Extra("flag", 0)
+    private val flag: Int by Extra()
 
     override fun onCall(flags: Int, startId: Int) {
         SLog.w(flag)

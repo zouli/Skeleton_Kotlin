@@ -18,7 +18,7 @@ import java.util.*
  * b_e      2020/12/03
  */
 class CommonSelectorActivity : SBaseSelectorActivity() {
-    private val options: CommonSelectorOptions by Extra(OPTIONS, CommonSelectorOptions())
+    private val options: CommonSelectorOptions by Extra(OPTIONS)
 
     override fun initView() {
         //设置标题栏

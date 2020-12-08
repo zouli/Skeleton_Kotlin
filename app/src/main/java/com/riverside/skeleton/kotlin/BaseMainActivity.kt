@@ -23,7 +23,7 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
 class BaseMainActivity : SBaseActivity() {
     lateinit var upgradeHelper: UpgradeHelper
     lateinit var cb_all: CheckBox
-    var a: Int by Preference("a", 0)
+    var a: Int by Preference(default = 0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

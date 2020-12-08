@@ -7,15 +7,18 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
- * Preference处理类 1.0
- * b_e  2019/09/29
+ * Preference处理类 1.1
+ *
+ * b_e                           2019/09/29
+ * 1.1  可以使用变量名为关键字      2020/12/08
  */
-class Preference<T>(private val name: String, private val default: T) : ReadWriteProperty<Any?, T> {
+class Preference<T>(private val name: String = "", private val default: T) :
+    ReadWriteProperty<Any?, T> {
     override fun getValue(thisRef: Any?, property: KProperty<*>): T =
-        PreferenceHelper.findPreference(name, default)
+        PreferenceHelper.findPreference(name.ifEmpty { property.name }, default)
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) =
-        PreferenceHelper.putPreference(name, value)
+        PreferenceHelper.putPreference(name.ifEmpty { property.name }, value)
 }
 
 object PreferenceHelper {
@@ -43,7 +46,7 @@ object PreferenceHelper {
             is Int -> getInt(name, default)
             is Boolean -> getBoolean(name, default)
             is Float -> getFloat(name, default)
-            else -> throw IllegalArgumentException("The data can not be saved")
+            else -> throw IllegalArgumentException("未找到对应的项目类型")
         }
         res as U
     }
@@ -55,7 +58,7 @@ object PreferenceHelper {
             is Int -> putInt(name, value)
             is Boolean -> putBoolean(name, value)
             is Float -> putFloat(name, value)
-            else -> throw IllegalArgumentException("The data can not be saved")
+            else -> throw IllegalArgumentException("未找到对应的项目类型")
         }.apply()
     }
 }

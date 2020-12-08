@@ -108,7 +108,7 @@ object IntentsHelper {
 
     fun startService(
         context: Context, service: Class<out Service>, params: Array<out Pair<String, Any?>>
-    ) = context.startService(createIntent(context, service, params))
+    ): ComponentName? = context.startService(createIntent(context, service, params))
 
     fun stopService(
         context: Context, service: Class<out Service>, params: Array<out Pair<String, Any?>>
