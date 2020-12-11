@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Colored.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert" />
+    <style name="ProgressDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="progressBarStyleHorizontal">@style/Widget.AppCompat.ProgressBar.Horizontal
+        </item>
+    </style>
+
+    <attr name="progressBarStyleHorizontal" format="reference" />
 </resources>

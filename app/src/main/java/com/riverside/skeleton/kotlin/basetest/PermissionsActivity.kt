@@ -4,9 +4,11 @@ import android.Manifest
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.base.utils.collectinfo.TelephonyInfo
+import com.riverside.skeleton.kotlin.base.utils.permission.requestAllPermissions
 import com.riverside.skeleton.kotlin.base.utils.permission.requestPermissions
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.notice.toast
+import com.riverside.skeleton.kotlin.util.packageinfo.PackageInfoHelper
 import kotlinx.android.synthetic.main.activity_permissions.*
 
 class PermissionsActivity : SBaseActivity() {
@@ -16,6 +18,19 @@ class PermissionsActivity : SBaseActivity() {
         title = "Permissions"
 
         SLog.w(TelephonyInfo.info(activity).toJSONString())
+
+        addFragment(R.id.ll_f, PermissionsFragment())
+
+        btn_all.setOnClickListener {
+            requestAllPermissions {
+                onGranted { perms ->
+                    "同意$perms".toast(activity)
+                }
+                onDenied { perms ->
+                    "拒绝$perms".toast(activity)
+                }
+            }
+        }
 
         btn_es.setOnClickListener {
             requestPermissions(
@@ -29,10 +44,21 @@ class PermissionsActivity : SBaseActivity() {
                     "拒绝$perms".toast(activity)
                 }
             }
-//                EasyPermissions.requestPermissions(
-//                    this, "请开启存储权限", 1,
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                )
+        }
+
+        btn_es_message.setOnClickListener {
+            requestPermissions(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                title = "Test", rationale = "请开启存储与相机权限"
+            ) {
+                onGranted { perms ->
+                    "同意$perms".toast(activity)
+                }
+                onDenied { perms ->
+                    "拒绝$perms".toast(activity)
+                }
+            }
         }
     }
 }

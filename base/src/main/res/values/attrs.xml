@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressDialog" >
+        <attr name="android:layout"/>
+        <attr format="reference" name="buttonPanelSideLayout"/>
+        <attr format="reference" name="listLayout"/>
+        <attr format="reference" name="multiChoiceItemLayout"/>
+        <attr format="reference" name="singleChoiceItemLayout"/>
+        <attr format="reference" name="listItemLayout"/>
+        <attr format="boolean" name="showTitle"/>
+        <attr format="dimension" name="buttonIconDimen"/>
+        <attr name="horizontalProgressLayout" format="reference" />
+        <attr name="progressLayout" format="reference" />
+    </declare-styleable>
+</resources>

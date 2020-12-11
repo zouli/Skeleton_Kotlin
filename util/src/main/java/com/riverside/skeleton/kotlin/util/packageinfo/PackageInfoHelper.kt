@@ -9,7 +9,9 @@ import kotlin.reflect.KProperty
 
 /**
  * PackageInfo处理类   1.2
+ *
  * b_e  2019/09/29
+ * 添加取得全部权限 2020/12/11
  */
 class MetadataInfo<T>(private val name: String, private val default: T) :
     ReadOnlyProperty<Any?, T> {
@@ -35,6 +37,15 @@ object PackageInfoHelper {
             else -> throw IllegalArgumentException("The data can not to read")
         }
         res as T
+    }
+
+    /**
+     * 取得需要的全部权限
+     */
+    val permissions by lazy {
+        context.packageManager.getPackageInfo(
+            context.packageName, PackageManager.GET_PERMISSIONS
+        ).requestedPermissions
     }
 }
 

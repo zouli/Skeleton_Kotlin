@@ -47,71 +47,81 @@ class BaseMainActivity : SBaseActivity() {
     override fun initView() {
         title = "Base"
 
-        verticalLayout {
+        scrollView {
             lparams(matchParent, matchParent)
-            button("eventbus") {
-                onClick {
-                    startActivity<RxBusActivity>()
-                }
-            }.lparams(matchParent, wrapContent)
 
-            button("validate anko") {
-                onClick {
-                    startActivity<ValidateAnkoActivity>()
-                }
-            }.lparams(matchParent, wrapContent)
-
-            button("validate xml") {
-                onClick {
-                    startActivity<ValidateXmlActivity>()
-                }
-            }.lparams(matchParent, wrapContent)
-
-            button("multiple finish") {
-                onClick {
-                    ActivityStackManager.startMultipleFinish()
-                    startActivity<MultipleFinishActivity>()
-                }
-            }.lparams(matchParent, wrapContent)
-
-            linearLayout {
-                orientation = LinearLayout.HORIZONTAL
-
-                button("to login") {
+            verticalLayout {
+                lparams(matchParent, wrapContent)
+                button("eventbus") {
                     onClick {
-                        ActivityStackManager.toLoginActivity(cb_all.isChecked)
+                        startActivity<RxBusActivity>()
                     }
-                }.lparams(0, wrapContent, 1.0F)
+                }.lparams(matchParent, wrapContent)
 
-                cb_all = checkBox("close all").lparams(wrapContent, wrapContent)
-            }.lparams(matchParent, wrapContent)
+                button("validate anko") {
+                    onClick {
+                        startActivity<ValidateAnkoActivity>()
+                    }
+                }.lparams(matchParent, wrapContent)
 
-            button("Crash") {
-                onClick {
-                    throw Exception("aaaaaa")
+                button("validate xml") {
+                    onClick {
+                        startActivity<ValidateXmlActivity>()
+                    }
+                }.lparams(matchParent, wrapContent)
+
+                button("multiple finish") {
+                    onClick {
+                        ActivityStackManager.startMultipleFinish()
+                        startActivity<MultipleFinishActivity>()
+                    }
+                }.lparams(matchParent, wrapContent)
+
+                linearLayout {
+                    orientation = LinearLayout.HORIZONTAL
+
+                    button("to login") {
+                        onClick {
+                            ActivityStackManager.toLoginActivity(cb_all.isChecked)
+                        }
+                    }.lparams(0, wrapContent, 1.0F)
+
+                    cb_all = checkBox("close all").lparams(wrapContent, wrapContent)
+                }.lparams(matchParent, wrapContent)
+
+                button("Crash") {
+                    onClick {
+                        throw Exception("aaaaaa")
+                    }
                 }
-            }
 
-            button("upgrade") {
-                onClick {
-                    upgradeHelper = UpgradeHelper(activity)
-                    upgradeHelper.startUpgrade(
-                        "",
-                        "",
-                        "http://www.915guo.com.cn/EXAM/upload/MedicalExam_CSTP.apk"
-                    )
+                button("upgrade") {
+                    onClick {
+                        upgradeHelper = UpgradeHelper(activity)
+                        upgradeHelper.startUpgrade(
+                            "Test",
+                            "Test Upgrade",
+                            "http://www.915guo.com.cn/EXAM/upload/MedicalExam_CSTP.apk"
+                        )
+                    }
                 }
-            }
 
-            button("Extras") {
-                onClick {
-                    startActivity<ExtrasActivity>()
+                button("Extras") {
+                    onClick {
+                        startActivity<ExtrasActivity>()
+                    }
                 }
-            }
 
-            button("Permissions") {
-                onClick {
-                    startActivity<PermissionsActivity>()
+                button("Permissions") {
+                    onClick {
+                        startActivity<PermissionsActivity>()
+                    }
+                }
+
+                button("Dialog") {
+                    onClick {
+                        startActivity<DialogActivity>()
+                    }
                 }
             }
         }

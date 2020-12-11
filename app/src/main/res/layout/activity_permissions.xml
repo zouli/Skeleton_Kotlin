@@ -5,8 +5,26 @@
         android:orientation="vertical">
 
     <Button
+            android:id="@+id/btn_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All" />
+
+    <Button
             android:id="@+id/btn_es"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="EXTERNAL STORAGE" />
+            android:text="No Message" />
+
+    <Button
+            android:id="@+id/btn_es_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Message" />
+
+    <LinearLayout
+            android:id="@+id/ll_f"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
 </LinearLayout>
