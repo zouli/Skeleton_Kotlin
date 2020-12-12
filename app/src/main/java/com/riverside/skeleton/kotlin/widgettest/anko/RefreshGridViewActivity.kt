@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.toColorInt
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.net.rest.CommonRestService
@@ -16,8 +15,10 @@ import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.notice.toast
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
 import com.riverside.skeleton.kotlin.widget.containers.RefreshGridView
-import kotlinx.android.synthetic.main.list_item_refresh_listview.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
 
 class RefreshGridViewActivity : SBaseActivity() {
     lateinit var rgv: RefreshGridView

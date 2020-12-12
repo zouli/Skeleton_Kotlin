@@ -1,9 +1,9 @@
 package com.riverside.skeleton.kotlin.net.eventbus
 
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
-import io.reactivex.processors.PublishProcessor
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.processors.PublishProcessor
 
 /**
  * RxBus 1.1

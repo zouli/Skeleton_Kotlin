@@ -2,7 +2,7 @@ package com.riverside.skeleton.kotlin.net.rest.handler
 
 import com.riverside.skeleton.kotlin.net.rest.error.SessionTimeoutThrowable
 import com.riverside.skeleton.kotlin.util.packageinfo.MetadataInfo
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 
 /**
  * Session处理工厂类  1.0

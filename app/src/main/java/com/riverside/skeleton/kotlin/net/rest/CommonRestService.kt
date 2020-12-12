@@ -1,8 +1,8 @@
 package com.riverside.skeleton.kotlin.net.rest
 
 import com.riverside.skeleton.kotlin.net.jsonbean.JsonResponse
+import io.reactivex.rxjava3.core.Flowable
 import retrofit2.http.QueryMap
-import io.reactivex.Flowable
 import retrofit2.http.GET
 
 interface CommonRestService {

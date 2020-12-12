@@ -3,7 +3,10 @@ package com.riverside.skeleton.kotlin.net.rest
 import com.riverside.skeleton.kotlin.net.jsonbean.JsonResponse
 import com.riverside.skeleton.kotlin.net.rest.error.RestThrowable
 import com.riverside.skeleton.kotlin.net.rest.error.SessionTimeoutThrowable
-import io.reactivex.*
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.FlowableOnSubscribe
+import io.reactivex.rxjava3.core.FlowableTransformer
 
 object ObservableHelper2 {
     fun <T> checkResult() = FlowableTransformer<JsonResponse<T>, T> {

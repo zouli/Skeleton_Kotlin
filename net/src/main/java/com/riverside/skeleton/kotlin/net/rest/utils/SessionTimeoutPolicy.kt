@@ -2,8 +2,8 @@ package com.riverside.skeleton.kotlin.net.rest.utils
 
 import com.riverside.skeleton.kotlin.net.rest.error.SessionTimeoutThrowable
 import com.riverside.skeleton.kotlin.net.rest.handler.SessionHandlerFactory
-import io.reactivex.Flowable
-import io.reactivex.functions.Function
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.functions.Function
 
 /**
  * Session超时策略类    1.0

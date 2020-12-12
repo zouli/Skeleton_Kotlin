@@ -1,9 +1,9 @@
 package com.riverside.skeleton.kotlin.net.rest.utils
 
 import com.riverside.skeleton.kotlin.slog.SLog
-import io.reactivex.functions.Function
-import io.reactivex.Flowable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
@@ -13,8 +13,7 @@ class RetryPolicy(
     private val count: Int = 3,
     private val delay: Int = 3000,
     private val increaseDelay: Int = 3000
-) :
-    Function<Flowable<out Throwable>, Flowable<*>> {
+) : Function<Flowable<out Throwable>, Flowable<*>> {
 
     override fun apply(observable: Flowable<out Throwable>): Flowable<*> {
         return observable

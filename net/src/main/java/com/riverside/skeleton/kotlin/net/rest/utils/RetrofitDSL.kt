@@ -1,7 +1,6 @@
 package com.riverside.skeleton.kotlin.net.rest.utils
 
-import io.reactivex.Flowable
-import kotlin.reflect.KClass
+import io.reactivex.rxjava3.core.Flowable
 
 /**
  * 网络连接服务类 1.0
