@@ -1,6 +1,7 @@
 package com.riverside.skeleton.kotlin.base.utils.permission
 
 import android.content.Context
+import androidx.core.content.PermissionChecker
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.base.fragment.ISBaseFragment
 import com.riverside.skeleton.kotlin.util.dialog.alert
@@ -18,18 +19,22 @@ import pub.devrel.easypermissions.EasyPermissions
 /**
  * 判断是否有权限
  */
+@PermissionChecker.PermissionResult
 fun Context.hasPermissions(vararg permissions: String): Boolean =
     EasyPermissions.hasPermissions(this, *permissions)
 
+@PermissionChecker.PermissionResult
 fun SBaseActivity.hasPermissions(vararg permissions: String): Boolean =
     (this as Context).hasPermissions(*permissions)
 
+@PermissionChecker.PermissionResult
 fun ISBaseFragment.hasPermissions(vararg permissions: String): Boolean =
     this.sBaseActivity.hasPermissions(*permissions)
 
 /**
  * 请求权限
  */
+@PermissionChecker.PermissionResult
 fun SBaseActivity.requestPermissions(
     vararg permissions: String,
     callback: RequestPermissionFragment.PermissionCallback.() -> Unit
@@ -39,6 +44,7 @@ fun SBaseActivity.requestPermissions(
     )
 }
 
+@PermissionChecker.PermissionResult
 fun SBaseActivity.requestPermissions(
     vararg permissions: String, title: String = "", rationale: String,
     callback: RequestPermissionFragment.PermissionCallback.() -> Unit
@@ -63,6 +69,7 @@ fun SBaseActivity.requestPermissions(
     }
 }
 
+@PermissionChecker.PermissionResult
 fun SBaseActivity.requestAllPermissions(
     callback: RequestPermissionFragment.PermissionCallback.() -> Unit
 ) {
@@ -71,11 +78,13 @@ fun SBaseActivity.requestAllPermissions(
     )
 }
 
+@PermissionChecker.PermissionResult
 fun ISBaseFragment.requestPermissions(
     vararg permissions: String,
     callback: RequestPermissionFragment.PermissionCallback.() -> Unit
 ) = this.sBaseActivity.requestPermissions(*permissions, callback = callback)
 
+@PermissionChecker.PermissionResult
 fun ISBaseFragment.requestPermissions(
     vararg permissions: String, title: String = "", rationale: String,
     callback: RequestPermissionFragment.PermissionCallback.() -> Unit
