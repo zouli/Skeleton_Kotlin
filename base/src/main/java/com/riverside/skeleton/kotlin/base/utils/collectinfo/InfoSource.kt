@@ -83,6 +83,9 @@ object TelephonyInfo : InfoSource {
             json["DeviceSoftwareVersion"] = tm.deviceSoftwareVersion
             json["Line1Number"] = tm.line1Number
             json["SimSerialNumber"] = tm.simSerialNumber
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                json["IMEI"] = tm.imei
+            }
             json["DeviceId"] = tm.deviceId
             json["PhoneType"] = tm.phoneType
         }

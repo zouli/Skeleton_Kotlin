@@ -20,7 +20,7 @@ fun Context.getLayoutID(id: String): Int = getResourceID(this, "layout", id)
 
 fun Context.getStyleID(id: String): Int = getResourceID(this, "style", id)
 
-fun Context.getSringID(id: String): Int = getResourceID(this, "string", id)
+fun Context.getStringID(id: String): Int = getResourceID(this, "string", id)
 
 fun Context.getColorID(id: String): Int = getResourceID(this, "color", id)
 

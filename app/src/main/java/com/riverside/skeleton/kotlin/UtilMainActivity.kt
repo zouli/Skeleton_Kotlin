@@ -6,6 +6,7 @@ import android.text.format.Formatter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColorInt
 import com.riverside.skeleton.kotlin.slog.SLog
+import com.riverside.skeleton.kotlin.util.converter.phoneMark
 import com.riverside.skeleton.kotlin.util.file.file
 import com.riverside.skeleton.kotlin.util.file.size
 import com.riverside.skeleton.kotlin.util.file.unaryPlus
@@ -72,6 +73,12 @@ class UtilMainActivity : AppCompatActivity() {
             button("application") {
                 onClick {
                     SLog.w(ContextHolder.applicationContext)
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("Phone Mark") {
+                onClick {
+                    "12345678901".phoneMark.toast(this@UtilMainActivity)
                 }
             }
         }

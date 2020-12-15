@@ -1,8 +1,10 @@
 package com.riverside.skeleton.kotlin.basetest
 
 import android.Manifest
+import android.annotation.SuppressLint
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.base.utils.collectinfo.OSInfo
 import com.riverside.skeleton.kotlin.base.utils.collectinfo.TelephonyInfo
 import com.riverside.skeleton.kotlin.base.utils.permission.requestAllPermissions
 import com.riverside.skeleton.kotlin.base.utils.permission.requestPermissions
@@ -14,10 +16,12 @@ import kotlinx.android.synthetic.main.activity_permissions.*
 class PermissionsActivity : SBaseActivity() {
     override val layoutId: Int get() = R.layout.activity_permissions
 
+    @SuppressLint("MissingPermission")
     override fun initView() {
         title = "Permissions"
 
         SLog.w(TelephonyInfo.info(activity).toJSONString())
+        SLog.w(OSInfo.info(activity).toJSONString())
 
         addFragment(R.id.ll_f, PermissionsFragment())
 
