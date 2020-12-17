@@ -5,6 +5,8 @@ import android.app.Service
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -67,6 +69,10 @@ fun Context.alert(
  */
 open class AlertBuilder(val context: Context, themeResId: Int) {
     private val builder = AlertDialog.Builder(context, themeResId)
+
+    private var result = Result.NO
+    private lateinit var dialog: AlertDialog
+    private lateinit var handler: Handler
 
     var title: CharSequence
         @Deprecated(GETTER, level = DeprecationLevel.ERROR) get() = getter()
@@ -152,6 +158,7 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
 
     fun onCancelled(block: (dialog: DialogInterface) -> Unit) {
         builder.setOnCancelListener(block)
+        setResult(Result.NO)
     }
 
     fun onKeyPressed(block: (dialog: DialogInterface, keyCode: Int, event: KeyEvent) -> Boolean) {
@@ -163,54 +170,81 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
     fun negativeButton(text: CharSequence, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setNegativeButton(text) { dialog, which ->
             block(dialog, which)
+            setResult(Result.NO)
         }
     }
 
     fun negativeButton(resId: Int, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setNegativeButton(resId) { dialog, which ->
             block(dialog, which)
+            setResult(Result.NO)
         }
     }
 
     fun positiveButton(text: CharSequence, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setPositiveButton(text) { dialog, which ->
             block(dialog, which)
+            setResult(Result.YES)
         }
     }
 
     fun positiveButton(resId: Int, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setPositiveButton(resId) { dialog, which ->
             block(dialog, which)
+            setResult(Result.YES)
         }
     }
 
     fun neutralButton(text: CharSequence, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setNeutralButton(text) { dialog, which ->
             block(dialog, which)
+            setResult(Result.NEUTRAL)
         }
     }
 
     fun neutralButton(resId: Int, block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setNeutralButton(resId) { dialog, which ->
             block(dialog, which)
+            setResult(Result.NEUTRAL)
         }
     }
 
     fun okButton(block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setPositiveButton(android.R.string.ok) { dialog, which ->
             block(dialog, which)
+            setResult(Result.YES)
         }
     }
 
     fun cancelButton(block: (dialog: DialogInterface, which: Int) -> Unit) {
         builder.setNegativeButton(android.R.string.cancel) { dialog, which ->
             block(dialog, which)
+            setResult(Result.NO)
         }
     }
 
     fun build(): AlertDialog = builder.create()
 
     fun show(): AlertDialog = builder.show()
+
+    private fun setResult(result: Result) {
+        this.result = result
+        if (::handler.isInitialized) handler.sendEmptyMessage(0)
+    }
+
+    fun showResult(): Result {
+        dialog = builder.show()
+        try {
+            Looper.getMainLooper()
+            handler = Handler {
+                throw java.lang.RuntimeException()
+            }
+            Looper.loop()
+        } catch (e: Exception) {
+        }
+        dialog.dismiss()
+        return result
+    }
 
     var centerTitle: CharSequence
         @Deprecated(GETTER, level = DeprecationLevel.ERROR) get() = getter()
@@ -219,6 +253,10 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
                 LayoutInflater.from(context).inflate(R.layout.alert_dialog_title_center, null)
                     .apply { this.findViewById<DialogTitle>(R.id.alertTitle).text = value }
         }
+
+    enum class Result {
+        YES, NO, NEUTRAL
+    }
 
     companion object {
         private const val GETTER = "属性为只写入"
