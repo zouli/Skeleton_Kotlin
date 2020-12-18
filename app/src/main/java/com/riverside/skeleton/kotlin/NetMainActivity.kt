@@ -1,8 +1,8 @@
 package com.riverside.skeleton.kotlin
 
-import android.Manifest
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.base.utils.permission.hasPermissions
+import com.riverside.skeleton.kotlin.net.BluetoothActivity
+import com.riverside.skeleton.kotlin.net.GpsActivity
 import com.riverside.skeleton.kotlin.net.WifiActivity
 import com.riverside.skeleton.kotlin.net.rest.CommonRestService
 import com.riverside.skeleton.kotlin.net.rest.checkResult
@@ -12,8 +12,6 @@ import com.riverside.skeleton.kotlin.net.rest.utils.next
 import com.riverside.skeleton.kotlin.net.rest.utils.retrofit
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.extras.startActivity
-import com.riverside.skeleton.kotlin.util.gps.GpsHelper
-import com.riverside.skeleton.kotlin.util.notice.toast
 import org.jetbrains.anko.button
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.sdk27.coroutines.onClick
@@ -21,11 +19,9 @@ import org.jetbrains.anko.verticalLayout
 import org.jetbrains.anko.wrapContent
 
 class NetMainActivity : SBaseActivity() {
-    private lateinit var gps: GpsHelper
 
     override fun initView() {
         title = "Net"
-        gps = GpsHelper(activity)
 
         verticalLayout {
             lparams(matchParent, matchParent)
@@ -83,25 +79,15 @@ class NetMainActivity : SBaseActivity() {
                 }
             }.lparams(matchParent, wrapContent)
 
-            button("Open Gps") {
+            button("Gps") {
                 onClick {
-                    if (hasPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        gps.openLocation()
-                    }
+                    startActivity<GpsActivity>()
                 }
             }.lparams(matchParent, wrapContent)
 
-            button("Get Gps") {
+            button("Bluetooth") {
                 onClick {
-                    gps.location.toString().toast(activity)
-                }
-            }.lparams(matchParent, wrapContent)
-
-            button("Close Gps") {
-                onClick {
-                    if (hasPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                        gps.closeLocaion()
-                    }
+                    startActivity<BluetoothActivity>()
                 }
             }.lparams(matchParent, wrapContent)
         }

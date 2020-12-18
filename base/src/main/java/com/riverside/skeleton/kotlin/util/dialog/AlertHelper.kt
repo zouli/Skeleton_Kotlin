@@ -233,6 +233,7 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
     }
 
     fun showResult(): Result {
+        isCancelable = false
         dialog = builder.show()
         try {
             Looper.getMainLooper()

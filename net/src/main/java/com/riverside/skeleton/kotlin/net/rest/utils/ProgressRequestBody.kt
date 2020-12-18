@@ -147,7 +147,7 @@ class ProgressRequestBody(
     }
 
     class Builder {
-        private val boundary: ByteString = uuid.encodeUtf8()
+        private val boundary: ByteString = uuid.toString().encodeUtf8()
         private val type = MIXED
         private val parts = mutableListOf<Part>()
 

@@ -11,12 +11,10 @@ import java.util.*
  * 1.1  根据字符串生成UUID   2020/12/15
  */
 
-val uuid get() = UUID.randomUUID().toString()
+val uuid: UUID get() = UUID.randomUUID()
 
-val String.uuid
-    get() = UUID(
-        this.hashCode().toLong(), "Riverside_Skeleton".hashCode().toLong()
-    ).toString()
+val String.uuid: UUID
+    get() = UUID(this.hashCode().toLong(), "Riverside_Skeleton".hashCode().toLong())
 
 val String.md5: String
     get() =
