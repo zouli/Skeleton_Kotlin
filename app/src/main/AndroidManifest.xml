@@ -129,6 +129,9 @@
         <activity
                 android:name=".net.BluetoothActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".DbMainActivity"
+                android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />
     </application>

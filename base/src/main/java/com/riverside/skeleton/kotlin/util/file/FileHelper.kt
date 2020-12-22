@@ -29,7 +29,7 @@ fun Context.getPathWithoutSD(path: String) = +basePath + +path.trim()
 
 fun Context.mkdirs(path: String) = getPath(path).mkdirs()
 
-fun Context.CreateNomediaFile() =
+fun Context.createNoMediaFile() =
     getPath(".nomedia").apply { if (this.exists()) File(this).apply { this.createNewFile() } }
 
 fun Context.getFileUri(path: String): Uri =

@@ -52,4 +52,6 @@ dependencies {
     releaseImplementation project(path: ':net')
     debugImplementation project(path: ':widget')
     releaseImplementation project(path: ':widget')
+    debugImplementation project(path: ':db')
+    releaseImplementation project(path: ':db')
 }

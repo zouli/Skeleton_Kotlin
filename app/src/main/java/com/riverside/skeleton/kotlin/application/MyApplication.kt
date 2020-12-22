@@ -8,7 +8,13 @@ import com.imnjh.imagepicker.PickerConfig
 import com.imnjh.imagepicker.SImagePicker
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
-import com.riverside.skeleton.kotlin.util.file.CreateNomediaFile
+import com.riverside.skeleton.kotlin.db.DbBeanHelper
+import com.riverside.skeleton.kotlin.db.DatabaseHelper
+import com.riverside.skeleton.kotlin.dbtest.A
+import com.riverside.skeleton.kotlin.dbtest.B
+import com.riverside.skeleton.kotlin.util.file.createNoMediaFile
+import com.riverside.skeleton.kotlin.util.file.mkdirs
+import com.riverside.skeleton.kotlin.util.file.unaryPlus
 import com.squareup.picasso.Picasso
 
 class MyApplication : SBaseApplication() {
@@ -19,7 +25,10 @@ class MyApplication : SBaseApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        this.CreateNomediaFile()
+        this.createNoMediaFile()
+
+        DatabaseHelper.databaseName = mkdirs("db") + +"database.xml"
+        DbBeanHelper.addBean(A::class, B::class)
 
         SImagePicker.init(
             PickerConfig.Builder().setAppContext(this)

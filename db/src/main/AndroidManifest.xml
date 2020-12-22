@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.riverside.skeleton.kotlin.db">
+
+    <application>
+        <meta-data
+                android:name="DATABASE_VERSION"
+                android:value="@integer/database_version" />
+    </application>
+</manifest>

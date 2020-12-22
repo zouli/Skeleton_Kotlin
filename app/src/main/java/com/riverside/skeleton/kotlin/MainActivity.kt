@@ -48,6 +48,12 @@ class MainActivity : SBaseActivity() {
                     startActivity<WidgetUIMainActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("db") {
+                onClick {
+                    startActivity<DbMainActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
 
         SLog.w(AppVersionInfo.info(this@MainActivity).getString("versionName"))
