@@ -10,22 +10,20 @@ import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 
 class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: Int) :
     SQLiteOpenHelper(context, dbName, null, dbVersion) {
-    private var currentDatabase: SQLiteDatabase = try {
-        writableDatabase
-    } catch (e: Exception) {
-        readableDatabase
-    }
+    val currentDatabase: SQLiteDatabase
+        get() = try {
+            writableDatabase
+        } catch (e: Exception) {
+            readableDatabase
+        }
 
     /**
      * 创建数据库
      */
     override fun onCreate(db: SQLiteDatabase) {
-        db.beginTransaction()
-        DbBeanHelper.getCreateSql().forEach {
-            db.execSQL(it)
+        DatabaseDCL(db).transaction {
+            exec(DbBeanHelper.getCreateSql())
         }
-        db.setTransactionSuccessful()
-        db.endTransaction()
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -63,9 +61,10 @@ class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: In
     fun query(
         table: String, columns: Array<String>,
         selection: String, selectionArgs: Array<String>,
+        groupBy: String?, having: String?,
         orderBy: String
     ): Cursor =
-        currentDatabase.query(table, columns, selection, selectionArgs, null, null, orderBy)
+        currentDatabase.query(table, columns, selection, selectionArgs, groupBy, having, orderBy)
 
     /**
      * 删除
@@ -96,6 +95,12 @@ class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: In
             }
             columnsName
         }
+
+    @Synchronized
+    override fun close() {
+        super.close()
+        if (currentDatabase.isOpen) currentDatabase.close()
+    }
 
     companion object {
         var databaseName: String = ""

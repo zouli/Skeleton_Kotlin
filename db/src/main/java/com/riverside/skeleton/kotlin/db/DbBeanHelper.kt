@@ -16,5 +16,5 @@ object DbBeanHelper {
     }
 
     fun getCreateSql(): List<String> =
-        beanList.map { DbAnnotationHelper.getCreateSql(it) }
+        beanList.map { DatabaseUtil.getCreateSql(it) }
 }

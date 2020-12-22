@@ -1,11 +1,10 @@
 package com.riverside.skeleton.kotlin.dbtest
 
-import com.riverside.skeleton.kotlin.db.Autoincrement
 import com.riverside.skeleton.kotlin.db.Id
 import com.riverside.skeleton.kotlin.db.STable
 import java.util.*
 
-@STable("A")
+@STable("AA")
 //@SCreateSql(
 //    "CREATE TABLE [A] ([id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT" +
 //            ", [user_id] VARCHAR(50)" +
@@ -15,7 +14,7 @@ import java.util.*
 //            ")"
 //)
 data class A(
-    @Id @Autoincrement var id: Int,
+    @Id var id: Int?,
     var userId: String?,
     var loginDate: Date?,
     var score: Double?,

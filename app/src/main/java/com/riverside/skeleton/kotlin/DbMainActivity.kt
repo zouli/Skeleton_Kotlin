@@ -2,13 +2,13 @@ package com.riverside.skeleton.kotlin
 
 import android.content.Context
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.db.DatabaseHelper
+import com.riverside.skeleton.kotlin.db.DatabaseUtil
 import com.riverside.skeleton.kotlin.db.DbBeanHelper
-import com.riverside.skeleton.kotlin.db.toList
+import com.riverside.skeleton.kotlin.db.sqlite
 import com.riverside.skeleton.kotlin.dbtest.A
 import com.riverside.skeleton.kotlin.dbtest.B
 import com.riverside.skeleton.kotlin.slog.SLog
-import com.riverside.skeleton.kotlin.util.converter.toString
+import com.riverside.skeleton.kotlin.util.converter.toDate
 import dalvik.system.BaseDexClassLoader
 import dalvik.system.DexFile
 import org.jetbrains.anko.button
@@ -45,36 +45,39 @@ class DbMainActivity : SBaseActivity() {
 
             button("insert data") {
                 onClick {
-                    val sql =
-                        "INSERT INTO [A] ([user_id],[login_date],[score],[flag]) values (?,?,?,?)"
-                    val args = arrayOf(
-                        "aa", Date().toString("yyyy-MM-dd HH:mm:ss"), "0.1", "1,2,3,4"
+                    val dataA =
+                        listOf(
+                            A(null, "dd", Date(), 0.2, null),
+                            A(null, "cc", Date(), 1.2, listOf("1", "2"))
+                        )
+                    val dataB = B(
+                        1, 2, 3, 4, "伍", 6.6F, 777.77777, true,
+                        "2020-05-15 05:21:01".toDate(DatabaseUtil.DATE_PATTERN)
                     )
-                    DatabaseHelper.defaultDatabase.execSQL(sql, args)
-
-                    val sql1 =
-                        "INSERT INTO [B] ([a],[b],[c],[d],[e],[f],[g],[h],[i]) values (?,?,?,?,?,?,?,?,?)"
-                    val args1 = arrayOf(
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "伍",
-                        "6.6",
-                        "7.7",
-                        "1",
-                        "2020-05-15 05:21:01"
-                    )
-                    DatabaseHelper.defaultDatabase.execSQL(sql1, args1)
+                    sqlite {
+                        transaction {
+                            insert(dataB)
+                            insert(dataA)
+                        }
+                    }
                 }
             }.lparams(matchParent, wrapContent)
 
             button("select data") {
                 onClick {
-                    val c = DatabaseHelper.defaultDatabase.rawQuery("SELECT * FROM [A]", arrayOf())
-                    SLog.w(c.toList<A>())
-                    val c1 = DatabaseHelper.defaultDatabase.rawQuery("SELECT * FROM [B]", arrayOf())
-                    SLog.w(c1.toList<B>())
+                    sqlite {
+                        select<A> {
+                            where {
+                                and(
+                                    or("user_id" eq "dd", "user_id" eq "cc"),
+                                    "score" gt 1
+                                )
+                            }
+                        }.forEach { SLog.w(it) }
+                        select<B> {
+                            distinct = true
+                        }.forEach { SLog.w(it) }
+                    }
                 }
             }.lparams(matchParent, wrapContent)
 
