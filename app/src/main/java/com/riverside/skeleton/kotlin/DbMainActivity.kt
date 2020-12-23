@@ -55,10 +55,10 @@ class DbMainActivity : SBaseActivity() {
                         "2020-05-15 05:21:01".toDate(DatabaseUtil.DATE_PATTERN)
                     )
                     sqlite {
-                        transaction {
-                            insert(dataB)
-                            insert(dataA)
-                        }
+//                        transaction {
+                        insert(dataA)
+                        insert(dataB)
+//                        }
                     }
                 }
             }.lparams(matchParent, wrapContent)
@@ -68,15 +68,51 @@ class DbMainActivity : SBaseActivity() {
                     sqlite {
                         select<A> {
                             where {
-                                and(
-                                    or("user_id" eq "dd", "user_id" eq "cc"),
-                                    "score" gt 1
-                                )
+                                "userId".notIn {
+                                    selectSql<B> {
+                                        column("c")
+                                        where { "c" eq "3" }
+                                    }
+                                }
                             }
+
+//                            groupBy("score") {
+//                                "score" lt 1
+//                            }
+                            orderBy("score", "id".desc())
                         }.forEach { SLog.w(it) }
+
                         select<B> {
                             distinct = true
                         }.forEach { SLog.w(it) }
+                    }
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("delete") {
+                onClick {
+                    sqlite {
+                        delete<B> {
+                            "a" eq 2
+                        }
+                    }
+                }
+            }.lparams(matchParent, wrapContent)
+
+            button("update") {
+                onClick {
+                    val dataB = B(
+                        2, 2, 3, 4, "伍伍", 6.6F, 777.77777, null,
+                        "2020-05-15 05:21:01".toDate(DatabaseUtil.DATE_PATTERN)
+                    )
+
+                    sqlite {
+                        update(dataB) {
+//                            values("a" to 2)
+                            where {
+                                "a" eq 1
+                            }
+                        }
                     }
                 }
             }.lparams(matchParent, wrapContent)

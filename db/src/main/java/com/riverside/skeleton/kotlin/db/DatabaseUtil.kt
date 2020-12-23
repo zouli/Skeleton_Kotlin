@@ -25,6 +25,7 @@ object DatabaseUtil {
                         //比较基础类型的时候需要忽略大小写
                         //TODO:考虑把判断抽象出来，把List的情况单独抽象出来
                         when {
+                            cursor.isNull(columnIndex) -> argsMap[javaField.type] = null
                             eqType(javaField, Byte::class) ->
                                 argsMap[javaField.type] = cursor.getInt(columnIndex).toByte()
                             eqType(javaField, Short::class) ->
@@ -89,7 +90,11 @@ object DatabaseUtil {
                     isNull = " NOT NULL"
                     " PRIMARY KEY$autoincrement"
                 } ?: ""
-            "[$fieldName] $type$isNull$primary"
+            val unique = clazz.fieldHasAnnotation<Unique>(param)?.let {
+                isNull = " NOT NULL"
+                " UNIQUE"
+            } ?: ""
+            "[$fieldName] $type$isNull$unique$primary"
         }
         return "CREATE TABLE [${getTableName(clazz)}] ($fields)"
     }
@@ -97,11 +102,13 @@ object DatabaseUtil {
     /**
      * 取得字段和值列表
      */
-    inline fun <reified T> getFieldValueArray(bean: T): Array<Pair<String, Any>> =
+    inline fun <reified T> getFieldValueArray(
+        bean: T, hasNull: Boolean = false
+    ): Array<Pair<String, Any?>> =
         T::class.java.declaredFields.map { field ->
             field.isAccessible = true
             getSnakeCaseName(field.name) to field.get(bean)
-        }.filter { it.second != null }.toTypedArray()
+        }.filter { it.second != null || hasNull }.toTypedArray()
 
     /**
      * 取得列Index

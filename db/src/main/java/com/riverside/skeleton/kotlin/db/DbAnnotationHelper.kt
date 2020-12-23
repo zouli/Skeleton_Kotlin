@@ -12,6 +12,9 @@ annotation class SCreateSql(val sql: String)
 @Target(AnnotationTarget.FIELD)
 annotation class Id(val autoincrement: Boolean = true)
 
+@Target(AnnotationTarget.FIELD)
+annotation class Unique
+
 inline fun <reified T> KClass<*>.hasAnnotation(): T? =
     this.annotations.filterIsInstance<T>().firstOrNull()
 
