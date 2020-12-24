@@ -57,7 +57,7 @@ class DbMainActivity : SBaseActivity() {
                     sqlite {
 //                        transaction {
                         insert(dataA)
-                        insert(dataB)
+                        replace(dataB)
 //                        }
                     }
                 }
@@ -68,10 +68,10 @@ class DbMainActivity : SBaseActivity() {
                     sqlite {
                         select<A> {
                             where {
-                                "userId".notIn {
-                                    selectSql<B> {
-                                        column("c")
-                                        where { "c" eq "3" }
+                                "scoreMath" lt {
+                                    subSelect<B> {
+                                        column("a")
+                                        where { "c" eq 3 }
                                     }
                                 }
                             }
@@ -79,7 +79,7 @@ class DbMainActivity : SBaseActivity() {
 //                            groupBy("score") {
 //                                "score" lt 1
 //                            }
-                            orderBy("score", "id".desc())
+                            orderBy("scoreMath".desc(), "id")
                         }.forEach { SLog.w(it) }
 
                         select<B> {
@@ -92,8 +92,10 @@ class DbMainActivity : SBaseActivity() {
             button("delete") {
                 onClick {
                     sqlite {
-                        delete<B> {
-                            "a" eq 2
+                        delete<B>()
+
+                        delete<A> {
+                            "id" ge 2
                         }
                     }
                 }
@@ -107,10 +109,19 @@ class DbMainActivity : SBaseActivity() {
                     )
 
                     sqlite {
-                        update(dataB) {
+                        update(dataB, true) {
 //                            values("a" to 2)
                             where {
-                                "a" eq 1
+//                                "a" eq 1
+                                "b / 10.0".In {
+                                    subSelect<A> {
+                                        column("scoreMath")
+                                        where { "userId" eq "dd" }
+                                        groupBy("userId") {
+
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

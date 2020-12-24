@@ -61,13 +61,14 @@ object DatabaseUtil {
         } else return null
     }
 
-    fun getCreateSql(clazz: KClass<*>): String =
-        clazz.hasAnnotation<SCreateSql>()?.sql ?: buildCreateSql(clazz)
+    fun KClass<*>.getCreateSql(): String =
+        this.getAnnotation<SCreateSql>()?.sql ?: buildCreateSql(this)
 
     /**
      * 生成Create语句
      */
     private fun buildCreateSql(clazz: KClass<*>): String {
+        val keys = clazz.getPrimaryKeys()
         val fields = clazz.constructors.first().parameters.joinToString(", ") { param ->
             val fieldName = param.name?.let { getSnakeCaseName(it) } ?: ""
             //TODO:把类型判断抽象出来
@@ -83,20 +84,21 @@ object DatabaseUtil {
                 Date::class -> "DATETIME"
                 else -> "BLOB"
             }
-            var isNull = if (param.type.isMarkedNullable) "" else " NOT NULL"
+            val isNull = if (param.type.isMarkedNullable) "" else " NOT NULL"
             val primary =
-                clazz.fieldHasAnnotation<Id>(param)?.let {
-                    val autoincrement = if (it.autoincrement) " AUTOINCREMENT" else ""
-                    isNull = " NOT NULL"
-                    " PRIMARY KEY$autoincrement"
-                } ?: ""
-            val unique = clazz.fieldHasAnnotation<Unique>(param)?.let {
-                isNull = " NOT NULL"
-                " UNIQUE"
-            } ?: ""
-            "[$fieldName] $type$isNull$unique$primary"
+                if (keys.size > 1) "" else
+                    keys.firstOrNull { (field, _) -> field == param.name }?.let { (_, hasAuto) ->
+                        val autoincrement = if (hasAuto) " AUTOINCREMENT" else ""
+                        " PRIMARY KEY$autoincrement"
+                    } ?: ""
+            val unique = clazz.getUnique(param)?.let { " UNIQUE" } ?: ""
+            val default = clazz.getDefault(param)?.let { " DEFAULT ${it.value}" } ?: ""
+            val check = clazz.getCheck(param)?.let { " CHECK(${it.value})" } ?: ""
+            "[$fieldName] $type$isNull$unique$primary$default$check"
         }
-        return "CREATE TABLE [${getTableName(clazz)}] ($fields)"
+        val primaries =
+            if (keys.size > 1) ", PRIMARY KEY(${keys.joinToString(", ") { it.first }})" else ""
+        return "CREATE TABLE [${clazz.getTableName()}] ($fields$primaries)"
     }
 
     /**
@@ -122,12 +124,6 @@ object DatabaseUtil {
     }
 
     /**
-     * 取得表名
-     */
-    fun getTableName(clazz: KClass<*>): String =
-        clazz.hasAnnotation<STable>()?.name?.orNull() ?: clazz.simpleName ?: ""
-
-    /**
      * 取得蛇形变量名
      */
     fun getSnakeCaseName(name: String) = name.toCharArray().joinToString("") {
@@ -136,8 +132,6 @@ object DatabaseUtil {
 
     private fun eqType(field: Field, clazz: KClass<*>) =
         field.type.simpleName.equals(clazz.java.simpleName, true)
-
-    private fun String.orNull() = if (this.isNotEmpty()) this else null
 
     const val DATE_PATTERN = DateUtils.DATE_FORMAT_PATTERN2
 }

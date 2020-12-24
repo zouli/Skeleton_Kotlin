@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin.db
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 import com.riverside.skeleton.kotlin.db.DatabaseUtil.DATE_PATTERN
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.converter.toString
@@ -65,7 +66,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      * 插入（Bean）
      */
     inline fun <reified T> insert(bean: T): Long = insert(
-        DatabaseUtil.getTableName(T::class), *DatabaseUtil.getFieldValueArray(bean)
+        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(bean)
     )
 
     /**
@@ -76,11 +77,31 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 插入
      */
-    fun insert(table: String, vararg values: Pair<String, Any?>): Long = if (db.inTransaction()) {
-        db.insertOrThrow(table, null, values.toContentValues())
-    } else {
-        db.insert(table, null, values.toContentValues())
-    }
+    fun insert(tableName: String, vararg values: Pair<String, Any?>): Long =
+        if (db.inTransaction()) {
+            db.insertOrThrow(tableName, null, values.toContentValues())
+        } else {
+            db.insert(tableName, null, values.toContentValues())
+        }
+
+    /**
+     * 插入（Bean）
+     */
+    inline fun <reified T> replace(bean: T): Long = replace(
+        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(bean)
+    )
+
+    /**
+     * 插入多个（Bean）
+     */
+    inline fun <reified T> replace(beans: List<T>) = beans.forEach { replace(it) }
+
+
+    /**
+     * 插入或更新
+     */
+    fun replace(tableName: String, vararg values: Pair<String, Any?>): Long =
+        db.insertWithOnConflict(tableName, null, values.toContentValues(), CONFLICT_REPLACE)
 
     /**
      * 查询
@@ -96,7 +117,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     inline fun <reified T> select(init: SelectBuilder.() -> Unit = {}): List<T> =
         SelectBuilder().run {
             init()
-            tableName = DatabaseUtil.getTableName(T::class)
+            tableName = T::class.getTableName()
 
             db.query(
                 distinct, tableName, columns,
@@ -105,24 +126,24 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         }
 
     /**
-     * 取得查询Sql
+     * 取得子查询
      */
     @SuppressLint("Recycle")
-    inline fun <reified T> selectSql(init: SelectBuilder.() -> Unit = {}): SelectBuilder =
+    inline fun <reified T> subSelect(init: SelectBuilder.() -> Unit = {}): SelectBuilder =
         SelectBuilder().apply {
             init()
-            tableName = DatabaseUtil.getTableName(T::class)
+            tableName = T::class.getTableName()
         }
 
     /**
      * 删除(DCL)
      */
-    inline fun <reified T> delete(init: ConditionsBuilder.() -> Unit): Int =
+    inline fun <reified T> delete(init: ConditionsBuilder.() -> Unit = {}): Int =
         ConditionsBuilder().run {
             init()
 
             delete(
-                DatabaseUtil.getTableName(T::class),
+                T::class.getTableName(),
                 condition, conditionArgs.map { it.toString() }.toTypedArray()
             )
         }
@@ -130,7 +151,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 删除
      */
-    fun delete(tableName: String, where: String, whereArg: Array<String>): Int =
+    fun delete(tableName: String, where: String = "", whereArg: Array<String> = arrayOf()): Int =
         db.delete(tableName, where, whereArg)
 
     /**
@@ -138,13 +159,13 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      */
     inline fun <reified T> update(
         bean: T, updateNull: Boolean = false,
-        init: UpdateBuilder.() -> Unit
+        init: UpdateBuilder.() -> Unit = {}
     ): Int =
         UpdateBuilder().run {
             init()
 
             update(
-                DatabaseUtil.getTableName(T::class),
+                T::class.getTableName(),
                 *DatabaseUtil.getFieldValueArray(bean, updateNull),
                 where = selection, whereArg = selectionArgs
             )
@@ -158,7 +179,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             init()
 
             update(
-                DatabaseUtil.getTableName(T::class), *values,
+                T::class.getTableName(), *values,
                 where = selection, whereArg = selectionArgs
             )
         }
@@ -218,7 +239,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             private set
 
         fun column(vararg column: String) {
-            this.columns = column.toList().toTypedArray()
+            this.columns = column.map { it.fieldName }.toTypedArray()
         }
 
         fun where(selection: String, vararg args: Any) {
@@ -238,10 +259,10 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             this.having = having
         }
 
-        fun groupBy(vararg column: String, init: ConditionsBuilder.() -> Unit) {
+        fun groupBy(vararg column: String, init: ConditionsBuilder.() -> Unit = {}) {
             val havingBuilder = ConditionsBuilder()
             havingBuilder.init()
-            this.groupBy = column.joinToString(", ") { "[$it]" }
+            this.groupBy = column.joinToString(", ") { it.fieldName }
             this.having = havingBuilder.condition
             this.selectionArgs =
                 this.selectionArgs.union(havingBuilder.conditionArgs.map { it.toString() })
@@ -249,14 +270,18 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         }
 
         fun orderBy(vararg column: String) {
-            this.orderBy = column.joinToString(", ")
+            this.orderBy =
+                column.joinToString(", ") { it.fieldName.replace("↓]", "] DESC") }
         }
 
         fun limit(page: Int, size: Int) {
             limit = "${page - 1},$size"
         }
 
-        fun getSql() =
+        /**
+         * 生成完成SQL文
+         */
+        fun createSql() =
             "SELECT${if (distinct) " DISTINCT" else ""} ${
             if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM [$tableName]${
             c("WHERE", selection)}${
@@ -266,7 +291,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         private fun c(name: String, clause: String): String =
             if (clause.isNotEmpty()) " $name $clause" else ""
 
-        fun String.desc(): String = "$this DESC"
+        fun String.desc(): String = "$this↓"
     }
 
     /**
@@ -281,7 +306,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             private set
 
         fun values(vararg values: Pair<String, Any>) {
-            this.values = values.toList().toTypedArray()
+            this.values = values.map { it.first.fieldName to it.second }
+                .toTypedArray()
         }
 
         fun where(selection: String, vararg args: Any) {
@@ -302,7 +328,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      */
     inner class ConditionsBuilder {
         var condition = ""
+            private set
         var conditionArgs = mutableListOf<Any>()
+            private set
 
         infix fun String.lt(value: Any): String = getExpression(this, "<", value)
         infix fun String.le(value: Any): String = getExpression(this, "<=", value)
@@ -311,8 +339,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         infix fun String.ne(value: Any): String = getExpression(this, "<>", value)
         infix fun String.eq(value: Any): String = getExpression(this, "=", value)
 
-        fun and(first: String, second: Any, vararg other: Any): String =
-            getClauses("AND", first, second, *other)
+        fun and(condition1: String, condition2: Any, vararg conditionN: Any): String =
+            getClauses("AND", condition1, condition2, *conditionN)
 
         fun String.between(start: Any, end: Any): String =
             getExpression(this, "BETWEEN", start, "AND", end)
@@ -320,14 +348,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         fun String.notBetween(start: Any, end: Any): String =
             getExpression(this, "NOT BETWEEN", start, "AND", end)
 
-        fun exists(init: SelectBuilder.() -> SelectBuilder): String = SelectBuilder().init().let {
-            getSubQuery("", "EXISTS", it.getSql(), it.selectionArgs)
-        }
-
-        fun notExists(init: SelectBuilder.() -> SelectBuilder): String =
-            SelectBuilder().init().let {
-                getSubQuery("", "NOT EXISTS", it.getSql(), it.selectionArgs)
-            }
+        fun exists(init: () -> SelectBuilder): String = getSubQuery("", "EXISTS", init)
+        fun notExists(init: () -> SelectBuilder): String = getSubQuery("", "NOT EXISTS", init)
 
         fun exists(sql: String, vararg sqlArgs: Any): String =
             getSubQuery("", "EXISTS", sql, sqlArgs)
@@ -338,20 +360,13 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         fun String.In(vararg value: Any): String = getInValues(this, "IN", value)
         fun String.notIn(vararg value: Any): String = getInValues(this, "NOT IN", value)
         fun String.In(sql: String, vararg sqlArgs: Any): String =
-            getSubQuery(this, "EXISTS", sql, sqlArgs)
+            getSubQuery(this, "IN", sql, sqlArgs)
 
         fun String.notIn(sql: String, vararg sqlArgs: Any): String =
-            getSubQuery(this, "NOT EXISTS", sql, sqlArgs)
+            getSubQuery(this, "NOT IN", sql, sqlArgs)
 
-        fun String.In(init: SelectBuilder.() -> SelectBuilder): String =
-            SelectBuilder().init().let {
-                getSubQuery(this, "IN", it.getSql(), it.selectionArgs)
-            }
-
-        fun String.notIn(init: SelectBuilder.() -> SelectBuilder): String =
-            SelectBuilder().init().let {
-                getSubQuery(this, "NOT IN", it.getSql(), it.selectionArgs)
-            }
+        fun String.In(init: () -> SelectBuilder): String = getSubQuery(this, "IN", init)
+        fun String.notIn(init: () -> SelectBuilder): String = getSubQuery(this, "NOT IN", init)
 
         infix fun String.like(pattern: String): String = getExpression(this, "LIKE '$pattern'")
         infix fun String.notLike(pattern: String): String =
@@ -361,33 +376,60 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         infix fun String.notGlob(pattern: String): String =
             getExpression(this, "NOT GLOB '$pattern'")
 
-        fun or(first: String, second: Any, vararg other: Any): String =
-            getClauses("OR", first, second, *other)
+        fun or(condition1: String, condition2: Any, vararg conditionN: Any): String =
+            getClauses("OR", condition1, condition2, *conditionN)
 
         fun String.isNull(): String = getExpression(this, "IS NULL")
         fun String.isNotNull(): String = getExpression(this, "IS NOT NULL")
         infix fun String.Is(value: Any): String = getExpression(this, "IS", value)
         infix fun String.isNot(value: Any): String = getExpression(this, "IS NOT", value)
 
-        private fun getClauses(operator: String, vararg values: Any): String =
-            "(${values.joinToString(" $operator ")})".apply { condition = this }
+        /**
+         * 取得逻辑表达式
+         */
+        private fun getClauses(operator: String, vararg cond: Any): String =
+            "(${cond.joinToString(" $operator ")})".apply { condition = this }
 
+        /**
+         * 取得表达式字符串
+         */
+        @Suppress("UNCHECKED_CAST")
         private fun getExpression(
-            field: String,
-            operator: String, value: Any? = null, operator2: String = "", value2: Any? = null
-        ): String = "${fo(field, operator)}${if (value == null) "" else " ?"}${
-        if (operator2.isNotEmpty()) " $operator2${if (value2 == null) "" else " ?"}" else ""}".apply {
-            value?.let { conditionArgs.add(it) }
-            value2?.let { conditionArgs.add(it) }
-            if (condition.isEmpty()) condition = this
+            field: String, operator: String, value: Any? = null,
+            operator2: String = "", value2: Any? = null
+        ): String {
+            val valueString =
+                if (value == null) ""
+                else
+                    (value as? () -> SelectBuilder)?.let { getSubQuery(field, operator, it) }
+                        ?: "${fo(field, operator)} ?".apply {
+                            conditionArgs.add(value)
+                        }
+
+            val value2String =
+                if (operator2.isNotEmpty())
+                    (value2 as? () -> SelectBuilder)?.let { getSubQuery("", operator2, it) }
+                        ?: " $operator2${if (value2 == null) "" else " ?".apply {
+                            conditionArgs.add(value2)
+                        }}"
+                else ""
+            return "$valueString$value2String".apply {
+                if (condition.isEmpty()) condition = this
+            }
         }
 
+        /**
+         * 取得IN语句的值
+         */
         private fun getInValues(field: String, operator: String, value: Array<out Any>): String =
             "${fo(field, operator)} (${value.joinToString(" , ") { "?" }})".apply {
                 conditionArgs.addAll(value)
                 condition = this
             }
 
+        /**
+         * 取得子查询
+         */
         private fun getSubQuery(
             field: String, operator: String, sql: String, sqlArgs: Array<out Any>
         ): String = "${fo(field, operator)} ($sql)".apply {
@@ -395,7 +437,26 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             condition = this
         }
 
+        /**
+         * 取得子查询
+         */
+        private fun getSubQuery(
+            field: String, operator: String, init: () -> SelectBuilder
+        ): String = init().let {
+            getSubQuery(field, operator, it.createSql(), it.selectionArgs)
+        }
+
+        /**
+         * 生成字段+操作符
+         */
         private fun fo(field: String, operator: String) =
-            "[${DatabaseUtil.getSnakeCaseName(field)}] $operator"
+            if (field.isNotEmpty()) "${field.fieldName} $operator"
+            else " $operator"
     }
+
+    private val String.fieldName
+        get() =
+            if (Regex("""[A-Za-z↓]+""").matches(this))
+                "[${DatabaseUtil.getSnakeCaseName(this)}]"
+            else this
 }

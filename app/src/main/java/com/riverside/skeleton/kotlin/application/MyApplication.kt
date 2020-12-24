@@ -12,6 +12,7 @@ import com.riverside.skeleton.kotlin.db.DbBeanHelper
 import com.riverside.skeleton.kotlin.db.DatabaseHelper
 import com.riverside.skeleton.kotlin.dbtest.A
 import com.riverside.skeleton.kotlin.dbtest.B
+import com.riverside.skeleton.kotlin.dbtest.C
 import com.riverside.skeleton.kotlin.util.file.createNoMediaFile
 import com.riverside.skeleton.kotlin.util.file.mkdirs
 import com.riverside.skeleton.kotlin.util.file.unaryPlus
@@ -28,7 +29,7 @@ class MyApplication : SBaseApplication() {
         this.createNoMediaFile()
 
         DatabaseHelper.databaseName = mkdirs("db") + +"database.xml"
-        DbBeanHelper.addBean(A::class, B::class)
+        DbBeanHelper.addBean(A::class, B::class, C::class)
 
         SImagePicker.init(
             PickerConfig.Builder().setAppContext(this)

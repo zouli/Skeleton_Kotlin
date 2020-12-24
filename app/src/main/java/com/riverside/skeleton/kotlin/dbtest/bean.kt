@@ -1,8 +1,6 @@
 package com.riverside.skeleton.kotlin.dbtest
 
-import com.riverside.skeleton.kotlin.db.Id
-import com.riverside.skeleton.kotlin.db.STable
-import com.riverside.skeleton.kotlin.db.Unique
+import com.riverside.skeleton.kotlin.db.*
 import java.util.*
 
 @STable("AA")
@@ -18,7 +16,7 @@ data class A(
     @Id var id: Int?,
     var userId: String?,
     var loginDate: Date?,
-    var score: Double?,
+    var scoreMath: Double?,
     var flag: List<String>?
 )
 
@@ -34,3 +32,9 @@ data class B(
     var h: Boolean?,
     var i: Date
 )
+
+@STable
+data class C(
+    @Id var a: Int,
+    @Id @Check("b > 2") var b: Int,
+    @Default("1.0") var c: Double?)

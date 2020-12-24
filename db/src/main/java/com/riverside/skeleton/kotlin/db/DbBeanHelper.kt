@@ -1,5 +1,6 @@
 package com.riverside.skeleton.kotlin.db
 
+import com.riverside.skeleton.kotlin.db.DatabaseUtil.getCreateSql
 import kotlin.reflect.KClass
 
 object DbBeanHelper {
@@ -15,6 +16,5 @@ object DbBeanHelper {
         beanList.remove(clazz)
     }
 
-    fun getCreateSql(): List<String> =
-        beanList.map { DatabaseUtil.getCreateSql(it) }
+    fun getCreateSql(): List<String> = beanList.map { it.getCreateSql() }
 }
