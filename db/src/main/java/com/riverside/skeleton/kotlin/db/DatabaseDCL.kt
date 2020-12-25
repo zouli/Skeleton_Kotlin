@@ -21,7 +21,7 @@ fun sqlite(
         try {
             databaseDCL.init()
         } catch (e: Exception) {
-            SLog.e("", throwable = e)
+            SLog.e(e)
         } finally {
             databaseDCL.db.close()
         }
@@ -38,7 +38,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             block()
             db.setTransactionSuccessful()
         } catch (e: Exception) {
-            SLog.e("", throwable = e)
+            SLog.e(e)
         } finally {
             db.endTransaction()
         }
@@ -82,6 +82,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             db.insertOrThrow(tableName, null, values.toContentValues())
         } else {
             db.insert(tableName, null, values.toContentValues())
+        }.apply {
+            SLog.i("INSERT INTO $tableName VALUES $values")
         }
 
     /**
@@ -96,12 +98,13 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      */
     inline fun <reified T> replace(beans: List<T>) = beans.forEach { replace(it) }
 
-
     /**
      * 插入或更新
      */
     fun replace(tableName: String, vararg values: Pair<String, Any?>): Long =
-        db.insertWithOnConflict(tableName, null, values.toContentValues(), CONFLICT_REPLACE)
+        db.insertWithOnConflict(tableName, null, values.toContentValues(), CONFLICT_REPLACE).apply {
+            SLog.i("INSERT OR REPLACE INTO $tableName VALUES $values")
+        }
 
     /**
      * 查询
@@ -114,10 +117,15 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      * 查询(DCL)
      */
     @SuppressLint("Recycle")
-    inline fun <reified T> select(init: SelectBuilder.() -> Unit = {}): List<T> =
-        SelectBuilder().run {
+    inline fun <reified T> select(
+        alias: String = "", init: SelectBuilder.() -> Unit = {}
+    ): List<T> =
+        SelectBuilder(alias).run {
             init()
             tableName = T::class.getTableName()
+
+            SLog.i(createSql())
+            SLog.i(selectionArgs)
 
             db.query(
                 distinct, tableName, columns,
@@ -129,10 +137,15 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      * 取得子查询
      */
     @SuppressLint("Recycle")
-    inline fun <reified T> subSelect(init: SelectBuilder.() -> Unit = {}): SelectBuilder =
-        SelectBuilder().apply {
+    inline fun <reified T> subSelect(
+        alias: String = "", init: SelectBuilder.() -> Unit = {}
+    ): SelectBuilder =
+        SelectBuilder(alias).apply {
             init()
             tableName = T::class.getTableName()
+
+            SLog.i(createSql())
+            SLog.i(selectionArgs)
         }
 
     /**
@@ -152,7 +165,10 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      * 删除
      */
     fun delete(tableName: String, where: String = "", whereArg: Array<String> = arrayOf()): Int =
-        db.delete(tableName, where, whereArg)
+        db.delete(tableName, where, whereArg).apply {
+            SLog.i("DELETE FROM $tableName WHERE $where")
+            SLog.i(whereArg)
+        }
 
     /**
      * 更新(Bean)
@@ -190,7 +206,10 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     fun update(
         tableName: String, vararg values: Pair<String, Any?>, where: String, whereArg: Array<String>
     ): Int =
-        db.update(tableName, values.toContentValues(), where, whereArg)
+        db.update(tableName, values.toContentValues(), where, whereArg).apply {
+            SLog.i("UPDATE $tableName SET ${values.contentToString()} WHERE $where")
+            SLog.i(whereArg)
+        }
 
     /**
      * 生成ContentValues
@@ -220,8 +239,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 查询构造类
      */
-    inner class SelectBuilder {
+    inner class SelectBuilder(private val alias: String = "") {
         var tableName = ""
+            get() = if (alias.isNotEmpty()) "$field AS $alias" else "$field"
         var columns = arrayOf<String>()
             private set
         var distinct = false
@@ -239,7 +259,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             private set
 
         fun column(vararg column: String) {
-            this.columns = column.map { it.fieldName }.toTypedArray()
+            this.columns = column.map { it.fieldName(alias) }.toTypedArray()
         }
 
         fun where(selection: String, vararg args: Any) {
@@ -248,7 +268,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         }
 
         fun where(init: ConditionsBuilder.() -> Unit) {
-            val whereBuilder = ConditionsBuilder()
+            val whereBuilder = ConditionsBuilder(alias)
             whereBuilder.init()
             this.selection = whereBuilder.condition
             this.selectionArgs = whereBuilder.conditionArgs.map { it.toString() }.toTypedArray()
@@ -260,9 +280,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         }
 
         fun groupBy(vararg column: String, init: ConditionsBuilder.() -> Unit = {}) {
-            val havingBuilder = ConditionsBuilder()
+            val havingBuilder = ConditionsBuilder(alias)
             havingBuilder.init()
-            this.groupBy = column.joinToString(", ") { it.fieldName }
+            this.groupBy = column.joinToString(", ") { it.fieldName(alias) }
             this.having = havingBuilder.condition
             this.selectionArgs =
                 this.selectionArgs.union(havingBuilder.conditionArgs.map { it.toString() })
@@ -271,7 +291,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
 
         fun orderBy(vararg column: String) {
             this.orderBy =
-                column.joinToString(", ") { it.fieldName.replace("↓]", "] DESC") }
+                column.joinToString(", ") { it.fieldName(alias).replace("↓", " DESC") }
         }
 
         fun limit(page: Int, size: Int) {
@@ -283,7 +303,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          */
         fun createSql() =
             "SELECT${if (distinct) " DISTINCT" else ""} ${
-            if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM [$tableName]${
+            if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM $tableName${
             c("WHERE", selection)}${
             c("GROUP BY", groupBy)}${c("HAVING", having)}${
             c("ORDER BY", orderBy)}${c("LIMIT", limit)}"
@@ -292,6 +312,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             if (clause.isNotEmpty()) " $name $clause" else ""
 
         fun String.desc(): String = "$this↓"
+
+        infix fun String.As(alias: String): String = "$this↔$alias"
     }
 
     /**
@@ -306,7 +328,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             private set
 
         fun values(vararg values: Pair<String, Any>) {
-            this.values = values.map { it.first.fieldName to it.second }
+            this.values = values.map { it.first.fieldName() to it.second }
                 .toTypedArray()
         }
 
@@ -326,7 +348,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * Conditions构造器
      */
-    inner class ConditionsBuilder {
+    inner class ConditionsBuilder(private val alias: String = "") {
         var condition = ""
             private set
         var conditionArgs = mutableListOf<Any>()
@@ -450,13 +472,18 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          * 生成字段+操作符
          */
         private fun fo(field: String, operator: String) =
-            if (field.isNotEmpty()) "${field.fieldName} $operator"
+            if (field.isNotEmpty()) "${field.fieldName(alias)} $operator"
             else " $operator"
     }
 
-    private val String.fieldName
-        get() =
-            if (Regex("""[A-Za-z↓]+""").matches(this))
-                "[${DatabaseUtil.getSnakeCaseName(this)}]"
-            else this
+    private fun String.fieldName(alias: String = "") =
+        if (Regex("""[A-Za-z↓↔]+""").matches(this)) {
+            val field = this.indexOf("↔").takeIf { it > 0 }?.let {
+                this.substring(0, this.indexOf("↔"))
+            } ?: this
+            val fieldAlias = this.indexOf("↔").takeIf { it > 0 }?.let {
+                this.substring(this.indexOf("↔")).replace("↔", " AS ")
+            } ?: ""
+            "${if (alias.isNotEmpty()) "$alias." else ""}${DatabaseUtil.getSnakeCaseName(field)}${fieldAlias}"
+        } else this
 }

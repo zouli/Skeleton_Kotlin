@@ -66,19 +66,19 @@ class DbMainActivity : SBaseActivity() {
             button("select data") {
                 onClick {
                     sqlite {
-                        select<A> {
+                        select<A>("C") {
                             where {
                                 "scoreMath" lt {
-                                    subSelect<B> {
-                                        column("a")
+                                    subSelect<B>("D") {
+                                        column("a" As "b")
                                         where { "c" eq 3 }
                                     }
                                 }
                             }
 
-//                            groupBy("score") {
-//                                "score" lt 1
-//                            }
+                            groupBy("scoreMath") {
+                                "scoreMath" lt 1
+                            }
                             orderBy("scoreMath".desc(), "id")
                         }.forEach { SLog.w(it) }
 
@@ -113,8 +113,8 @@ class DbMainActivity : SBaseActivity() {
 //                            values("a" to 2)
                             where {
 //                                "a" eq 1
-                                "b / 10.0".In {
-                                    subSelect<A> {
+                                "b".In {
+                                    subSelect<A>("A") {
                                         column("scoreMath")
                                         where { "userId" eq "dd" }
                                         groupBy("userId") {

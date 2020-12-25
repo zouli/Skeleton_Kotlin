@@ -31,7 +31,7 @@ class NetMainActivity : SBaseActivity() {
                     retrofit<CommonRestService>()
                         .login()
                         .next { checkResult() }
-                        .subscribe({}, { t -> SLog.e("onError", t) })
+                        .subscribe({}, { t -> SLog.e(t) })
                 }
             }.lparams(matchParent, wrapContent)
 
