@@ -37,4 +37,7 @@ data class B(
 data class C(
     @Id var a: Int,
     @Id @Check("b > 2") var b: Int,
-    @Default("1.0") var c: Double?)
+    @Default("1.0") var c: Double?
+)
+
+data class AB(var aA: Int, var bB: String)

@@ -6,6 +6,7 @@ import com.riverside.skeleton.kotlin.db.DatabaseUtil
 import com.riverside.skeleton.kotlin.db.DbBeanHelper
 import com.riverside.skeleton.kotlin.db.sqlite
 import com.riverside.skeleton.kotlin.dbtest.A
+import com.riverside.skeleton.kotlin.dbtest.AB
 import com.riverside.skeleton.kotlin.dbtest.B
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.converter.toDate
@@ -76,9 +77,9 @@ class DbMainActivity : SBaseActivity() {
                                 }
                             }
 
-                            groupBy("scoreMath") {
-                                "scoreMath" lt 1
-                            }
+//                            groupBy("scoreMath") {
+//                                "scoreMath" lt 1
+//                            }
                             orderBy("scoreMath".desc(), "id")
                         }.forEach { SLog.w(it) }
 
@@ -127,6 +128,37 @@ class DbMainActivity : SBaseActivity() {
                     }
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("unions") {
+                onClick {
+                    sqlite {
+                        union<AB>({
+                            subSelect<A>("A") {
+                                column("id" As "aA", "userId" As "bB")
+                                where {
+                                    "id" gt 2
+                                }
+                            }
+                        }, {
+                            subSelect<B> {
+                                column("a" As "aA", "e" As "bB")
+                            }
+                        }).forEach { SLog.w(it) }
+
+                        SLog.w("------Union All-------")
+
+                        unionAll<AB>({
+                            subSelect<A>("A") {
+                                column("id" As "aA", "userId" As "bB")
+                            }
+                        }, {
+                            subSelect<B> {
+                                column("a" As "aA", "e" As "bB")
+                            }
+                        }).forEach { SLog.w(it) }
+                    }
+                }
+            }
 
             button("aaaa") {
                 onClick {

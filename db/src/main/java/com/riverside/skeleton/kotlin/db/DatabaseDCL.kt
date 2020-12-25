@@ -212,6 +212,36 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         }
 
     /**
+     * Union
+     */
+    inline fun <reified T> union(
+        select1: () -> SelectBuilder, select2: () -> SelectBuilder
+    ): List<T> {
+        val selectBuilder1 = select1()
+        val selectBuilder2 = select2()
+
+        return select(
+            sql = "${selectBuilder1.createSql()} UNION ${selectBuilder2.createSql()}",
+            selectionArgs = arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
+        )
+    }
+
+    /**
+     * Union All
+     */
+    inline fun <reified T> unionAll(
+        select1: () -> SelectBuilder, select2: () -> SelectBuilder
+    ): List<T> {
+        val selectBuilder1 = select1()
+        val selectBuilder2 = select2()
+
+        return select(
+            sql = "${selectBuilder1.createSql()} UNION ALL ${selectBuilder2.createSql()}",
+            selectionArgs = arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
+        )
+    }
+
+    /**
      * 生成ContentValues
      */
     private fun Array<out Pair<String, Any?>>.toContentValues() =
