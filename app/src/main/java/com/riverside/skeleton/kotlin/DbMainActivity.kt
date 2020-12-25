@@ -69,18 +69,18 @@ class DbMainActivity : SBaseActivity() {
                     sqlite {
                         select<A>("C") {
                             where {
-                                "scoreMath" lt {
+                                "scoreMath"() lt {
                                     subSelect<B>("D") {
-                                        column("a" As "b")
-                                        where { "c" eq 3 }
+                                        column("a"() As "b")
+                                        where { "c"() eq 3 }
                                     }
                                 }
                             }
 
-//                            groupBy("scoreMath") {
-//                                "scoreMath" lt 1
-//                            }
-                            orderBy("scoreMath".desc(), "id")
+                            groupBy("scoreMath"()) {
+                                "scoreMath"() lt 1
+                            }
+                            orderBy("scoreMath"().desc(), "id"())
                         }.forEach { SLog.w(it) }
 
                         select<B> {
@@ -96,7 +96,7 @@ class DbMainActivity : SBaseActivity() {
                         delete<B>()
 
                         delete<A> {
-                            "id" ge 2
+                            "id"() ge 2
                         }
                     }
                 }
@@ -114,11 +114,11 @@ class DbMainActivity : SBaseActivity() {
 //                            values("a" to 2)
                             where {
 //                                "a" eq 1
-                                "b".In {
+                                "b"().In {
                                     subSelect<A>("A") {
-                                        column("scoreMath")
-                                        where { "userId" eq "dd" }
-                                        groupBy("userId") {
+                                        column("scoreMath"())
+                                        where { "userId"() eq "dd" }
+                                        groupBy("userId"()) {
 
                                         }
                                     }
@@ -134,14 +134,14 @@ class DbMainActivity : SBaseActivity() {
                     sqlite {
                         union<AB>({
                             subSelect<A>("A") {
-                                column("id" As "aA", "userId" As "bB")
+                                column("id"() As "aA", "userId"() As "bB")
                                 where {
-                                    "id" gt 2
+                                    "id"() gt 2
                                 }
                             }
                         }, {
                             subSelect<B> {
-                                column("a" As "aA", "e" As "bB")
+                                column("a"() As "aA", "e"() As "bB")
                             }
                         }).forEach { SLog.w(it) }
 
@@ -149,11 +149,11 @@ class DbMainActivity : SBaseActivity() {
 
                         unionAll<AB>({
                             subSelect<A>("A") {
-                                column("id" As "aA", "userId" As "bB")
+                                column("id"() As "aA", "userId"() As "bB")
                             }
                         }, {
                             subSelect<B> {
-                                column("a" As "aA", "e" As "bB")
+                                column("a"() As "aA", "e"() As "bB")
                             }
                         }).forEach { SLog.w(it) }
                     }

@@ -83,7 +83,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         } else {
             db.insert(tableName, null, values.toContentValues())
         }.apply {
-            SLog.i("INSERT INTO $tableName VALUES $values")
+            SLog.i("INSERT INTO $tableName VALUES ${values.contentToString()}")
         }
 
     /**
@@ -103,7 +103,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      */
     fun replace(tableName: String, vararg values: Pair<String, Any?>): Long =
         db.insertWithOnConflict(tableName, null, values.toContentValues(), CONFLICT_REPLACE).apply {
-            SLog.i("INSERT OR REPLACE INTO $tableName VALUES $values")
+            SLog.i("INSERT OR REPLACE INTO $tableName VALUES ${values.contentToString()}")
         }
 
     /**
@@ -288,8 +288,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         var limit = ""
             private set
 
-        fun column(vararg column: String) {
-            this.columns = column.map { it.fieldName(alias) }.toTypedArray()
+        fun column(vararg column: SField) {
+            this.columns = column.map { it.toString() }.toTypedArray()
         }
 
         fun where(selection: String, vararg args: Any) {
@@ -309,19 +309,19 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             this.having = having
         }
 
-        fun groupBy(vararg column: String, init: ConditionsBuilder.() -> Unit = {}) {
+        fun groupBy(vararg column: SField, init: ConditionsBuilder.() -> Unit = {}) {
             val havingBuilder = ConditionsBuilder(alias)
             havingBuilder.init()
-            this.groupBy = column.joinToString(", ") { it.fieldName(alias) }
+            this.groupBy = column.joinToString(", ") { it.toString() }
             this.having = havingBuilder.condition
             this.selectionArgs =
                 this.selectionArgs.union(havingBuilder.conditionArgs.map { it.toString() })
                     .toTypedArray()
         }
 
-        fun orderBy(vararg column: String) {
+        fun orderBy(vararg column: SField) {
             this.orderBy =
-                column.joinToString(", ") { it.fieldName(alias).replace("↓", " DESC") }
+                column.joinToString(", ") { it.getOrder() }
         }
 
         fun limit(page: Int, size: Int) {
@@ -341,9 +341,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         private fun c(name: String, clause: String): String =
             if (clause.isNotEmpty()) " $name $clause" else ""
 
-        fun String.desc(): String = "$this↓"
-
-        infix fun String.As(alias: String): String = "$this↔$alias"
+        operator fun String.invoke(): SField = SField(this, alias)
     }
 
     /**
@@ -357,8 +355,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         var selectionArgs = arrayOf<String>()
             private set
 
-        fun values(vararg values: Pair<String, Any>) {
-            this.values = values.map { it.first.fieldName() to it.second }
+        fun values(vararg values: Pair<SField, Any>) {
+            this.values = values.map { it.first.toString() to it.second }
                 .toTypedArray()
         }
 
@@ -384,57 +382,58 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         var conditionArgs = mutableListOf<Any>()
             private set
 
-        infix fun String.lt(value: Any): String = getExpression(this, "<", value)
-        infix fun String.le(value: Any): String = getExpression(this, "<=", value)
-        infix fun String.gt(value: Any): String = getExpression(this, ">", value)
-        infix fun String.ge(value: Any): String = getExpression(this, ">=", value)
-        infix fun String.ne(value: Any): String = getExpression(this, "<>", value)
-        infix fun String.eq(value: Any): String = getExpression(this, "=", value)
+        infix fun SField.lt(value: Any): String = getExpression(this, "<", value)
+        infix fun SField.le(value: Any): String = getExpression(this, "<=", value)
+        infix fun SField.gt(value: Any): String = getExpression(this, ">", value)
+        infix fun SField.ge(value: Any): String = getExpression(this, ">=", value)
+        infix fun SField.ne(value: Any): String = getExpression(this, "<>", value)
+        infix fun SField.eq(value: Any): String = getExpression(this, "=", value)
 
         fun and(condition1: String, condition2: Any, vararg conditionN: Any): String =
             getClauses("AND", condition1, condition2, *conditionN)
 
-        fun String.between(start: Any, end: Any): String =
+        fun SField.between(start: Any, end: Any): String =
             getExpression(this, "BETWEEN", start, "AND", end)
 
-        fun String.notBetween(start: Any, end: Any): String =
+        fun SField.notBetween(start: Any, end: Any): String =
             getExpression(this, "NOT BETWEEN", start, "AND", end)
 
-        fun exists(init: () -> SelectBuilder): String = getSubQuery("", "EXISTS", init)
-        fun notExists(init: () -> SelectBuilder): String = getSubQuery("", "NOT EXISTS", init)
+        fun exists(init: () -> SelectBuilder): String = getSubQuery(SField.Empty, "EXISTS", init)
+        fun notExists(init: () -> SelectBuilder): String =
+            getSubQuery(SField.Empty, "NOT EXISTS", init)
 
         fun exists(sql: String, vararg sqlArgs: Any): String =
-            getSubQuery("", "EXISTS", sql, sqlArgs)
+            getSubQuery(SField.Empty, "EXISTS", sql, sqlArgs)
 
         fun notExists(sql: String, vararg sqlArgs: Any): String =
-            getSubQuery("", "NOT EXISTS", sql, sqlArgs)
+            getSubQuery(SField.Empty, "NOT EXISTS", sql, sqlArgs)
 
-        fun String.In(vararg value: Any): String = getInValues(this, "IN", value)
-        fun String.notIn(vararg value: Any): String = getInValues(this, "NOT IN", value)
-        fun String.In(sql: String, vararg sqlArgs: Any): String =
+        fun SField.In(vararg value: Any): String = getInValues(this, "IN", value)
+        fun SField.notIn(vararg value: Any): String = getInValues(this, "NOT IN", value)
+        fun SField.In(sql: String, vararg sqlArgs: Any): String =
             getSubQuery(this, "IN", sql, sqlArgs)
 
-        fun String.notIn(sql: String, vararg sqlArgs: Any): String =
+        fun SField.notIn(sql: String, vararg sqlArgs: Any): String =
             getSubQuery(this, "NOT IN", sql, sqlArgs)
 
-        fun String.In(init: () -> SelectBuilder): String = getSubQuery(this, "IN", init)
-        fun String.notIn(init: () -> SelectBuilder): String = getSubQuery(this, "NOT IN", init)
+        fun SField.In(init: () -> SelectBuilder): String = getSubQuery(this, "IN", init)
+        fun SField.notIn(init: () -> SelectBuilder): String = getSubQuery(this, "NOT IN", init)
 
-        infix fun String.like(pattern: String): String = getExpression(this, "LIKE '$pattern'")
-        infix fun String.notLike(pattern: String): String =
+        infix fun SField.like(pattern: String): String = getExpression(this, "LIKE '$pattern'")
+        infix fun SField.notLike(pattern: String): String =
             getExpression(this, "NOT LIKE '$pattern'")
 
-        infix fun String.glob(pattern: String): String = getExpression(this, "GLOB '$pattern'")
-        infix fun String.notGlob(pattern: String): String =
+        infix fun SField.glob(pattern: String): String = getExpression(this, "GLOB '$pattern'")
+        infix fun SField.notGlob(pattern: String): String =
             getExpression(this, "NOT GLOB '$pattern'")
 
         fun or(condition1: String, condition2: Any, vararg conditionN: Any): String =
             getClauses("OR", condition1, condition2, *conditionN)
 
-        fun String.isNull(): String = getExpression(this, "IS NULL")
-        fun String.isNotNull(): String = getExpression(this, "IS NOT NULL")
-        infix fun String.Is(value: Any): String = getExpression(this, "IS", value)
-        infix fun String.isNot(value: Any): String = getExpression(this, "IS NOT", value)
+        fun SField.isNull(): String = getExpression(this, "IS NULL")
+        fun SField.isNotNull(): String = getExpression(this, "IS NOT NULL")
+        infix fun SField.Is(value: Any): String = getExpression(this, "IS", value)
+        infix fun SField.isNot(value: Any): String = getExpression(this, "IS NOT", value)
 
         /**
          * 取得逻辑表达式
@@ -447,7 +446,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          */
         @Suppress("UNCHECKED_CAST")
         private fun getExpression(
-            field: String, operator: String, value: Any? = null,
+            field: SField, operator: String, value: Any? = null,
             operator2: String = "", value2: Any? = null
         ): String {
             val valueString =
@@ -460,10 +459,11 @@ class DatabaseDCL(val db: SQLiteDatabase) {
 
             val value2String =
                 if (operator2.isNotEmpty())
-                    (value2 as? () -> SelectBuilder)?.let { getSubQuery("", operator2, it) }
-                        ?: " $operator2${if (value2 == null) "" else " ?".apply {
-                            conditionArgs.add(value2)
-                        }}"
+                    (value2 as? () -> SelectBuilder)?.let {
+                        getSubQuery(SField.Empty, operator2, it)
+                    } ?: " $operator2${if (value2 == null) "" else " ?".apply {
+                        conditionArgs.add(value2)
+                    }}"
                 else ""
             return "$valueString$value2String".apply {
                 if (condition.isEmpty()) condition = this
@@ -473,7 +473,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         /**
          * 取得IN语句的值
          */
-        private fun getInValues(field: String, operator: String, value: Array<out Any>): String =
+        private fun getInValues(field: SField, operator: String, value: Array<out Any>): String =
             "${fo(field, operator)} (${value.joinToString(" , ") { "?" }})".apply {
                 conditionArgs.addAll(value)
                 condition = this
@@ -483,7 +483,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          * 取得子查询
          */
         private fun getSubQuery(
-            field: String, operator: String, sql: String, sqlArgs: Array<out Any>
+            field: SField, operator: String, sql: String, sqlArgs: Array<out Any>
         ): String = "${fo(field, operator)} ($sql)".apply {
             conditionArgs.addAll(sqlArgs)
             condition = this
@@ -493,7 +493,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          * 取得子查询
          */
         private fun getSubQuery(
-            field: String, operator: String, init: () -> SelectBuilder
+            field: SField, operator: String, init: () -> SelectBuilder
         ): String = init().let {
             getSubQuery(field, operator, it.createSql(), it.selectionArgs)
         }
@@ -501,19 +501,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         /**
          * 生成字段+操作符
          */
-        private fun fo(field: String, operator: String) =
-            if (field.isNotEmpty()) "${field.fieldName(alias)} $operator"
-            else " $operator"
-    }
+        private fun fo(field: SField, operator: String) =
+            if (field.notEmpty()) "$field $operator" else " $operator"
 
-    private fun String.fieldName(alias: String = "") =
-        if (Regex("""[A-Za-z↓↔]+""").matches(this)) {
-            val field = this.indexOf("↔").takeIf { it > 0 }?.let {
-                this.substring(0, this.indexOf("↔"))
-            } ?: this
-            val fieldAlias = this.indexOf("↔").takeIf { it > 0 }?.let {
-                this.substring(this.indexOf("↔")).replace("↔", " AS ")
-            } ?: ""
-            "${if (alias.isNotEmpty()) "$alias." else ""}${DatabaseUtil.getSnakeCaseName(field)}${fieldAlias}"
-        } else this
+        operator fun String.invoke(): SField = SField(this, alias)
+    }
 }
