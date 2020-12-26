@@ -127,16 +127,18 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             SLog.i(createSql())
             SLog.i(selectionArgs)
 
-            db.query(
-                distinct, tableName, columns,
-                selection, selectionArgs, groupBy, having, orderBy, limit
-            ).toList()
+            if (join.isNotEmpty())
+                select(createSql(), selectionArgs)
+            else
+                db.query(
+                    distinct, tableName, columns,
+                    selection, selectionArgs, groupBy, having, orderBy, limit
+                ).toList()
         }
 
     /**
      * 取得子查询
      */
-    @SuppressLint("Recycle")
     inline fun <reified T> subSelect(
         alias: String = "", init: SelectBuilder.() -> Unit = {}
     ): SelectBuilder =
@@ -147,6 +149,36 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             SLog.i(createSql())
             SLog.i(selectionArgs)
         }
+
+    /**
+     * 交叉连接
+     */
+    inline fun <reified T> crossJoin(
+        alias: String = "", noinline init: ConditionsBuilder.() -> Unit = {}
+    ): JoinBuilder = JoinBuilder("CROSS", alias).apply {
+        tableName = T::class.getTableName()
+        on(init)
+    }
+
+    /**
+     * 内连接
+     */
+    inline fun <reified T> innerJoin(
+        alias: String = "", noinline init: ConditionsBuilder.() -> Unit = {}
+    ): JoinBuilder = JoinBuilder("INNER", alias).apply {
+        tableName = T::class.getTableName()
+        on(init)
+    }
+
+    /**
+     * 左连接
+     */
+    inline fun <reified T> leftJoin(
+        alias: String = "", noinline init: ConditionsBuilder.() -> Unit = {}
+    ): JoinBuilder = JoinBuilder("LEFT", alias).apply {
+        tableName = T::class.getTableName()
+        on(init)
+    }
 
     /**
      * 删除(DCL)
@@ -271,10 +303,12 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      */
     inner class SelectBuilder(private val alias: String = "") {
         var tableName = ""
-            get() = if (alias.isNotEmpty()) "$field AS $alias" else "$field"
+            get() = if (alias.isNotEmpty()) "$field AS $alias" else field
         var columns = arrayOf<String>()
             private set
         var distinct = false
+        var join = ""
+            private set
         var selection = ""
             private set
         var selectionArgs = arrayOf<String>()
@@ -292,6 +326,12 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             this.columns = column.map { it.toString() }.toTypedArray()
         }
 
+        fun join(vararg init: JoinBuilder) = init.forEach { join ->
+            this.join += "$join"
+            this.selectionArgs =
+                this.selectionArgs.union(join.onArgs.map { it }).toTypedArray()
+        }
+
         fun where(selection: String, vararg args: Any) {
             this.selection = selection
             this.selectionArgs = args.map { it.toString() }.toTypedArray()
@@ -301,7 +341,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             val whereBuilder = ConditionsBuilder(alias)
             whereBuilder.init()
             this.selection = whereBuilder.condition
-            this.selectionArgs = whereBuilder.conditionArgs.map { it.toString() }.toTypedArray()
+            this.selectionArgs =
+                this.selectionArgs.union(whereBuilder.conditionArgs.map { it.toString() })
+                    .toTypedArray()
         }
 
         fun groupBy(groupBy: String, having: String = "") {
@@ -333,7 +375,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          */
         fun createSql() =
             "SELECT${if (distinct) " DISTINCT" else ""} ${
-            if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM $tableName${
+            if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM $tableName$join${
             c("WHERE", selection)}${
             c("GROUP BY", groupBy)}${c("HAVING", having)}${
             c("ORDER BY", orderBy)}${c("LIMIT", limit)}"
@@ -371,6 +413,28 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             this.selection = whereBuilder.condition
             this.selectionArgs = whereBuilder.conditionArgs.map { it.toString() }.toTypedArray()
         }
+    }
+
+    /**
+     * Join构造器
+     */
+    inner class JoinBuilder(val join: String, private val alias: String = "") {
+        var tableName: String = ""
+            get() = if (alias.isNotEmpty()) "$field AS $alias" else field
+        var on = ""
+            get() = if (field.isNotEmpty()) " ON $field" else field
+            private set
+        var onArgs = arrayOf<String>()
+            private set
+
+        fun on(init: ConditionsBuilder.() -> Unit) {
+            val onBuilder = ConditionsBuilder()
+            onBuilder.init()
+            this.on = onBuilder.condition
+            this.onArgs = onBuilder.conditionArgs.map { it.toString() }.toTypedArray()
+        }
+
+        override fun toString(): String = " $join JOIN $tableName$on"
     }
 
     /**
@@ -449,25 +513,11 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             field: SField, operator: String, value: Any? = null,
             operator2: String = "", value2: Any? = null
         ): String {
-            val valueString =
-                if (value == null) ""
-                else
-                    (value as? () -> SelectBuilder)?.let { getSubQuery(field, operator, it) }
-                        ?: "${fo(field, operator)} ?".apply {
-                            conditionArgs.add(value)
-                        }
-
-            val value2String =
-                if (operator2.isNotEmpty())
-                    (value2 as? () -> SelectBuilder)?.let {
-                        getSubQuery(SField.Empty, operator2, it)
-                    } ?: " $operator2${if (value2 == null) "" else " ?".apply {
-                        conditionArgs.add(value2)
-                    }}"
+            val fov = fov(field, operator, value)
+            val fov2 =
+                if (operator2.isNotEmpty()) fov(SField.Empty, operator2, value2)
                 else ""
-            return "$valueString$value2String".apply {
-                if (condition.isEmpty()) condition = this
-            }
+            return "$fov$fov2".apply { if (condition.isEmpty()) condition = this }
         }
 
         /**
@@ -503,6 +553,19 @@ class DatabaseDCL(val db: SQLiteDatabase) {
          */
         private fun fo(field: SField, operator: String) =
             if (field.notEmpty()) "$field $operator" else " $operator"
+
+        /**
+         * 生成字段+操作符+值
+         */
+        @Suppress("UNCHECKED_CAST")
+        private fun fov(field: SField, operator: String, value: Any?): String = when (value) {
+            null -> fo(field, operator)
+            is SField -> "${fo(field, operator)} $value"
+            value as? () -> SelectBuilder -> getSubQuery(field, operator, value)
+            else -> "${fo(field, operator)} ?".apply {
+                conditionArgs.add(value)
+            }
+        }
 
         operator fun String.invoke(): SField = SField(this, alias)
     }

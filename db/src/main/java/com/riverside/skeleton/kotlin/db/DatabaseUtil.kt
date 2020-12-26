@@ -51,6 +51,8 @@ object DatabaseUtil {
                                     cursor.getString(columnIndex)?.split(",")?.toList()
                             else -> argsMap[javaField.type] = cursor.getString(columnIndex)
                         }
+                    } ?: Unit.apply {
+                        argsMap[javaField.type] = null
                     }
                 } ?: Unit
             }

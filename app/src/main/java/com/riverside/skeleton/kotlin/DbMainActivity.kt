@@ -8,6 +8,7 @@ import com.riverside.skeleton.kotlin.db.sqlite
 import com.riverside.skeleton.kotlin.dbtest.A
 import com.riverside.skeleton.kotlin.dbtest.AB
 import com.riverside.skeleton.kotlin.dbtest.B
+import com.riverside.skeleton.kotlin.dbtest.C
 import com.riverside.skeleton.kotlin.slog.SLog
 import com.riverside.skeleton.kotlin.util.converter.toDate
 import dalvik.system.BaseDexClassLoader
@@ -72,19 +73,22 @@ class DbMainActivity : SBaseActivity() {
                                 "scoreMath"() lt {
                                     subSelect<B>("D") {
                                         column("a"() As "b")
-                                        where { "c"() eq 3 }
+                                        where { "c"().between(2, 4) }
                                     }
                                 }
                             }
 
-                            groupBy("scoreMath"()) {
-                                "scoreMath"() lt 1
-                            }
+//                            groupBy("scoreMath"()) {
+//                                "scoreMath"() lt 1
+//                            }
                             orderBy("scoreMath"().desc(), "id"())
                         }.forEach { SLog.w(it) }
 
                         select<B> {
                             distinct = true
+                            where {
+                                "h"().isNotNull()
+                            }
                         }.forEach { SLog.w(it) }
                     }
                 }
@@ -114,7 +118,7 @@ class DbMainActivity : SBaseActivity() {
 //                            values("a" to 2)
                             where {
 //                                "a" eq 1
-                                "b"().In {
+                                "b"().notIn {
                                     subSelect<A>("A") {
                                         column("scoreMath"())
                                         where { "userId"() eq "dd" }
@@ -156,6 +160,28 @@ class DbMainActivity : SBaseActivity() {
                                 column("a"() As "aA", "e"() As "bB")
                             }
                         }).forEach { SLog.w(it) }
+                    }
+                }
+            }
+
+            button("join") {
+                onClick {
+                    sqlite {
+                        select<A>("A") {
+                            column(
+                                "a"().prefix("BB") As "id",
+                                "userId"(),
+                                "b"().prefix("CC") As "flag"
+                            )
+                            join(
+                                crossJoin<B>("BB") {
+                                    "a"().prefix("BB") eq "id"().prefix("A")
+                                },
+                                leftJoin<C>("CC") {
+                                    "a"().prefix("CC").isNull()
+                                }
+                            )
+                        }.forEach { SLog.w(it) }
                     }
                 }
             }
