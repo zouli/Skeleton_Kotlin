@@ -17,7 +17,9 @@ data class A(
     var userId: String?,
     var loginDate: Date?,
     var scoreMath: Double?,
-    var flag: List<String>?
+    var flag1: List<String>?,
+    var flag2: List<Int>?,
+    var flag3: List<Double>?
 )
 
 @STable

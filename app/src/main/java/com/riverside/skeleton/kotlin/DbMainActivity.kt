@@ -2,7 +2,7 @@ package com.riverside.skeleton.kotlin
 
 import android.content.Context
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.db.DatabaseUtil
+import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper
 import com.riverside.skeleton.kotlin.db.DbBeanHelper
 import com.riverside.skeleton.kotlin.db.sqlite
 import com.riverside.skeleton.kotlin.dbtest.A
@@ -49,12 +49,20 @@ class DbMainActivity : SBaseActivity() {
                 onClick {
                     val dataA =
                         listOf(
-                            A(null, "dd", Date(), 0.2, null),
-                            A(null, "cc", Date(), 1.2, listOf("1", "2"))
+                            A(null, "dd", Date(), 0.2, null, null, null),
+                            A(
+                                null,
+                                "cc",
+                                Date(),
+                                1.2,
+                                listOf("1", "2"),
+                                listOf(3, 4),
+                                listOf(6.6, 7.7)
+                            )
                         )
                     val dataB = B(
                         1, 2, 3, 4, "伍", 6.6F, 777.77777, true,
-                        "2020-05-15 05:21:01".toDate(DatabaseUtil.DATE_PATTERN)
+                        "2020-05-15 05:21:01".toDate(DatabaseTypeHelper.DATE_PATTERN)
                     )
                     sqlite {
 //                        transaction {
@@ -69,14 +77,14 @@ class DbMainActivity : SBaseActivity() {
                 onClick {
                     sqlite {
                         select<A>("C") {
-                            where {
-                                "scoreMath"() lt {
-                                    subSelect<B>("D") {
-                                        column("a"() As "b")
-                                        where { "c"().between(2, 4) }
-                                    }
-                                }
-                            }
+//                            where {
+//                                "scoreMath"() lt {
+//                                    subSelect<B>("D") {
+//                                        column("a"() As "b")
+//                                        where { "c"().between(2, 4) }
+//                                    }
+//                                }
+//                            }
 
 //                            groupBy("scoreMath"()) {
 //                                "scoreMath"() lt 1
@@ -110,7 +118,7 @@ class DbMainActivity : SBaseActivity() {
                 onClick {
                     val dataB = B(
                         2, 2, 3, 4, "伍伍", 6.6F, 777.77777, null,
-                        "2020-05-15 05:21:01".toDate(DatabaseUtil.DATE_PATTERN)
+                        "2020-05-15 05:21:01".toDate(DatabaseTypeHelper.DATE_PATTERN)
                     )
 
                     sqlite {

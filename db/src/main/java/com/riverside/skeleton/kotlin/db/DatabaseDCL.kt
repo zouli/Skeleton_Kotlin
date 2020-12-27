@@ -1,16 +1,13 @@
 package com.riverside.skeleton.kotlin.db
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
-import com.riverside.skeleton.kotlin.db.DatabaseUtil.DATE_PATTERN
+import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper.toContentValues
 import com.riverside.skeleton.kotlin.slog.SLog
-import com.riverside.skeleton.kotlin.util.converter.toString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
 
 fun sqlite(
     database: SQLiteDatabase = DatabaseHelper.defaultDatabase.currentDatabase,
@@ -272,31 +269,6 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             selectionArgs = arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
         )
     }
-
-    /**
-     * 生成ContentValues
-     */
-    private fun Array<out Pair<String, Any?>>.toContentValues() =
-        ContentValues().also { contentValues ->
-            this.forEach { (key, value) ->
-                value?.also {
-                    when (it) {
-                        is Byte -> contentValues.put(key, it)
-                        is Short -> contentValues.put(key, it)
-                        is Int -> contentValues.put(key, it)
-                        is Long -> contentValues.put(key, it)
-                        is Float -> contentValues.put(key, it)
-                        is Double -> contentValues.put(key, it)
-                        is Boolean -> contentValues.put(key, it)
-                        is String -> contentValues.put(key, it)
-                        is Date -> contentValues.put(key, it.toString(DATE_PATTERN))
-                        //TODO:这里需要重新弄
-                        is List<*> -> contentValues.put(key, it.joinToString(","))
-                        else -> contentValues.put(key, it.toString().toByteArray())
-                    }
-                } ?: contentValues.putNull(key)
-            }
-        }
 
     /**
      * 查询构造类
