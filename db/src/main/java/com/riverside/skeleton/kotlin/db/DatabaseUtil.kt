@@ -42,6 +42,7 @@ object DatabaseUtil {
      */
     private fun buildCreateSql(clazz: KClass<*>): String {
         val keys = clazz.getPrimaryKeys()
+        val indexMap = mutableMapOf<String, MutableList<String>>()
         val fields = clazz.constructors.first().parameters.joinToString(", ") { param ->
             val fieldName = param.name?.let { getSnakeCaseName(it) } ?: ""
             val type = DatabaseTypeHelper.getTableType(param.type)
@@ -55,11 +56,22 @@ object DatabaseUtil {
             val unique = clazz.getUnique(param)?.let { " UNIQUE" } ?: ""
             val default = clazz.getDefault(param)?.let { " DEFAULT ${it.value}" } ?: ""
             val check = clazz.getCheck(param)?.let { " CHECK(${it.value})" } ?: ""
+            clazz.getIndexes(param).forEach {
+                val field = fieldName + if (it.desc) " DESC" else ""
+                if (indexMap.containsKey(it.indexName))
+                    indexMap[it.indexName]?.add(field)
+                else
+                    indexMap[it.indexName] = mutableListOf(field)
+            }
             "[$fieldName] $type$isNull$unique$primary$default$check"
         }
         val primaries =
             if (keys.size > 1) ", PRIMARY KEY(${keys.joinToString(", ") { it.first }})" else ""
-        return "CREATE TABLE [${clazz.getTableName()}] ($fields$primaries)"
+        val indexes = indexMap.map { (name, fields) ->
+            "CREATE INDEX ${clazz.getTableName()}_$name ON ${clazz.getTableName()} (${
+            fields.joinToString(", ")});"
+        }.joinToString("")
+        return "CREATE TABLE [${clazz.getTableName()}] ($fields$primaries);$indexes"
     }
 
     /**

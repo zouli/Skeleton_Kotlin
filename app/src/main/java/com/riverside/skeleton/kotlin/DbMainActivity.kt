@@ -77,6 +77,7 @@ class DbMainActivity : SBaseActivity() {
                 onClick {
                     sqlite {
                         select<A>("C") {
+                            indexedBy()
 //                            where {
 //                                "scoreMath"() lt {
 //                                    subSelect<B>("D") {

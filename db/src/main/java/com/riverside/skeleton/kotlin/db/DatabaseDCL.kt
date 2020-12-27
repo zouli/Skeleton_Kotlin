@@ -44,6 +44,13 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 执行SQL
      */
+    fun exec(sql: String, args: Array<Any?>) {
+        db.execSQL(sql, args)
+    }
+
+    /**
+     * 执行SQL
+     */
     fun exec(vararg sql: String) {
         sql.forEach {
             db.execSQL(it)
@@ -53,9 +60,11 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 执行SQL
      */
-    fun exec(sql: List<String>) {
-        sql.forEach {
-            db.execSQL(it)
+    fun exec(sqlList: List<String>) {
+        sqlList.forEach { sql ->
+            sql.split(";").filter { it.isNotEmpty() }.forEach {
+                db.execSQL(it)
+            }
         }
     }
 
@@ -118,13 +127,13 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         alias: String = "", init: SelectBuilder.() -> Unit = {}
     ): List<T> =
         SelectBuilder(alias).run {
-            init()
             tableName = T::class.getTableName()
+            init()
 
             SLog.i(createSql())
             SLog.i(selectionArgs)
 
-            if (join.isNotEmpty())
+            if (join.isNotEmpty() || indexedBy.isNotEmpty())
                 select(createSql(), selectionArgs)
             else
                 db.query(
@@ -140,8 +149,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         alias: String = "", init: SelectBuilder.() -> Unit = {}
     ): SelectBuilder =
         SelectBuilder(alias).apply {
-            init()
             tableName = T::class.getTableName()
+            init()
 
             SLog.i(createSql())
             SLog.i(selectionArgs)
@@ -281,6 +290,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         var distinct = false
         var join = ""
             private set
+        var indexedBy = ""
+            private set
         var selection = ""
             private set
         var selectionArgs = arrayOf<String>()
@@ -296,6 +307,10 @@ class DatabaseDCL(val db: SQLiteDatabase) {
 
         fun column(vararg column: SField) {
             this.columns = column.map { it.toString() }.toTypedArray()
+        }
+
+        fun indexedBy(indexName: String = "index_1") {
+            this.indexedBy = "${tableName.originalTableName}_$indexName"
         }
 
         fun join(vararg init: JoinBuilder) = init.forEach { join ->
@@ -348,7 +363,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
         fun createSql() =
             "SELECT${if (distinct) " DISTINCT" else ""} ${
             if (columns.isEmpty()) "*" else columns.joinToString(", ")} FROM $tableName$join${
-            c("WHERE", selection)}${
+            c("INDEXED BY", indexedBy)}${c("WHERE", selection)}${
             c("GROUP BY", groupBy)}${c("HAVING", having)}${
             c("ORDER BY", orderBy)}${c("LIMIT", limit)}"
 
@@ -356,6 +371,9 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             if (clause.isNotEmpty()) " $name $clause" else ""
 
         operator fun String.invoke(): SField = SField(this, alias)
+
+        private val String.originalTableName
+            get() = if (this.indexOf(" AS") > -1) this.substring(0, this.indexOf(" AS")) else this
     }
 
     /**

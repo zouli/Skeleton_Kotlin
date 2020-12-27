@@ -21,6 +21,12 @@ annotation class Default(val value: String)
 @Target(AnnotationTarget.FIELD)
 annotation class Check(val value: String)
 
+@Target(AnnotationTarget.FIELD)
+annotation class Index(val desc: Boolean = false, val indexName: String = "index_1")
+
+@Target(AnnotationTarget.FIELD)
+annotation class Indexes(vararg val value: Index)
+
 /**
  * 类是否含有指定的注解
  */
@@ -34,6 +40,14 @@ inline fun <reified T> KClass<*>.fieldHasAnnotation(param: KParameter): T? =
     param.name?.let {
         this.java.getDeclaredField(it).annotations.filterIsInstance<T>().firstOrNull()
     }
+
+/**
+ * 字段是否含有指定的注解
+ */
+inline fun <reified T> KClass<*>.fieldHasAnnotations(param: KParameter): List<T> =
+    param.name?.let {
+        this.java.getDeclaredField(it).annotations.filterIsInstance<T>()
+    } ?: listOf()
 
 /**
  * 取得表名
@@ -53,6 +67,10 @@ fun KClass<*>.getCheck(param: KParameter): Check? = this.fieldHasAnnotation<Chec
 fun KClass<*>.getDefault(param: KParameter): Default? = this.fieldHasAnnotation<Default>(param)
 fun KClass<*>.getUnique(param: KParameter): Unique? = this.fieldHasAnnotation<Unique>(param)
 fun KClass<*>.getId(param: KParameter): Id? = this.fieldHasAnnotation<Id>(param)
+fun KClass<*>.getIndexes(param: KParameter): List<Index> = mutableListOf<Index>().also { indexes ->
+    indexes.addAll(this.fieldHasAnnotations(param))
+    this.fieldHasAnnotation<Indexes>(param)?.let { indexes.addAll(it.value) }
+}
 
 /**
  * 返回本身或null

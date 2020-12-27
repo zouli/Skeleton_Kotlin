@@ -15,7 +15,7 @@ import java.util.*
 data class A(
     @Id var id: Int?,
     var userId: String?,
-    var loginDate: Date?,
+    @Index var loginDate: Date?,
     var scoreMath: Double?,
     var flag1: List<String>?,
     var flag2: List<Int>?,
@@ -37,9 +37,9 @@ data class B(
 
 @STable
 data class C(
-    @Id var a: Int,
-    @Id @Check("b > 2") var b: Int,
-    @Default("1.0") var c: Double?
+    @Index(indexName = "2") @Id var a: Int,
+    @Id @Check("b > 2") @Indexes(Index(true), Index(indexName = "2")) var b: Int,
+    @Indexes(Index(), Index(indexName = "3")) @Default("1.0") var c: Double?
 )
 
 data class AB(var aA: Int, var bB: String)
