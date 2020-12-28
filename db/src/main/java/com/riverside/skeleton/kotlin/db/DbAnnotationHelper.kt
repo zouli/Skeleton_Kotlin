@@ -3,6 +3,11 @@ package com.riverside.skeleton.kotlin.db
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 
+/**
+ * 数据库注解帮助类 1.0
+ *
+ * b_e  2020/12/28
+ */
 @Target(AnnotationTarget.CLASS)
 annotation class STable(val name: String = "")
 

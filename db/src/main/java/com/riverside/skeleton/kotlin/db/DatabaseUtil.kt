@@ -5,6 +5,11 @@ import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper.toBasicObject
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 
+/**
+ * 数据库工具类   1.0
+ *
+ * b_e  2020/12/28
+ */
 object DatabaseUtil {
     /**
      * 实例化Bean
@@ -36,13 +41,25 @@ object DatabaseUtil {
         } else return null
     }
 
+    /**
+     * 取得创建表Sql
+     */
     fun KClass<*>.getCreateSql(): String =
         this.getAnnotation<SCreateSql>()?.sql ?: buildCreateSql(this)
 
+    /**
+     * 取得删除表Sql
+     */
     fun KClass<*>.getDropSql(): String = buildDropSql(this)
 
+    /**
+     * 取得字段列表
+     */
     fun KClass<*>.getFields(): List<KParameter> = this.constructors.first().parameters
 
+    /**
+     * 取得字段名列表
+     */
     fun KClass<*>.getFieldNames(): List<String> =
         this.getFields().map { param -> param.name?.let { getSnakeCaseName(it) } ?: "" }
 

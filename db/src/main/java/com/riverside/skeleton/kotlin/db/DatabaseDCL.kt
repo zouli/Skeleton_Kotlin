@@ -10,6 +10,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * 数据库DCL类  1.0
+ *
+ * b_e  2020/12/28
+ */
 fun sqlite(
     database: SQLiteDatabase = DatabaseHelper.defaultDatabase.currentDatabase,
     init: DatabaseDCL.() -> Unit

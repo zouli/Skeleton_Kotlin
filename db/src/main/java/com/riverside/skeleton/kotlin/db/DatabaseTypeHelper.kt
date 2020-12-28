@@ -11,6 +11,11 @@ import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
+/**
+ * 数据库类型转换帮助类   1.0
+ *
+ * b_e  2020/12/28
+ */
 object DatabaseTypeHelper {
     /**
      * 取得表的类型

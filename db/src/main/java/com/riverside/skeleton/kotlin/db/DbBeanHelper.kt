@@ -3,6 +3,11 @@ package com.riverside.skeleton.kotlin.db
 import com.riverside.skeleton.kotlin.db.DatabaseUtil.getCreateSql
 import kotlin.reflect.KClass
 
+/**
+ * 数据库Bean帮助类   1.0
+ *
+ * b_e  2020/12/28
+ */
 object DbBeanHelper {
     val beanList = mutableListOf<KClass<*>>()
 

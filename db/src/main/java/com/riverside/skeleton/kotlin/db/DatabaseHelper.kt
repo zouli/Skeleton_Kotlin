@@ -8,6 +8,11 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.riverside.skeleton.kotlin.util.packageinfo.MetadataInfo
 import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 
+/**
+ * 数据库帮助类   1.0
+ *
+ * b_e  2020/12/28
+ */
 class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: Int) :
     SQLiteOpenHelper(context, dbName, null, dbVersion) {
     val currentDatabase: SQLiteDatabase
