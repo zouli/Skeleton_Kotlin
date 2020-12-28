@@ -1,6 +1,7 @@
 package com.riverside.skeleton.kotlin.db
 
 import android.database.Cursor
+import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper.toBasicObject
 import kotlin.reflect.KClass
 
 object DatabaseUtil {
@@ -9,7 +10,7 @@ object DatabaseUtil {
      */
     fun <T> toObject(cursor: Cursor, kClazz: KClass<*>): T? {
         if (cursor.isBeforeFirst) cursor.moveToNext()
-        if (!cursor.isAfterLast) {
+        if (!cursor.isAfterLast) return cursor.toBasicObject(kClazz) ?: run {
             val argsMap = mutableListOf<Pair<Class<*>, Any?>>()
             val clazz = kClazz.java as Class<T>
             //Class.getDeclaredFields()取得变量名列表的顺序不稳定，只能通过KClass的取得构造函数取得变量顺序
@@ -108,12 +109,14 @@ fun Cursor.getColumnIndexIgnoreCase(columnName: String) = (0 until this.columnCo
     this.getColumnName(it).equals(columnName, true)
 } ?: -1
 
-inline fun <reified T> Cursor.toObject(): T? = DatabaseUtil.toObject(this, T::class)
+inline fun <reified T> Cursor.toObject(): T? = DatabaseUtil.toObject<T>(this, T::class).also {
+    this.close()
+}
 
 inline fun <reified T> Cursor.toList(): List<T> {
     val result = mutableListOf<T>()
     while (this.moveToNext()) {
-        this.toObject<T>()?.let { result.add(it) }
+        DatabaseUtil.toObject<T>(this, T::class)?.let { result.add(it) }
     }
     this.close()
     return result

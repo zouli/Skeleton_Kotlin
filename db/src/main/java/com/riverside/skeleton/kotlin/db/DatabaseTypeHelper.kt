@@ -70,6 +70,21 @@ object DatabaseTypeHelper {
             }
         }
 
+    @Suppress("IMPLICIT_CAST_TO_ANY")
+    fun <T> Cursor.toBasicObject(clazz: KClass<*>): T? = when (clazz) {
+        Byte::class -> this.getInt(0).toByte()
+        Short::class -> this.getInt(0)
+        Int::class -> this.getInt(0)
+        Integer::class -> this.getInt(0)
+        Long::class -> this.getLong(0)
+        Float::class -> this.getFloat(0)
+        Double::class -> this.getDouble(0)
+        Boolean::class -> this.getInt(0) == 1
+        Date::class -> this.getString(0)?.toDate(DATE_PATTERN)
+        String::class -> this.getString(0)
+        else -> null
+    } as T?
+
     private val converterList = mutableListOf<SFieldTypeConverter>(DefaultTypeConverter())
 
     fun addTypeConverter(converter: SFieldTypeConverter) {

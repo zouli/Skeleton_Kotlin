@@ -29,6 +29,8 @@ class SField(val name: String, pre: String = "") {
 
     private var order: String = ""
 
+    private var function: String = ""
+
     /**
      * 设置别名
      */
@@ -40,6 +42,15 @@ class SField(val name: String, pre: String = "") {
      * 设置前缀
      */
     fun prefix(pre: String): SField = this.apply { prefix = pre }
+
+    /**
+     * 设置函数
+     */
+    fun function(funName: String, vararg args: String): SField = this.apply {
+        function =
+            "$funName(${if (function.isEmpty()) "$$" else function}${
+            if (args.isNotEmpty()) ", " + args.joinToString(", ") else ""})"
+    }
 
     /**
      * 倒序
@@ -54,7 +65,8 @@ class SField(val name: String, pre: String = "") {
     fun notEmpty() = name.isNotEmpty()
 
     override fun toString(): String = if (Regex("""[A-Za-z]+""").matches(name)) {
-        "$prefix${DatabaseUtil.getSnakeCaseName(name)}${alias}"
+        val field = "$prefix${DatabaseUtil.getSnakeCaseName(name)}"
+        "${if (function.isEmpty()) field else function.replace("$$", field)}$alias"
     } else "$prefix$name"
 
     companion object {

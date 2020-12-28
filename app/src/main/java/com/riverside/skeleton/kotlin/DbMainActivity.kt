@@ -2,10 +2,7 @@ package com.riverside.skeleton.kotlin
 
 import android.content.Context
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper
-import com.riverside.skeleton.kotlin.db.DbBeanHelper
-import com.riverside.skeleton.kotlin.db.sqlite
-import com.riverside.skeleton.kotlin.db.toList
+import com.riverside.skeleton.kotlin.db.*
 import com.riverside.skeleton.kotlin.dbtest.A
 import com.riverside.skeleton.kotlin.dbtest.AB
 import com.riverside.skeleton.kotlin.dbtest.B
@@ -196,12 +193,21 @@ class DbMainActivity : SBaseActivity() {
                 }
             }
 
-            button("count") {
+            button("function") {
                 onClick {
                     sqlite {
-                        select<A> {
+                        select<B>("bb") {
+                            column("a"().count())
+                        }.toObject<Int>().also { SLog.w(it) }
 
-                        }
+                        select<A>("aa") {
+                            column("id"().max())
+                        }.toObject<Int>().also { SLog.w(it) }
+
+                        select<A>("aa") {
+                            column("loginDate"(), "userId"().groupConcat(";").As("user_id"))
+                            groupBy("loginDate"())
+                        }.toList<A>().forEach { SLog.w(it) }
                     }
                 }
             }.lparams(matchParent, wrapContent)
