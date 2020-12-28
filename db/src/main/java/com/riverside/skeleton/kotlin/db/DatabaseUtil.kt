@@ -3,14 +3,15 @@ package com.riverside.skeleton.kotlin.db
 import android.database.Cursor
 import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper.toBasicObject
 import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
 
 object DatabaseUtil {
     /**
      * 实例化Bean
      */
-    fun <T> toObject(cursor: Cursor, kClazz: KClass<*>): T? {
+    fun <T> toObject(cursor: Cursor, kClazz: KClass<*>, columnName: String = ""): T? {
         if (cursor.isBeforeFirst) cursor.moveToNext()
-        if (!cursor.isAfterLast) return cursor.toBasicObject(kClazz) ?: run {
+        if (!cursor.isAfterLast) return cursor.toBasicObject(kClazz, columnName) ?: run {
             val argsMap = mutableListOf<Pair<Class<*>, Any?>>()
             val clazz = kClazz.java as Class<T>
             //Class.getDeclaredFields()取得变量名列表的顺序不稳定，只能通过KClass的取得构造函数取得变量顺序
@@ -38,13 +39,20 @@ object DatabaseUtil {
     fun KClass<*>.getCreateSql(): String =
         this.getAnnotation<SCreateSql>()?.sql ?: buildCreateSql(this)
 
+    fun KClass<*>.getDropSql(): String = buildDropSql(this)
+
+    fun KClass<*>.getFields(): List<KParameter> = this.constructors.first().parameters
+
+    fun KClass<*>.getFieldNames(): List<String> =
+        this.getFields().map { param -> param.name?.let { getSnakeCaseName(it) } ?: "" }
+
     /**
      * 生成Create语句
      */
     private fun buildCreateSql(clazz: KClass<*>): String {
         val keys = clazz.getPrimaryKeys()
         val indexMap = mutableMapOf<String, MutableList<String>>()
-        val fields = clazz.constructors.first().parameters.joinToString(", ") { param ->
+        val fields = clazz.getFields().joinToString(", ") { param ->
             val fieldName = param.name?.let { getSnakeCaseName(it) } ?: ""
             val type = DatabaseTypeHelper.getTableType(param.type)
             val isNull = if (param.type.isMarkedNullable) "" else " NOT NULL"
@@ -74,6 +82,12 @@ object DatabaseUtil {
         }.joinToString("")
         return "CREATE TABLE [${clazz.getTableName()}] ($fields$primaries);$indexes"
     }
+
+    /**
+     * 生成Drop语句
+     */
+    private fun buildDropSql(clazz: KClass<*>): String =
+        "DROP TABLE IF EXISTS [${clazz.getTableName()}]"
 
     /**
      * 取得字段和值列表
@@ -109,14 +123,15 @@ fun Cursor.getColumnIndexIgnoreCase(columnName: String) = (0 until this.columnCo
     this.getColumnName(it).equals(columnName, true)
 } ?: -1
 
-inline fun <reified T> Cursor.toObject(): T? = DatabaseUtil.toObject<T>(this, T::class).also {
-    this.close()
-}
+inline fun <reified T> Cursor.toObject(columnName: SField = SField.Empty): T? =
+    DatabaseUtil.toObject<T>(this, T::class, columnName.toString()).also {
+        this.close()
+    }
 
-inline fun <reified T> Cursor.toList(): List<T> {
+inline fun <reified T> Cursor.toList(columnName: SField = SField.Empty): List<T> {
     val result = mutableListOf<T>()
     while (this.moveToNext()) {
-        DatabaseUtil.toObject<T>(this, T::class)?.let { result.add(it) }
+        DatabaseUtil.toObject<T>(this, T::class, columnName.toString())?.let { result.add(it) }
     }
     this.close()
     return result

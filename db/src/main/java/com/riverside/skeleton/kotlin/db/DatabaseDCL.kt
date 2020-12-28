@@ -45,28 +45,24 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 执行SQL
      */
-    fun String.exec(args: Array<Any?>) {
-        db.execSQL(this, args)
+    fun String.exec(args: Array<Any?> = arrayOf()) {
+        this.split(";").filter { it.isNotEmpty() }.forEach {
+            db.execSQL(it, args)
+        }
     }
 
     /**
      * 执行SQL
      */
     fun Array<String>.exec() {
-        this.forEach {
-            db.execSQL(it)
-        }
+        this.forEach { it.exec() }
     }
 
     /**
      * 执行SQL
      */
     fun List<String>.exec() {
-        this.forEach { sql ->
-            sql.split(";").filter { it.isNotEmpty() }.forEach {
-                db.execSQL(it)
-            }
-        }
+        this.forEach { it.exec() }
     }
 
     /**
@@ -214,7 +210,7 @@ class DatabaseDCL(val db: SQLiteDatabase) {
 
             update(
                 T::class.getTableName(),
-                *DatabaseUtil.getFieldValueArray(this, updateNull),
+                *DatabaseUtil.getFieldValueArray(this@update, updateNull),
                 where = selection, whereArg = selectionArgs
             )
         }
@@ -266,6 +262,20 @@ class DatabaseDCL(val db: SQLiteDatabase) {
             arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
         )
     }
+
+    /**
+     * 表是否存在
+     */
+    fun isTableExists(tableName: String, isTemp: Boolean = false): Boolean =
+        "SELECT COUNT(*) FROM ${if (isTemp) "sqlite_temp_master" else "sqlite_master"} WHERE type = ? AND name = ?".select(
+            arrayOf("table", tableName)
+        ).toObject<Int>()?.let { it > 0 } ?: false
+
+    /**
+     * 取得字段名列表
+     */
+    fun getColumnsName(tableName: String): List<String> =
+        "PRAGMA table_info($tableName)".select().toList(SField("name"))
 
     /**
      * 查询构造类

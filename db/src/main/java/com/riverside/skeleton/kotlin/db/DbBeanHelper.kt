@@ -4,7 +4,7 @@ import com.riverside.skeleton.kotlin.db.DatabaseUtil.getCreateSql
 import kotlin.reflect.KClass
 
 object DbBeanHelper {
-    private val beanList = mutableListOf<KClass<*>>()
+    val beanList = mutableListOf<KClass<*>>()
 
     fun addBean(vararg classes: KClass<*>) {
         classes.filter { !beanList.contains(it) }.let {

@@ -47,7 +47,7 @@ class DbMainActivity : SBaseActivity() {
                 onClick {
                     val dataA =
                         listOf(
-                            A(null, "dd", Date(), 0.2, null, null, null),
+                            A(null, "dd", Date(), 0.2, null, null, null, 0.3),
                             A(
                                 null,
                                 "cc",
@@ -55,7 +55,8 @@ class DbMainActivity : SBaseActivity() {
                                 1.2,
                                 listOf("1", "2"),
                                 listOf(3, 4),
-                                listOf(6.6, 7.7)
+                                listOf(6.6, 7.7),
+                                2.4
                             )
                         )
                     val dataB = B(
@@ -205,9 +206,9 @@ class DbMainActivity : SBaseActivity() {
                         }.toObject<Int>().also { SLog.w(it) }
 
                         select<A>("aa") {
-                            column("loginDate"(), "userId"().groupConcat(";").As("user_id"))
+                            column("loginDate"() As "aA", "userId"().groupConcat(";") As "bB")
                             groupBy("loginDate"())
-                        }.toList<A>().forEach { SLog.w(it) }
+                        }.toList<AB>().forEach { SLog.w(it) }
                     }
                 }
             }.lparams(matchParent, wrapContent)

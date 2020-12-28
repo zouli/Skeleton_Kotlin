@@ -19,7 +19,8 @@ data class A(
     var scoreMath: Double?,
     var flag1: List<String>?,
     var flag2: List<Int>?,
-    var flag3: List<Double>?
+    var flag3: List<Double>?,
+    @Default("0.0") var scoreJava: Double
 )
 
 @STable

@@ -27,7 +27,7 @@ class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: In
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-
+        DbMigrationHelper.migration(db)
     }
 
     /**
@@ -80,21 +80,6 @@ class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: In
     fun update(
         table: String, values: ContentValues, whereClause: String, whereArgs: Array<String>
     ): Int = currentDatabase.update(table, values, whereClause, whereArgs)
-
-    /**
-     * 取得字段名列表
-     */
-    fun getColumnsName(tableName: String): List<String> =
-        rawQuery("PRAGMA table_info($tableName)", arrayOf()).run {
-            val columnsName = mutableListOf<String>()
-            if (this.moveToFirst()) {
-                val nameIndex = this.getColumnIndexIgnoreCase("name")
-                do {
-                    columnsName.add(this.getString(nameIndex))
-                } while (this.moveToNext())
-            }
-            columnsName
-        }
 
     @Synchronized
     override fun close() {
