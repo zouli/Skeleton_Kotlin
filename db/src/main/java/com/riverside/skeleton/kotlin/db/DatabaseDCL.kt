@@ -1,6 +1,7 @@
 package com.riverside.skeleton.kotlin.db
 
 import android.annotation.SuppressLint
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CONFLICT_REPLACE
 import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper.toContentValues
@@ -44,15 +45,15 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 执行SQL
      */
-    fun exec(sql: String, args: Array<Any?>) {
-        db.execSQL(sql, args)
+    fun String.exec(args: Array<Any?>) {
+        db.execSQL(this, args)
     }
 
     /**
      * 执行SQL
      */
-    fun exec(vararg sql: String) {
-        sql.forEach {
+    fun Array<String>.exec() {
+        this.forEach {
             db.execSQL(it)
         }
     }
@@ -60,8 +61,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 执行SQL
      */
-    fun exec(sqlList: List<String>) {
-        sqlList.forEach { sql ->
+    fun List<String>.exec() {
+        this.forEach { sql ->
             sql.split(";").filter { it.isNotEmpty() }.forEach {
                 db.execSQL(it)
             }
@@ -71,14 +72,14 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 插入（Bean）
      */
-    inline fun <reified T> insert(bean: T): Long = insert(
-        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(bean)
+    inline fun <reified T> T.insert(): Long = insert(
+        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(this)
     )
 
     /**
      * 插入多个（Bean）
      */
-    inline fun <reified T> insert(beans: List<T>) = beans.forEach { insert(it) }
+    inline fun <reified T> List<T>.insert() = this.forEach { it.insert() }
 
     /**
      * 插入
@@ -95,14 +96,14 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 插入（Bean）
      */
-    inline fun <reified T> replace(bean: T): Long = replace(
-        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(bean)
+    inline fun <reified T> T.replace(): Long = replace(
+        T::class.getTableName(), *DatabaseUtil.getFieldValueArray(this)
     )
 
     /**
      * 插入多个（Bean）
      */
-    inline fun <reified T> replace(beans: List<T>) = beans.forEach { replace(it) }
+    inline fun <reified T> List<T>.replace() = this.forEach { it.replace() }
 
     /**
      * 插入或更新
@@ -116,8 +117,8 @@ class DatabaseDCL(val db: SQLiteDatabase) {
      * 查询
      */
     @SuppressLint("Recycle")
-    inline fun <reified T> select(sql: String, selectionArgs: Array<String> = arrayOf()): List<T> =
-        db.rawQuery(sql, selectionArgs).toList()
+    fun String.select(selectionArgs: Array<String> = arrayOf()): Cursor =
+        db.rawQuery(this, selectionArgs)
 
     /**
      * 查询(DCL)
@@ -125,21 +126,15 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     @SuppressLint("Recycle")
     inline fun <reified T> select(
         alias: String = "", init: SelectBuilder.() -> Unit = {}
-    ): List<T> =
-        SelectBuilder(alias).run {
-            tableName = T::class.getTableName()
-            init()
-
-            SLog.i(createSql())
-            SLog.i(selectionArgs)
-
+    ): Cursor =
+        subSelect<T>(alias, init).run {
             if (join.isNotEmpty() || indexedBy.isNotEmpty())
-                select(createSql(), selectionArgs)
+                createSql().select(selectionArgs)
             else
                 db.query(
                     distinct, tableName, columns,
                     selection, selectionArgs, groupBy, having, orderBy, limit
-                ).toList()
+                )
         }
 
     /**
@@ -211,16 +206,15 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * 更新(Bean)
      */
-    inline fun <reified T> update(
-        bean: T, updateNull: Boolean = false,
-        init: UpdateBuilder.() -> Unit = {}
+    inline fun <reified T> T.update(
+        updateNull: Boolean = false, init: UpdateBuilder.() -> Unit = {}
     ): Int =
         UpdateBuilder().run {
             init()
 
             update(
                 T::class.getTableName(),
-                *DatabaseUtil.getFieldValueArray(bean, updateNull),
+                *DatabaseUtil.getFieldValueArray(this, updateNull),
                 where = selection, whereArg = selectionArgs
             )
         }
@@ -252,30 +246,24 @@ class DatabaseDCL(val db: SQLiteDatabase) {
     /**
      * Union
      */
-    inline fun <reified T> union(
-        select1: () -> SelectBuilder, select2: () -> SelectBuilder
-    ): List<T> {
+    fun union(select1: () -> SelectBuilder, select2: () -> SelectBuilder): Cursor {
         val selectBuilder1 = select1()
         val selectBuilder2 = select2()
 
-        return select(
-            sql = "${selectBuilder1.createSql()} UNION ${selectBuilder2.createSql()}",
-            selectionArgs = arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
+        return "${selectBuilder1.createSql()} UNION ${selectBuilder2.createSql()}".select(
+            arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
         )
     }
 
     /**
      * Union All
      */
-    inline fun <reified T> unionAll(
-        select1: () -> SelectBuilder, select2: () -> SelectBuilder
-    ): List<T> {
+    fun unionAll(select1: () -> SelectBuilder, select2: () -> SelectBuilder): Cursor {
         val selectBuilder1 = select1()
         val selectBuilder2 = select2()
 
-        return select(
-            sql = "${selectBuilder1.createSql()} UNION ALL ${selectBuilder2.createSql()}",
-            selectionArgs = arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
+        return "${selectBuilder1.createSql()} UNION ALL ${selectBuilder2.createSql()}".select(
+            arrayOf(*selectBuilder1.selectionArgs, *selectBuilder2.selectionArgs)
         )
     }
 

@@ -22,7 +22,7 @@ class DatabaseHelper constructor(context: Context, dbName: String, dbVersion: In
      */
     override fun onCreate(db: SQLiteDatabase) {
         DatabaseDCL(db).transaction {
-            exec(DbBeanHelper.getCreateSql())
+            DbBeanHelper.getCreateSql().exec()
         }
     }
 

@@ -5,6 +5,7 @@ import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.db.DatabaseTypeHelper
 import com.riverside.skeleton.kotlin.db.DbBeanHelper
 import com.riverside.skeleton.kotlin.db.sqlite
+import com.riverside.skeleton.kotlin.db.toList
 import com.riverside.skeleton.kotlin.dbtest.A
 import com.riverside.skeleton.kotlin.dbtest.AB
 import com.riverside.skeleton.kotlin.dbtest.B
@@ -66,8 +67,8 @@ class DbMainActivity : SBaseActivity() {
                     )
                     sqlite {
 //                        transaction {
-                        insert(dataA)
-                        replace(dataB)
+                        dataA.insert()
+                        dataB.replace()
 //                        }
                     }
                 }
@@ -91,14 +92,14 @@ class DbMainActivity : SBaseActivity() {
 //                                "scoreMath"() lt 1
 //                            }
                             orderBy("scoreMath"().desc(), "id"())
-                        }.forEach { SLog.w(it) }
+                        }.toList<A>().forEach { SLog.w(it) }
 
                         select<B> {
                             distinct = true
                             where {
                                 "h"().isNotNull()
                             }
-                        }.forEach { SLog.w(it) }
+                        }.toList<B>().forEach { SLog.w(it) }
                     }
                 }
             }.lparams(matchParent, wrapContent)
@@ -123,7 +124,7 @@ class DbMainActivity : SBaseActivity() {
                     )
 
                     sqlite {
-                        update(dataB, true) {
+                        dataB.update(true) {
 //                            values("a" to 2)
                             where {
 //                                "a" eq 1
@@ -145,7 +146,7 @@ class DbMainActivity : SBaseActivity() {
             button("unions") {
                 onClick {
                     sqlite {
-                        union<AB>({
+                        union({
                             subSelect<A>("A") {
                                 column("id"() As "aA", "userId"() As "bB")
                                 where {
@@ -156,11 +157,11 @@ class DbMainActivity : SBaseActivity() {
                             subSelect<B> {
                                 column("a"() As "aA", "e"() As "bB")
                             }
-                        }).forEach { SLog.w(it) }
+                        }).toList<AB>().forEach { SLog.w(it) }
 
                         SLog.w("------Union All-------")
 
-                        unionAll<AB>({
+                        unionAll({
                             subSelect<A>("A") {
                                 column("id"() As "aA", "userId"() As "bB")
                             }
@@ -168,7 +169,7 @@ class DbMainActivity : SBaseActivity() {
                             subSelect<B> {
                                 column("a"() As "aA", "e"() As "bB")
                             }
-                        }).forEach { SLog.w(it) }
+                        }).toList<AB>().forEach { SLog.w(it) }
                     }
                 }
             }
@@ -190,10 +191,20 @@ class DbMainActivity : SBaseActivity() {
                                     "a"().prefix("CC").isNull()
                                 }
                             )
-                        }.forEach { SLog.w(it) }
+                        }.toList<A>().forEach { SLog.w(it) }
                     }
                 }
             }
+
+            button("count") {
+                onClick {
+                    sqlite {
+                        select<A> {
+
+                        }
+                    }
+                }
+            }.lparams(matchParent, wrapContent)
 
             button("aaaa") {
                 onClick {
