@@ -19,8 +19,9 @@ import kotlin.math.abs
 
 /**
  * 图片显示Grid控件   1.1
- * b_e                      2020/11/23
- * 添加SmartColumn加载器     2020/12/05
+ * b_e  2020/11/23
+ * 1.1 添加SmartColumn加载器 2020/12/05
+ * 1.1 修改一个图片的显示状态  2020/12/29
  */
 class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context, attrs) {
     constructor(context: Context) : this(context, null)
@@ -119,20 +120,20 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     /**
      * 动态列数
      */
-    private val smartColumnCount by lazy {
-        if (isReadOnly && isSmartColumnCount)
-            smartColumnLoader.getColumnCount(imageList.size)
-        else
-            this.columnCount
-    }
+    private val smartColumnCount
+        get() =
+            if (isReadOnly && isSmartColumnCount)
+                smartColumnLoader.getColumnCount(imageList.size)
+            else
+                this.columnCount
 
     /**
      * 显示图片
      */
     private fun showImage() {
         this.post {
-            columnCount = abs(smartColumnCount)
             removeAllViews()
+            columnCount = abs(smartColumnCount)
 
             (0 until imageList.count()).forEach { i ->
                 this.addView(getImageView(i).apply {
@@ -165,8 +166,11 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
                 this@ImageGridView.width - this@ImageGridView.paddingLeft - this@ImageGridView.paddingRight
             val itemWidth =
                 (width - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
-            this.width = itemWidth
-            this.height = itemWidth
+
+            if (imageList.size > 1) {
+                this.width = itemWidth
+                this.height = itemWidth
+            } else this.width = itemWidth * 2 / 3
 
             if (col > 0) this.leftMargin = dividerSize
             if (row > 0) this.topMargin = dividerSize
@@ -199,7 +203,10 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     private fun getImageView(position: Int) = rlImage.apply {
         val iWidth = this@ImageGridView.width / abs(smartColumnCount)
         addView(ivImage.apply {
-            imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
+            if (imageList.size > 1)
+                imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
+            else
+                imageLoader.loadImage(this, imageList[position])
             this.tag = position
             setOnClickListener { v ->
                 if (::imageClickListener.isInitialized)

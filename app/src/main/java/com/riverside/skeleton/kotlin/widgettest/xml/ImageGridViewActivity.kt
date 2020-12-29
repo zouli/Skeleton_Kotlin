@@ -2,6 +2,9 @@ package com.riverside.skeleton.kotlin.widgettest.xml
 
 import android.app.Activity
 import android.content.Intent
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import androidx.core.graphics.toColorInt
 import com.imnjh.imagepicker.SImagePicker
@@ -28,11 +31,30 @@ class ImageGridViewActivity : SBaseActivity() {
 
     override val layoutId: Int get() = R.layout.activity_imagegridview
 
+    private var imageSize = 6
+
     override fun initView() {
         acToolbar.title = "ImageGridView"
 
+        spinner.adapter = ArrayAdapter<Int>(
+            this, android.R.layout.simple_spinner_item, arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9)
+        )
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                imageSize = position + 1
+                initIGV1()
+
+            }
+
+        }
+        spinner.setSelection(2)
+
         initIGV()
-        initIGV1()
     }
 
     fun initIGV() {
@@ -76,12 +98,13 @@ class ImageGridViewActivity : SBaseActivity() {
     fun initIGV1() {
         val list = mutableListOf(
             "http://pic1.win4000.com/wallpaper/2017-11-15/5a0bce6037bd4.jpg",
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F14%2F20150914171329_cj8VT.jpeg&refer=http%3A%2F%2Fb-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1611756970&t=3eb88135bd96a5f99fa14f0ae5b46a83",
             "http://pic1.win4000.com/pic/8/a8/99a938e209.jpg",
             "http://pic1.win4000.com/wallpaper/2017-11-15/5a0bce5db257c.jpg",
             "http://pic1.win4000.com/wallpaper/2017-11-15/5a0bce5a8951e.jpg",
             "http://pic1.win4000.com/wallpaper/2017-11-15/5a0bce5b56b9f.jpg",
-//            "http://a.hiphotos.baidu.com/zhidao/pic/item/810a19d8bc3eb13513c00107ad1ea8d3fd1f4402.jpg",
-//            "http://f.hiphotos.baidu.com/image/pic/item/4610b912c8fcc3ce863f8b519c45d688d53f20d0.jpg",
+            "http://a.hiphotos.baidu.com/zhidao/pic/item/810a19d8bc3eb13513c00107ad1ea8d3fd1f4402.jpg",
+            "http://f.hiphotos.baidu.com/image/pic/item/4610b912c8fcc3ce863f8b519c45d688d53f20d0.jpg",
 //            "http://03imgmini.eastday.com/mobile/20190411/2019041105_3395409e15bf4cc1aee6fe8d28d529b2_9130_wmk.jpg",
             "http://07imgmini.eastday.com/mobile/20190409/20190409144819_7839f4c2c0ba95a355ae63c59e842219_1.jpeg"
         )
@@ -133,7 +156,7 @@ class ImageGridViewActivity : SBaseActivity() {
 
         }
 
-        igv_image1.smartColumnLoader = sLoader
+//        igv_image1.smartColumnLoader = sLoader
         igv_image1.imageLoader = pLoader
 
         igv_image1.setOnImageClickListener { v, position, url ->
@@ -144,6 +167,6 @@ class ImageGridViewActivity : SBaseActivity() {
             )
         }
 
-        igv_image1.imageList = list
+        igv_image1.imageList = list.take(imageSize).toMutableList()
     }
 }

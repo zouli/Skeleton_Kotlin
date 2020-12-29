@@ -18,8 +18,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
             <com.riverside.skeleton.kotlin.widget.containers.ImageGridView
                     android:id="@+id/igv_image"
@@ -38,6 +38,11 @@
                     android:columnCount="3"
                     app:igv_readOnly="true"
                     app:igv_smartColumnCount="true" />
+
+            <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
