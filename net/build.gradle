@@ -27,6 +27,22 @@ android {
     }
 
     kotlinOptions { jvmTarget = 1.8 }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    libraryVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            variant.getPackageLibraryProvider().get().destinationDir = new File(project.rootDir.absolutePath + "/libs")
+        }
+
+        variant.outputs.all { output ->
+            if (variant.buildType.name == "release") {
+                output.apkData.outputFileName = "skeleton_net_${defaultConfig.versionName}.aar"
+            }
+        }
+    }
 }
 
 dependencies {
