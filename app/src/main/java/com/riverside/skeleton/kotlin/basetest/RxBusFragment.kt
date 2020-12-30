@@ -19,6 +19,7 @@ class RxBusFragment : SBaseFragment() {
 
     //    lateinit var bus: Disposable
     lateinit var bus: EventConsumer<String>
+    lateinit var busS: EventConsumer<String>
 
     private val value: Int by FragmentArgument(default = -1)
 
@@ -41,11 +42,16 @@ class RxBusFragment : SBaseFragment() {
         bus = EventBus.register {
             tv_title.text = it
         }
+
+        busS = EventBus.registerSticky {
+            tv_title.text = it
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 //        RxBus.unRegister(bus)
         EventBus.unregister(bus)
+        EventBus.unregister(busS)
     }
 }

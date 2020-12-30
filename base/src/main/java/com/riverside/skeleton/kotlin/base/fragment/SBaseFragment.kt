@@ -25,7 +25,7 @@ abstract class SBaseFragment : Fragment(), ISBaseFragment {
         menuId.takeIf { it != 0 }?.let { setHasOptionsMenu(true) }
         arguments?.let { BundleHelper.bundle = it }
         return setView(container) ?: if (layoutId != 0) inflater.inflate(
-            layoutId, container
+            layoutId, container, false
         ) else null
     }
 
