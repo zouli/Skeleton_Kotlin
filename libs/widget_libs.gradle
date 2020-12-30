@@ -1,4 +1,6 @@
 dependencies {
+    implementation 'androidx.core:core-ktx:1.0.2'
+
     //picasso图片加载框架
     implementation "com.squareup.picasso:picasso:2.71828"
 
@@ -16,5 +18,5 @@ dependencies {
 
     //UI验证框架
     implementation 'com.github.yoojia:next-inputs-android:1.7.2'
-    implementation 'com.github.zouli:KotlinNextInputs:v1.0'
+    implementation 'com.github.zouli:KotlinNextInputs:v1.0.1'
 }
