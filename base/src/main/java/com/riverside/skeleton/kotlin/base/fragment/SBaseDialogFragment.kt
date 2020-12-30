@@ -21,7 +21,7 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         menuId.takeIf { it != 0 }?.let { setHasOptionsMenu(true) }
-        arguments?.let { BundleHelper.bundle = it }
+        arguments?.let { BundleHelper.bundle[hashCode()] = it }
         return setView(container) ?: if (layoutId != 0) inflater.inflate(
             layoutId, container, false
         ) else null
@@ -69,5 +69,10 @@ abstract class SBaseDialogFragment : DialogFragment(), ISBaseFragment {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackList[requestCode]?.let { it(resultCode, data) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        BundleHelper.bundle.remove(hashCode())
     }
 }
