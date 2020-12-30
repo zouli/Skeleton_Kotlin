@@ -50,3 +50,7 @@ fun RequestCreator.shadow(
     this.apply {
         this.transform(ShadowTransformation(radius, color, left, top))
     }
+
+fun RequestCreator.round(): RequestCreator = this.apply {
+    this.transform(RoundTransformation())
+}
