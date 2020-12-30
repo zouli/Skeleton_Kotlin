@@ -7,7 +7,7 @@
         android:clickable="false"
         android:orientation="horizontal"
         android:padding="8dp"
-        app:cll_checkedChild="true">
+        app:cll_childCheckable="true">
 
     <RadioButton
             android:id="@+id/selector"

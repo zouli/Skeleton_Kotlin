@@ -22,12 +22,12 @@ open class CheckableLinearLayout(context: Context, attrs: AttributeSet?) :
     constructor(context: Context) : this(context, null)
 
     @Attr(AttrType.BOOLEAN)
-    private val mCheckedChild: Boolean by AttributeSetInfo(
+    private val mChildCheckable: Boolean by AttributeSetInfo(
         attrs, R.styleable.CheckableLinearLayout,
-        R.styleable.CheckableLinearLayout_cll_checkedChild, false
+        R.styleable.CheckableLinearLayout_cll_childCheckable, false
     )
 
-    var checkedChild = mCheckedChild
+    var childCheckable = mChildCheckable
         set(value) {
             field = value
             setChildChecked(mChecked and value)
@@ -38,7 +38,7 @@ open class CheckableLinearLayout(context: Context, attrs: AttributeSet?) :
     override fun setChecked(checked: Boolean) {
         // 只有变化时调用
         if (checked != mChecked) {
-            if (checkedChild)
+            if (childCheckable)
                 setChildChecked(checked)
 
             // 保存Check状态

@@ -15,7 +15,7 @@ class ListItemCheckableLinearLayout<T> : AnkoComponent<T> {
         ui.ctx.checkableLinearLayout {
             lparams(matchParent, wrapContent)
             orientation = LinearLayout.HORIZONTAL
-            checkedChild = true
+            childCheckable = true
             background = ColorDrawable(0xFFFFFFFF.toInt())
 
             radioButton {
