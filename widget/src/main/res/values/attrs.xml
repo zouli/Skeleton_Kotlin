@@ -47,6 +47,7 @@
         <attr name="igv_readOnly" format="boolean" />
         <attr name="igv_smartColumnCount" format="boolean" />
         <attr name="igv_addButtonIcon" format="reference" />
+        <attr name="igv_deleteButtonIcon" format="reference" />
         <attr name="igv_imageCount" format="integer" />
         <attr name="igv_dividerSize" format="dimension" />
     </declare-styleable>

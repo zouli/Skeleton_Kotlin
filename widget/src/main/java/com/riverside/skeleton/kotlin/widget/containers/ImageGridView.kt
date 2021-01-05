@@ -63,6 +63,15 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     )
 
     /**
+     * 删除图片按钮图标
+     */
+    @Attr(AttrType.DRAWABLE)
+    private val _deleteButtonIcon: Drawable? by AttributeSetInfo(
+        attrs, R.styleable.ImageGridView,
+        R.styleable.ImageGridView_igv_deleteButtonIcon, null
+    )
+
+    /**
      * 最多可添加几个图片
      */
     @Attr(AttrType.INTEGER)
@@ -91,6 +100,12 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
         }
 
     var addButtonIcon = _addButtonIcon
+        set(value) {
+            field = value
+            showImage()
+        }
+
+    var deleteButtonIcon = _deleteButtonIcon
         set(value) {
             field = value
             showImage()
@@ -127,6 +142,19 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             else
                 this.columnCount
 
+    private val realWidth: Int get() = width - paddingLeft - paddingRight
+
+    val realHeight: Int
+        get() = if (imageList.size > 0) {
+            val columnCount = abs(smartColumnCount)
+            val (row, col, spec) = smartColumnLoader.getCoordinate(
+                imageList.size - 1, columnCount, smartColumnCount
+            )
+            val itemWidth =
+                (realWidth - (columnCount - 1) * dividerSize) / columnCount + (spec - 1) * dividerSize
+            (row + spec) * itemWidth + (row - 1) * dividerSize
+        } else 0
+
     /**
      * 显示图片
      */
@@ -162,12 +190,10 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             this.rowSpec = spec(row, spec)
             this.columnSpec = spec(col, spec)
 
-            val width =
-                this@ImageGridView.width - this@ImageGridView.paddingLeft - this@ImageGridView.paddingRight
             val itemWidth =
-                (width - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
+                (realWidth - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
 
-            if (imageList.size > 1) {
+            if (imageList.size > 1 || !isReadOnly) {
                 this.width = itemWidth
                 this.height = itemWidth
             } else this.width = itemWidth * 2 / 3
@@ -203,7 +229,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     private fun getImageView(position: Int) = rlImage.apply {
         val iWidth = this@ImageGridView.width / abs(smartColumnCount)
         addView(ivImage.apply {
-            if (imageList.size > 1)
+            if (imageList.size > 1 || !isReadOnly)
                 imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
             else
                 imageLoader.loadImage(this, imageList[position])
@@ -219,10 +245,10 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
                 addRule(RelativeLayout.ALIGN_PARENT_TOP)
                 addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
             }
-            setPadding(4.dip, 4.dip, 4.dip, 4.dip)
             adjustViewBounds = true
             scaleType = ImageView.ScaleType.FIT_CENTER
-            setImageResource(R.drawable.imagegrid_delete_image)
+            deleteButtonIcon?.let { setImageDrawable(it) }
+                ?: setImageResource(R.drawable.imagegrid_delete_image)
             tag = position
             setOnClickListener {
                 if (::deleteImageClickListener.isInitialized)
@@ -318,7 +344,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
                 row = when {
                     position == 0 -> 0
                     position < columnCount -> position - 1
-                    else -> (position / columnCount) + columnCount - 1
+                    else -> (position / columnCount) + 1
                 }
                 col = when {
                     position == 0 -> 0
