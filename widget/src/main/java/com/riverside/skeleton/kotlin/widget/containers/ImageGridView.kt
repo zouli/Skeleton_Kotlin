@@ -156,6 +156,11 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
         } else 0
 
     /**
+     * 是否为多张图片
+     */
+    private val isMulti get() = imageList.size > 1 || !isReadOnly || !isSmartColumnCount
+
+    /**
      * 显示图片
      */
     private fun showImage() {
@@ -193,7 +198,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             val itemWidth =
                 (realWidth - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
 
-            if (imageList.size > 1 || !isReadOnly) {
+            if (isMulti) {
                 this.width = itemWidth
                 this.height = itemWidth
             } else this.width = itemWidth * 2 / 3
@@ -229,7 +234,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     private fun getImageView(position: Int) = rlImage.apply {
         val iWidth = this@ImageGridView.width / abs(smartColumnCount)
         addView(ivImage.apply {
-            if (imageList.size > 1 || !isReadOnly)
+            if (isMulti)
                 imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
             else
                 imageLoader.loadImage(this, imageList[position])
