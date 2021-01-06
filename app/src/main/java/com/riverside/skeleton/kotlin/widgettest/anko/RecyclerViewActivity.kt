@@ -29,7 +29,7 @@ class RecyclerViewActivity : SBaseActivity() {
             background = ColorDrawable(0xFFDDDDDD.toInt())
 
             rv_list = recyclerView {
-            }.lparams(matchParent, matchParent)
+            }.lparams(matchParent, wrapContent)
         }
 
         val data = mutableListOf("aaaaaaaaaaaaaa", "bbbbbbbb", "ccccccccccc", "ddddd")

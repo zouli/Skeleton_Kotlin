@@ -1,8 +1,10 @@
 package com.riverside.skeleton.kotlin.util.recyclerview
 
 import android.graphics.Rect
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.util.getOrElse
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 
@@ -21,7 +23,7 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
     // 竖直方向上的偏移量
     private var verticalScrollOffset = 0
 
-    var allItemFrames = mutableListOf<Rect>()
+    var allItemFrames = SparseArray<Rect>()
     private var row = Row()
     private var col = mutableListOf<Row>()
 
@@ -66,8 +68,11 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
                     currentLineWidth = viewWidth
                     maxItemHeight = viewHeight
                 }
-                val frame = Rect(itemLeft, itemTop, itemLeft + viewWidth, itemTop + viewHeight)
-                allItemFrames.add(frame)
+                val frame = allItemFrames.getOrElse(index) { Rect() }.apply {
+                    set(itemLeft, itemTop, itemLeft + viewWidth, itemTop + viewHeight)
+                }
+
+                allItemFrames.put(index, frame)
                 row.views.add(Item(viewHeight, view, frame))
                 row.currentTop = currentLineTop
                 row.maxHeight = maxItemHeight
@@ -97,13 +102,13 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
         col.forEach { row ->
             if (row.currentTop < displayFrame.bottom && displayFrame.top < (row.currentTop + row.maxHeight))
             //如果该行在屏幕中，进行放置item
-                row.views.forEach { view ->
-                    measureChildWithMargins(view.view, 0, 0)
-                    addView(view.view)
+                row.views.forEach { item ->
+                    measureChildWithMargins(item.view, 0, 0)
+                    addView(item.view)
                     layoutDecoratedWithMargins(
-                        view.view,
-                        view.rect.left, view.rect.top - verticalScrollOffset,
-                        view.rect.right, view.rect.bottom - verticalScrollOffset
+                        item.view,
+                        item.rect.left, item.rect.top - verticalScrollOffset,
+                        item.rect.right, item.rect.bottom - verticalScrollOffset
                     )
                 }
             else
@@ -118,18 +123,19 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
      * 计算每一行没有居中的ViewGroup，让居中显示
      */
     private fun formatAboveRow() {
-        row.views.forEach { view ->
-            val position = getPosition(view.view)
+        row.views.forEach { item ->
+            val position = getPosition(item.view)
             //如果该item的位置不在该行中间位置的话，进行重新放置
-            with(allItemFrames[position]) {
-                if (this.top < row.currentTop + (row.maxHeight - view.useHeight) / 2) {
+            with(allItemFrames.getOrElse(position) { Rect() }) {
+                if (this.top < row.currentTop + (row.maxHeight - item.useHeight) / 2) {
                     this.set(
-                        this.left, row.currentTop + (row.maxHeight - view.useHeight) / 2,
+                        this.left, row.currentTop + (row.maxHeight - item.useHeight) / 2,
                         this.right,
-                        row.currentTop + (row.maxHeight - view.useHeight) / 2
-                                + getDecoratedMeasuredHeight(view.view)
+                        row.currentTop + (row.maxHeight - item.useHeight) / 2
+                                + getDecoratedMeasuredHeight(item.view)
                     )
-                    view.rect = this
+                    allItemFrames.put(position, this)
+                    item.rect = this
                 }
             }
         }
@@ -149,7 +155,7 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
         else if (verticalScrollOffset + dy > totalHeight - verticalSpace)
             offset = totalHeight - verticalSpace - verticalScrollOffset
 
-        // 将竖直方向的偏移量+travel
+        // 将竖直方向的偏移量+offset
         verticalScrollOffset += offset
 
         // 平移容器内的item
@@ -179,6 +185,11 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
      * 横向空间
      */
     private val horizontalSpace get() = width - paddingLeft - paddingRight
+
+    init {
+        //设置主动测量规则,适应recyclerView高度为wrap_content
+        isAutoMeasureEnabled = true
+    }
 
     data class Item(val useHeight: Int, val view: View, var rect: Rect)
 
