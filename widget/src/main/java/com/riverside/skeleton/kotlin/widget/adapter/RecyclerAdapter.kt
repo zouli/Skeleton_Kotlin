@@ -11,7 +11,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.viewholders.RecyclerViewHold
  *
  * b_e      2020/11/16
  */
-class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
+open class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
     private var mItemLayout: Int? = null
 
     //单击事件

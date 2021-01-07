@@ -10,7 +10,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.viewholders.ListViewHolder
  *
  * b_e      2020/11/16
  */
-class ListViewAdapter<D>() : BaseAdapter() {
+open class ListViewAdapter<D>() : BaseAdapter() {
     private var mItemLayout: Int? = null
 
     //数据集

@@ -12,7 +12,7 @@ import com.riverside.skeleton.kotlin.widget.adapter.viewholders.ListViewHolder
  *
  * b_e      2020/12/03
  */
-class SelectorListViewAdapter<D>() : BaseAdapter(), Filterable {
+open class SelectorListViewAdapter<D>() : BaseAdapter(), Filterable {
     private var mItemLayout: Int? = null
 
     //数据集
