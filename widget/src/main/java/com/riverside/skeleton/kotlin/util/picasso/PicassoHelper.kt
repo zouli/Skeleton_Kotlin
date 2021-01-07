@@ -54,3 +54,7 @@ fun RequestCreator.shadow(
 fun RequestCreator.round(): RequestCreator = this.apply {
     this.transform(RoundTransformation())
 }
+
+fun RequestCreator.corner(radius: Float): RequestCreator = this.apply {
+    this.transform(RoundCornerTransformation(radius))
+}

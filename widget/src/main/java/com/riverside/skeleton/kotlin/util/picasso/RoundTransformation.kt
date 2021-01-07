@@ -1,6 +1,8 @@
 package com.riverside.skeleton.kotlin.util.picasso
 
 import android.graphics.*
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.squareup.picasso.Transformation
 
 /**
@@ -28,6 +30,34 @@ class RoundTransformation : Transformation {
             drawCircle(size / 2f, size / 2f, size / 2f, paint)
         }
         squaredBitmap.recycle()
+        return bitmap
+    }
+}
+
+/**
+ * 圆角图片变换   1.0
+ *
+ * b_e  2021/01/06
+ */
+class RoundCornerTransformation(private val radius: Float) : Transformation {
+    override fun key() = "roundCorner"
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun transform(source: Bitmap): Bitmap {
+        val width = source.width
+        val height = source.height
+        val bitmap = Bitmap.createBitmap(width, height, source.config)
+        val paint = Paint().apply {
+            flags = Paint.ANTI_ALIAS_FLAG
+        }
+        val paintImage = Paint().apply {
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP)
+        }
+        Canvas(bitmap).apply {
+            drawRoundRect(0F, 0F, width.toFloat(), height.toFloat(), radius, radius, paint)
+            drawBitmap(source, 0F, 0F, paintImage)
+        }
+        source.recycle()
         return bitmap
     }
 }

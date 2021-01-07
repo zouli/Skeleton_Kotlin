@@ -1,9 +1,11 @@
 package com.riverside.skeleton.kotlin.widgettest
 
-import androidx.core.graphics.toColorInt
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
-import com.riverside.skeleton.kotlin.util.picasso.*
+import com.riverside.skeleton.kotlin.util.converter.px
+import com.riverside.skeleton.kotlin.util.picasso.corner
+import com.riverside.skeleton.kotlin.util.picasso.defaultImage
+import com.riverside.skeleton.kotlin.util.picasso.read
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_picasso.*
 
@@ -24,7 +26,8 @@ class PicassoActivity : SBaseActivity() {
             .read(url)
 //            .resizeT(250, 250)
 //            .shadow(10F, "#999999".toColorInt(), -3F, -8F)
-            .transform(RoundTransformation())
+//            .round()
+            .corner(16.px.toFloat())
             .defaultImage(R.drawable.image_grid_add_image)
             .into(iv_image1)
     }
