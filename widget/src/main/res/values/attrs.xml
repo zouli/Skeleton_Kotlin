@@ -51,4 +51,16 @@
         <attr name="igv_imageCount" format="integer" />
         <attr name="igv_dividerSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="SearchBar">
+        <attr name="sb_logo" format="reference" />
+        <attr name="sb_hint" format="reference|string" />
+        <attr name="sb_cancelButton" format="reference|string" />
+        <attr name="sb_searchButton" format="reference|string" />
+        <attr name="sb_editTextMarginStart" format="dimension" />
+    </declare-styleable>
+
+    <attr name="searchBarStyle" format="reference" />
+    <attr name="searchBarEditTextStyle" format="reference" />
+    <attr name="searchBarButtonStyle" format="reference" />
 </resources>

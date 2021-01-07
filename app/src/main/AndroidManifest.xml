@@ -132,6 +132,12 @@
         <activity
                 android:name=".DbMainActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.SearchBarActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.anko.SearchBarActivity"
+                android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />
     </application>

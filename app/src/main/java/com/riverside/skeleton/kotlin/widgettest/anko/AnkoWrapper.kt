@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.*
+import com.riverside.skeleton.kotlin.widget.search.SearchBar
 import com.riverside.skeleton.kotlin.widget.toolbar.AlignCenterToolbar
 import org.jetbrains.anko.custom.ankoView
 
@@ -198,4 +199,8 @@ inline fun ViewManager.imageGridView(init: ImageGridView.() -> Unit): ImageGridV
 
 inline fun ViewManager.alignCenterToolbar(init: AlignCenterToolbar.() -> Unit): AlignCenterToolbar {
     return ankoView({ AlignCenterToolbar(it as AppCompatActivity, null) }, 0, init)
+}
+
+inline fun ViewManager.searchBar(init: SearchBar.() -> Unit): SearchBar {
+    return ankoView({ SearchBar(it, null) }, 0, init)
 }

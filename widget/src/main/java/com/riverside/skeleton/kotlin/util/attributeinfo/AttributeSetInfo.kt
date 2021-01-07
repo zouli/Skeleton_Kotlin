@@ -42,7 +42,7 @@ class AttributeSetInfo<T>(
                     }
                     recycle()
 
-                    res as T
+                    (res ?: default) as T
                 } else default
             }
         }

@@ -56,6 +56,12 @@ class WidgetXmlMainActivity : SBaseActivity() {
                     startActivity<ImageGridViewActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("SearchBar") {
+                onClick {
+                    startActivity<SearchBarActivity>()
+                }
+            }
         }
     }
 }
