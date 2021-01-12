@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 
 /**
- * RecyclerView的瀑布布局    1.0
+ * RecyclerView的瀑布布局    1.1
  *
- * b_e      2020/12/04
+ * b_e  2020/12/04
+ * 1.1  添加分割设置  2021/01/12
  */
-class FlowLayoutManager : RecyclerView.LayoutManager() {
+class FlowLayoutManager(private val divider: Int = 0) : RecyclerView.LayoutManager() {
     // 显示内容的高度
     var totalHeight = 0
 
@@ -57,16 +58,16 @@ class FlowLayoutManager : RecyclerView.LayoutManager() {
                 if (currentLineWidth + viewWidth <= maxWidth) {
                     itemLeft = paddingLeft + currentLineWidth
                     itemTop = currentLineTop
-                    currentLineWidth += viewWidth
+                    currentLineWidth += viewWidth + divider
                     maxItemHeight = max(viewHeight, maxItemHeight)
                 } else {
                     formatAboveRow()
-                    currentLineTop += maxItemHeight
-                    totalHeight += maxItemHeight
+                    currentLineTop += maxItemHeight + divider
+                    totalHeight += maxItemHeight + divider
                     itemLeft = paddingLeft
                     itemTop = currentLineTop
-                    currentLineWidth = viewWidth
-                    maxItemHeight = viewHeight
+                    currentLineWidth = viewWidth + divider
+                    maxItemHeight = viewHeight + divider
                 }
                 val frame = allItemFrames.getOrElse(index) { Rect() }.apply {
                     set(itemLeft, itemTop, itemLeft + viewWidth, itemTop + viewHeight)

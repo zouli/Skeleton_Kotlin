@@ -55,8 +55,7 @@ class RecyclerViewActivity : SBaseActivity() {
             viewHolder.setText(101, item)
         })
 
-        rv_list.layoutManager = FlowLayoutManager()
-        rv_list.addItemDecoration(SpacesItemDecoration(1.dip))
+        rv_list.layoutManager = FlowLayoutManager(1.dip)
         rv_list.adapter = adapter
         adapter.addItem("eee")
     }
