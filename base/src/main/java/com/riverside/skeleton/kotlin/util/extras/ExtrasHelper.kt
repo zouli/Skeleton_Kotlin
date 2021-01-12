@@ -61,7 +61,7 @@ object ExtrasHelper {
     }
 
     internal fun <T> findExtra(name: String, default: T): T =
-        getKeyNames(name).firstOrNull { intent.hasExtra(name) }?.let { keyName ->
+        getKeyNames(name).firstOrNull { intent.hasExtra(it) }?.let { keyName ->
             when (default) {
                 is Int -> intent.getIntExtra(keyName, default)
                 is Long -> intent.getLongExtra(keyName, default)

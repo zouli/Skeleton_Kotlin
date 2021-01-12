@@ -80,7 +80,7 @@ object BundleHelper {
 
     internal fun <T> findValue(parentHash: Int, name: String, default: T): T =
         bundle[parentHash]?.let { bundle ->
-            getKeyNames(name).firstOrNull { bundle.containsKey(name) }?.let { keyName ->
+            getKeyNames(name).firstOrNull { bundle.containsKey(it) }?.let { keyName ->
                 when (default) {
                     is Boolean -> bundle.getBoolean(keyName, default)
                     is Byte -> bundle.getByte(keyName, default)
