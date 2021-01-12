@@ -101,7 +101,7 @@ class FlowLayoutManager(private val divider: Int = 0) : RecyclerView.LayoutManag
         )
 
         col.forEach { row ->
-            if (row.currentTop < displayFrame.bottom && displayFrame.top < (row.currentTop + row.maxHeight))
+//            if (row.currentTop < displayFrame.bottom && displayFrame.top < (row.currentTop + row.maxHeight))
             //如果该行在屏幕中，进行放置item
                 row.views.forEach { item ->
                     measureChildWithMargins(item.view, 0, 0)
@@ -112,11 +112,11 @@ class FlowLayoutManager(private val divider: Int = 0) : RecyclerView.LayoutManag
                         item.rect.right, item.rect.bottom - verticalScrollOffset
                     )
                 }
-            else
-            //将不在屏幕中的item放到缓存中
-                row.views.forEach { view ->
-                    removeAndRecycleView(view.view, recycler)
-                }
+//            else
+//            //将不在屏幕中的item放到缓存中
+//                row.views.forEach { view ->
+//                    removeAndRecycleView(view.view, recycler)
+//                }
         }
     }
 
