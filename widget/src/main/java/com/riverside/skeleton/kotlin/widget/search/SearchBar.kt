@@ -16,13 +16,15 @@ import com.riverside.skeleton.kotlin.widget.R
 import kotlinx.android.synthetic.main.view_search_bar.view.*
 
 /**
- * 搜索控件 1.0
+ * 搜索控件 1.1
  *
  * ?attr/searchBarStyle   输入框背景样式
  * ?attr/searchBarEditTextStyle 输入框样式
  * ?attr/searchBarButtonStyle   按钮样式
  *
  * b_e  2021/01/07
+ * 1.1  添加是否显示查询按钮  2021/01/14
+ * 1.1  添加是否得到焦点    2021/01/14
  */
 class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
     constructor(context: Context) : this(context, null)
@@ -58,6 +60,22 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
         R.styleable.SearchBar_sb_editTextMarginStart, 0
     )
 
+    //是否显示查询按钮
+    @Attr(AttrType.BOOLEAN)
+    private val buttonVisibility: Boolean by AttributeSetInfo(
+        attrs, R.styleable.SearchBar,
+        R.styleable.SearchBar_sb_buttonVisibility, true
+    )
+
+    //是否得到焦点
+    @Attr(AttrType.BOOLEAN)
+    private val focusable: Boolean by AttributeSetInfo(
+        attrs, R.styleable.SearchBar,
+        R.styleable.SearchBar_sb_isFocusable, true
+    )
+
+    private var _buttonVisibility = buttonVisibility
+
     fun setLogo(logo: Drawable) {
         iv_logo.setImageDrawable(logo)
         iv_logo.visibility = View.VISIBLE
@@ -82,6 +100,16 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
         }
     }
 
+    fun setButtonVisibility(visibility: Boolean) {
+        _buttonVisibility = visibility
+        setSearchButton(!et_search.text.isNullOrEmpty())
+    }
+
+    override fun setFocusable(focusable: Boolean) {
+        if (focusable) et_search.requestFocus()
+        else ll_background.requestFocus()
+    }
+
     var text
         get() = et_search.text.toString()
         set(value) = et_search.setText(value)
@@ -100,6 +128,9 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
         setEditTextMarginStart(editTextMarginStart)
         setCancelTitle(cancelTitle)
         setSearchTitle(searchTitle)
+        setSearchButton(!et_search.text.isNullOrEmpty())
+
+        isFocusable = focusable
     }
 
     private fun initEvent() {
@@ -118,6 +149,13 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
         })
+    }
+
+    /**
+     * 添加输入框修改监视事件
+     */
+    fun addTextChangedListener(textWatcher: TextWatcher) {
+        et_search.addTextChangedListener(textWatcher)
     }
 
     /**
@@ -142,7 +180,7 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
      * 切换按钮显示状态
      */
     private fun setSearchButton(isSearch: Boolean) {
-        tv_search.visibility = if (isSearch) View.VISIBLE else View.GONE
-        tv_cancel.visibility = if (!isSearch) View.VISIBLE else View.GONE
+        tv_search.visibility = if (isSearch && _buttonVisibility) View.VISIBLE else View.GONE
+        tv_cancel.visibility = if (!isSearch && _buttonVisibility) View.VISIBLE else View.GONE
     }
 }

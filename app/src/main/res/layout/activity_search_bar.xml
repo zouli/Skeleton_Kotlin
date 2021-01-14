@@ -7,6 +7,7 @@
 
     <com.riverside.skeleton.kotlin.widget.search.SearchBar
             android:id="@+id/sb_search"
+            app:sb_buttonVisibility="false"
             app:sb_editTextMarginStart="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
