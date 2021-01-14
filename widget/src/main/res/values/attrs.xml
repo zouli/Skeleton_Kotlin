@@ -55,6 +55,8 @@
     <declare-styleable name="SearchBar">
         <attr name="sb_logo" format="reference" />
         <attr name="sb_hint" format="reference|string" />
+        <attr name="sb_buttonVisibility" format="boolean" />
+        <attr name="sb_isFocusable" format="boolean" />
         <attr name="sb_cancelButton" format="reference|string" />
         <attr name="sb_searchButton" format="reference|string" />
         <attr name="sb_editTextMarginStart" format="dimension" />
