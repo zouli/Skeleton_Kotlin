@@ -80,7 +80,7 @@ open class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
      * @param type
      * @return
      */
-    private fun getItemLayout(type: Int) = mItemLayout
+    open fun getItemLayout(type: Int) = mItemLayout
 
     /**
      * 解析布局资源

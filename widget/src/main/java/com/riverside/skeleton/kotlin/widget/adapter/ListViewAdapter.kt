@@ -79,7 +79,7 @@ open class ListViewAdapter<D>() : BaseAdapter() {
      * @param type
      * @return
      */
-    fun getItemLayout(type: Int) = mItemLayout
+    open fun getItemLayout(type: Int) = mItemLayout
 
     /**
      * 封装getView逻辑,将根据viewType获取布局资源、解析布局资源、创建ViewHolder等逻辑封装起来,简化使用流程
