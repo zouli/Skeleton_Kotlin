@@ -81,4 +81,18 @@
         <item name="android:padding">16dp</item>
         <item name="android:background">#FFFF00</item>
     </style>
+
+    <style name="PairViewFirstText">
+        <item name="android:layout_height">16dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#FF0000</item>
+    </style>
+
+    <style name="PairViewSecondText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 </resources>

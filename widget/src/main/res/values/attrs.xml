@@ -65,4 +65,15 @@
     <attr name="searchBarStyle" format="reference" />
     <attr name="searchBarEditTextStyle" format="reference" />
     <attr name="searchBarButtonStyle" format="reference" />
+
+    <declare-styleable name="PairView">
+        <attr name="pv_firstViewStyle" format="reference" />
+        <attr name="pv_secondViewStyle" format="reference" />
+        <attr name="pv_firstImage" format="reference" />
+        <attr name="pv_secondImage" format="reference" />
+        <attr name="pv_firstImageSize" format="dimension" />
+        <attr name="pv_secondImageSize" format="dimension" />
+        <attr name="pv_firstText" format="reference|string" />
+        <attr name="pv_secondText" format="reference|string" />
+    </declare-styleable>
 </resources>

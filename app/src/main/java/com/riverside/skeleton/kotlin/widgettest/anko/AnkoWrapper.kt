@@ -204,3 +204,7 @@ inline fun ViewManager.alignCenterToolbar(init: AlignCenterToolbar.() -> Unit): 
 inline fun ViewManager.searchBar(init: SearchBar.() -> Unit): SearchBar {
     return ankoView({ SearchBar(it, null) }, 0, init)
 }
+
+inline fun ViewManager.pairView(init: PairView.() -> Unit): PairView {
+    return ankoView({ PairView(it, null) }, 0, init)
+}

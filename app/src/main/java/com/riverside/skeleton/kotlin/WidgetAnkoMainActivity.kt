@@ -62,6 +62,12 @@ class WidgetAnkoMainActivity : SBaseActivity() {
                     startActivity<SearchBarActivity>()
                 }
             }
+
+            button("PairView") {
+                onClick {
+                    startActivity<PairViewActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
     }
 }
