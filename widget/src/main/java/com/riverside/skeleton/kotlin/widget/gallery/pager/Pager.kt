@@ -14,7 +14,7 @@ import com.riverside.skeleton.kotlin.util.converter.dip
  * b_e      2020/11/27
  */
 interface PagerView {
-    fun getView(context: Context): View
+    fun getView(context: Context, size: Int): View
 
     fun onPageScrolled(position: Int, size: Int, positionOffset: Float, positionOffsetPixels: Int)
 
@@ -27,9 +27,9 @@ interface PagerView {
  * 分页显示器数字版
  */
 class NumberPagerView : PagerView {
-    private lateinit var tv_pager_num: TextView
+    private lateinit var tvPagerNum: TextView
 
-    override fun getView(context: Context): View =
+    override fun getView(context: Context, size: Int): View =
         TextView(context, null).apply {
             this.setPadding(2.dip)
             this.setTextColor("#FFFFFF".toColorInt())
@@ -41,7 +41,7 @@ class NumberPagerView : PagerView {
             ).also {
                 it.addRule(RelativeLayout.ALIGN_PARENT_TOP)
             }
-            tv_pager_num = this
+            tvPagerNum = this
         }
 
 
@@ -54,6 +54,6 @@ class NumberPagerView : PagerView {
     }
 
     override fun onPageSelected(position: Int, size: Int) {
-        tv_pager_num.text = "${position + 1} / $size"
+        tvPagerNum.text = "${position + 1} / $size"
     }
 }

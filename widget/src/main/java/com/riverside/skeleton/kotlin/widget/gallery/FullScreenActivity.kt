@@ -65,7 +65,7 @@ class FullScreenActivity : SBaseActivity() {
         })
 
         if (::pagerView.isInitialized) {
-            activity_full_image.addView(pagerView.getView(activity))
+            activity_full_image.addView(pagerView.getView(activity, image_url.size))
             pagerView.onPageSelected(default_index, image_url.size)
         }
     }
