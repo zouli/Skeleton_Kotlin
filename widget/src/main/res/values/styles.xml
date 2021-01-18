@@ -100,4 +100,6 @@
         <item name="colorAccent">#68D778</item>
         <item name="android:textColorSecondary">#D0D0D0</item>
     </style>
+
+    <style name="PopupWindowInOutAnimation" parent="android:Animation" />
 </resources>
