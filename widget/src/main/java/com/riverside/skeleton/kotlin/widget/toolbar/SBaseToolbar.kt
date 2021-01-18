@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
 import com.riverside.skeleton.kotlin.base.activity.ActivityStackManager
 import com.riverside.skeleton.kotlin.widget.R
@@ -23,9 +24,11 @@ abstract class SBaseToolbar(context: Context, attrs: AttributeSet?) : AppBarLayo
 
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.view_sbase_toolbar, this@SBaseToolbar)
-        toolbar.title = ""
-        (ActivityStackManager.currentActivity as AppCompatActivity).setSupportActionBar(toolbar)
+        tb_toolbar.title = ""
+        (ActivityStackManager.currentActivity as AppCompatActivity).setSupportActionBar(tb_toolbar)
     }
+
+    val toolbar: Toolbar = tb_toolbar
 
     /**
      * 设置标题
@@ -39,15 +42,15 @@ abstract class SBaseToolbar(context: Context, attrs: AttributeSet?) : AppBarLayo
     internal abstract fun onSetTitle(title: String)
 
     internal fun setView(view: View) {
-        toolbar.addView(view)
+        tb_toolbar.addView(view)
     }
 
     /**
      * 设置回退键
      */
     fun setNavigation(resId: Int, callback: (v: View) -> Unit) {
-        toolbar.setNavigationIcon(resId)
-        toolbar.setNavigationOnClickListener {
+        tb_toolbar.setNavigationIcon(resId)
+        tb_toolbar.setNavigationOnClickListener {
             callback(it)
         }
     }

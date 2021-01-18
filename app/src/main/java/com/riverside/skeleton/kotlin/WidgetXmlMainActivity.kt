@@ -68,6 +68,12 @@ class WidgetXmlMainActivity : SBaseActivity() {
                     startActivity<PairViewActivity>()
                 }
             }.lparams(matchParent, wrapContent)
+
+            button("ImageGridViewList") {
+                onClick {
+                    startActivity<RefreshImageGridViewActivity>()
+                }
+            }.lparams(matchParent, wrapContent)
         }
     }
 }
