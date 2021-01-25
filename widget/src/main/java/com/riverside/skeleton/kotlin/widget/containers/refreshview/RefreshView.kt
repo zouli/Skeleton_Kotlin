@@ -1,23 +1,20 @@
-package com.riverside.skeleton.kotlin.widget.containers
+package com.riverside.skeleton.kotlin.widget.containers.refreshview
 
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import android.widget.AbsListView
-import android.widget.AdapterView
-import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 
 /**
- * 可刷新的AbsListview  1.0
- * b_e      2020/11/19
+ * 可刷新的view  1.0
+ * b_e  2021/01/25
  */
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-abstract class RefreshAbsListView(
+abstract class RefreshView<T : View>(
     context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
     private var pageNum = 1
@@ -26,7 +23,6 @@ abstract class RefreshAbsListView(
     private lateinit var getList: (pageNum: Int) -> Unit
 
     private lateinit var srlList: SwipyRefreshLayout
-    private lateinit var listView: AbsListView
 
     constructor(context: Context) : this(context, null)
 
@@ -43,11 +39,9 @@ abstract class RefreshAbsListView(
         srlList = SwipyRefreshLayout(context).apply {
             this.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             this.direction =
-                SwipyRefreshLayoutDirection.getFromInt(this@RefreshAbsListView.updateDirection())
-            this@RefreshAbsListView.addView(this)
-
-            listView = initListView()
-            this.addView(listView)
+                SwipyRefreshLayoutDirection.getFromInt(this@RefreshView.updateDirection())
+            this@RefreshView.addView(this)
+            this.addView(getView())
         }
     }
 
@@ -80,19 +74,6 @@ abstract class RefreshAbsListView(
             field = refreshing
         }
 
-    open fun setAdapter(adapter: BaseAdapter) {
-        listView.adapter = adapter
-    }
-
-    open fun setOnItemClickListener(listener: (parent: AdapterView<*>, view: View, position: Int, id: Long) -> Unit) =
-        listView.setOnItemClickListener { parent, view, position, id ->
-            listener(parent, view, position, id)
-        }
-
-    open fun setEmptyView(emptyView: View) {
-        listView.emptyView = emptyView
-    }
-
     open fun doClear(block: () -> Unit) {
         clearData = block
     }
@@ -104,8 +85,6 @@ abstract class RefreshAbsListView(
             srlList.direction = value
             field = value
         }
-
-    fun getListView() = listView
 
     /**
      * 读取下一页数据
@@ -125,9 +104,9 @@ abstract class RefreshAbsListView(
 
 
     /**
-     * 初始化List控件
+     * 初始化View控件
      *
      * @return
      */
-    abstract fun initListView(): AbsListView
+    abstract fun getView(): T
 }

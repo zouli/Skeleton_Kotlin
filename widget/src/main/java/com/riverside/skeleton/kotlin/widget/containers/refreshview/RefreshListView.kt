@@ -1,4 +1,4 @@
-package com.riverside.skeleton.kotlin.widget.containers
+package com.riverside.skeleton.kotlin.widget.containers.refreshview
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.widget.AbsListView
 import android.widget.ListView
 import androidx.annotation.RequiresApi
-import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo

@@ -1,4 +1,4 @@
-package com.riverside.skeleton.kotlin.widget.containers
+package com.riverside.skeleton.kotlin.widget.containers.refreshview
 
 import android.content.Context
 import android.os.Build

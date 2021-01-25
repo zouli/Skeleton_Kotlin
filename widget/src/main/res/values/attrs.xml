@@ -27,6 +27,16 @@
         <attr name="rlv_dividerHeight" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="RefreshCompleteListView">
+        <attr name="rclv_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+        <attr name="rclv_divider" format="reference" />
+        <attr name="rclv_dividerHeight" format="dimension" />
+    </declare-styleable>
+
     <declare-styleable name="RefreshGridView">
         <attr name="rgv_direction">
             <enum name="top" value="0" />

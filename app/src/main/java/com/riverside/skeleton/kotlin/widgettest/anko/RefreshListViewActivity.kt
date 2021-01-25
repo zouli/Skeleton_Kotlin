@@ -5,7 +5,6 @@ import android.os.Build
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.core.graphics.toColorInt
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.net.rest.CommonRestService
@@ -13,10 +12,9 @@ import com.riverside.skeleton.kotlin.net.rest.checkResult
 import com.riverside.skeleton.kotlin.net.rest.utils.next
 import com.riverside.skeleton.kotlin.net.rest.utils.retrofit
 import com.riverside.skeleton.kotlin.util.converter.dip
-import com.riverside.skeleton.kotlin.util.converter.sp
 import com.riverside.skeleton.kotlin.util.notice.toast
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
-import com.riverside.skeleton.kotlin.widget.containers.RefreshListView
+import com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshListView
 import org.jetbrains.anko.*
 
 class RefreshListViewActivity : SBaseActivity() {

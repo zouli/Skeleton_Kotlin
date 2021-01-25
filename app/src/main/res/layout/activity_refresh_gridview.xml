@@ -12,7 +12,7 @@
             android:gravity="center"
             android:text="Empty List" />
 
-    <com.riverside.skeleton.kotlin.widget.containers.RefreshGridView
+    <com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshGridView
             android:id="@+id/rgv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

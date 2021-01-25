@@ -14,7 +14,7 @@ import com.riverside.skeleton.kotlin.net.rest.utils.retrofit
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.notice.toast
 import com.riverside.skeleton.kotlin.widget.adapter.ListViewAdapter
-import com.riverside.skeleton.kotlin.widget.containers.RefreshGridView
+import com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshGridView
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.textView

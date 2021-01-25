@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.*
+import com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshGridView
+import com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshListView
 import com.riverside.skeleton.kotlin.widget.search.SearchBar
 import com.riverside.skeleton.kotlin.widget.toolbar.AlignCenterToolbar
 import org.jetbrains.anko.custom.ankoView
@@ -177,12 +179,22 @@ inline fun ViewManager.recyclerView(init: RecyclerView.() -> Unit): RecyclerView
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 inline fun ViewManager.refreshListView(init: RefreshListView.() -> Unit): RefreshListView {
-    return ankoView({ RefreshListView(it, null) }, 0, init)
+    return ankoView({
+        RefreshListView(
+            it,
+            null
+        )
+    }, 0, init)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 inline fun ViewManager.refreshGridView(init: RefreshGridView.() -> Unit): RefreshGridView {
-    return ankoView({ RefreshGridView(it, null) }, 0, init)
+    return ankoView({
+        RefreshGridView(
+            it,
+            null
+        )
+    }, 0, init)
 }
 
 inline fun ViewManager.completeListView(init: CompleteListView.() -> Unit): CompleteListView {
