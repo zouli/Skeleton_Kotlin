@@ -2,13 +2,16 @@ package com.riverside.skeleton.kotlin.widget.containers
 
 import android.content.Context
 import android.database.DataSetObserver
+import android.graphics.Paint
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RectShape
 import android.os.Build
 import android.util.AttributeSet
 import android.util.SparseBooleanArray
 import android.util.SparseIntArray
 import android.view.View
-import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Checkable
 import android.widget.LinearLayout
@@ -19,10 +22,13 @@ import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.widget.R
 
 /**
- * 完全显示的ListView    1.1
+ * 完全显示的ListView    1.4
  *
  * b_e  2020/11/20
  * 1.1  添加单选、多选功能   2021/01/14
+ * 1.2  修改控件显示逻辑    2021/01/25
+ * 1.3  修改分割符显示方法   2021/01/25
+ * 1.4  添加HeaderView    2021/01/25
  */
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
 class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(context, attrs) {
@@ -80,6 +86,12 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
 
     private val useActivated =
         (context.applicationInfo.targetSdkVersion >= Build.VERSION_CODES.HONEYCOMB)
+
+    private val listLinearLayout = LinearLayout(context).apply {
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        orientation = VERTICAL
+        this@CompleteListView.addView(this)
+    }
 
     /**
      *  设置Item点击监听
@@ -165,34 +177,37 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
     /**
      * 绑定显示控件
      */
-    private fun bindView() = adapter?.let {
-        // 清除现有View
-        removeAllViews()
-
-        (0 until it.count).forEach { i ->
-            addView(it.getView(i, null, this@CompleteListView).apply {
-                mChildren.add(this)
-
-                if (this is Checkable) this.isChecked = mCheckStates.get(i)
-                else if (useActivated) this.isActivated = mCheckStates.get(i)
-
-                this.setOnClickListener { view ->
-                    val position = mChildren.indexOf(view)
-                    performItemClick(view, position)
-                }
-            })
-
-            //添加分割线
-            if (divider != null && dividerHeight > 0 && it.count > 1 && i < it.count - 1) {
-                addView(View(context).apply {
-                    this.layoutParams =
-                        LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dividerHeight)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        this.background = divider
-                    } else {
-                        this.setBackgroundDrawable(divider)
+    private fun bindView() = listLinearLayout.post {
+        with(listLinearLayout) {
+            adapter?.let {
+                // 清除现有View
+                if (it.count == 0) {
+                    removeAllViews()
+                    mChildren.clear()
+                } else if (it.count < mChildren.size) {
+                    repeat(mChildren.size - it.count) {
+                        mChildren.removeAt(mChildren.size - 1)
+                        removeViewAt(childCount - 1)
                     }
-                })
+                }
+
+                (0 until it.count).forEach { i ->
+                    if (i < mChildren.size)
+                        mChildren[i] = it.getView(i, mChildren[i], this@CompleteListView)
+                    else {
+                        addView(it.getView(i, null, this@CompleteListView).apply {
+                            mChildren.add(this)
+
+                            if (this is Checkable) this.isChecked = mCheckStates.get(i)
+                            else if (useActivated) this.isActivated = mCheckStates.get(i)
+
+                            this.setOnClickListener { view ->
+                                val position = mChildren.indexOf(view)
+                                performItemClick(view, position)
+                            }
+                        })
+                    }
+                }
             }
         }
     }
@@ -225,13 +240,37 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
     }
 
     /**
+     * 添加Header View
+     */
+    fun addHeaderView(view: View) {
+        addView(view, 0)
+    }
+
+    /**
      * Adapter数据监听类
      */
     inner class AdapterDataSetObserver : DataSetObserver() {
         override fun onChanged() {
             super.onChanged()
+
+            //添加分割线
+            if (divider != null && dividerHeight > 0) {
+                divider?.let { d ->
+                    if (d is ColorDrawable) ShapeDrawable(RectShape()).apply {
+                        paint.color = d.color
+                        paint.style = Paint.Style.FILL_AND_STROKE
+                        intrinsicHeight = dividerHeight
+                    }
+                    else d
+                }?.let { drawable ->
+                    listLinearLayout.dividerDrawable = drawable
+                    listLinearLayout.showDividers = SHOW_DIVIDER_MIDDLE
+                }
+            }
+
             // 绑定显示控件
             bindView()
+
             emptyView?.let { updateEmptyStatus(adapter?.isEmpty ?: true) }
         }
 
