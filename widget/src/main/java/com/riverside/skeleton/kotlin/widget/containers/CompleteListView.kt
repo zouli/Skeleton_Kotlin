@@ -89,7 +89,6 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
 
     private val listLinearLayout = LinearLayout(context).apply {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-        orientation = VERTICAL
         this@CompleteListView.addView(this)
     }
 
@@ -278,6 +277,11 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
             super.onInvalidated()
             emptyView?.let { updateEmptyStatus(adapter?.isEmpty ?: true) }
         }
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed, l, t, r, b)
+        listLinearLayout.orientation = this@CompleteListView.orientation
     }
 
     companion object {
