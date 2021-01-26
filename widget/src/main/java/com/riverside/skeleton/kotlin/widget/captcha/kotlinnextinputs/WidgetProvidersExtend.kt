@@ -3,6 +3,7 @@ package com.riverside.skeleton.kotlin.widget.captcha.kotlinnextinputs
 import com.github.yoojia.inputs.ViewInput
 import com.riverside.skeleton.kotlin.kotlinnextinputs.WidgetProvidersExtend
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
+import com.riverside.skeleton.kotlin.widget.captcha.ImageCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 
 /**
@@ -17,4 +18,9 @@ fun WidgetProvidersExtend.Companion.inputCaptchaView(inputCaptchaView: InputCapt
 fun WidgetProvidersExtend.Companion.boxCaptchaView(boxCaptchaView: BoxCaptchaView) =
     object : ViewInput<BoxCaptchaView>(boxCaptchaView) {
         override fun getValue(): String = boxCaptchaView.text
+    }
+
+fun WidgetProvidersExtend.Companion.imageCaptchView(imageCaptchaView: ImageCaptchaView) =
+    object : ViewInput<ImageCaptchaView>(imageCaptchaView) {
+        override fun getValue(): String = imageCaptchaView.text
     }

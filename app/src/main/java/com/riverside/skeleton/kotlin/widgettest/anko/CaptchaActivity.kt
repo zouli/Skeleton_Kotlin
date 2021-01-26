@@ -11,6 +11,7 @@ import com.riverside.skeleton.kotlin.kotlinnextinputs.nextInput
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.notice.toast
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
+import com.riverside.skeleton.kotlin.widget.captcha.ImageCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.kotlinnextinputs.nextInput
 import org.jetbrains.anko.*
@@ -20,6 +21,7 @@ class CaptchaActivity : SBaseActivity() {
     lateinit var et_phone: EditText
     lateinit var icv: InputCaptchaView
     lateinit var bcv: BoxCaptchaView
+    lateinit var icv_image: ImageCaptchaView
 
     override fun initView() {
         title = "Captcha"
@@ -57,6 +59,15 @@ class CaptchaActivity : SBaseActivity() {
                     validate()
                 }
             }.lparams(matchParent, wrapContent)
+
+            icv_image = imageCaptchaView {
+                setMaxLength(4)
+                setEditTextMarginEnd(8.dip)
+                setEditPaddingTop(2.dip)
+                setCaptchaUrl("http://zyln.org/zyz/code.do?t=" + System.currentTimeMillis()) {
+
+                }
+            }.lparams(matchParent, wrapContent)
         }
     }
 
@@ -64,6 +75,7 @@ class CaptchaActivity : SBaseActivity() {
         messageDisplay = AndroidToastMessageDisplay()
 
         add(et_phone.nextInput, StaticScheme.Required().msg("请输入手机号码"))
+        add(icv_image.nextInput, StaticScheme.Required().msg("请输入图形验证码"))
     }.test()
 
     override fun doValidate(): Boolean = nextInput {

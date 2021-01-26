@@ -15,6 +15,8 @@
             android:id="@+id/icv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:icv_editPaddingTop="16dp"
+            app:icv_editPaddingBottom="16dp"
             app:icv_maxLength="4"
             app:icv_sleepSecond="30"
             app:icv_textHint="请输入手机验证码" />
@@ -37,4 +39,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Validate" />
+
+    <com.riverside.skeleton.kotlin.widget.captcha.ImageCaptchaView
+            android:id="@+id/icv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            app:icv_editPaddingTop="16dp"
+            app:icv_editPaddingBottom="16dp"
+            app:icv_editPaddingStart="32dp"
+            app:icv_editBackground="@color/colorAccent"
+            app:icv_editTextMarginEnd="32dp"
+            app:icv_maxLength="4"
+            app:icv_textHint="请输入图片验证码" />
 </LinearLayout>

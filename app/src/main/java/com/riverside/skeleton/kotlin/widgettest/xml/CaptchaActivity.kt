@@ -30,6 +30,10 @@ class CaptchaActivity : SBaseActivity() {
         btn_val.setOnClickListener {
             validate()
         }
+
+        icv1.setCaptchaUrl("http://zyln.org/zyz/code.do?t=" + System.currentTimeMillis()) {
+
+        }
     }
 
     private fun icvValidate() = nextInput {

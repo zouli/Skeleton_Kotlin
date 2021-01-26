@@ -4,10 +4,12 @@ import android.annotation.TargetApi
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.*
 import androidx.annotation.IdRes
+import androidx.annotation.RequiresApi
 
 /**
  * ViewHolder操作子视图的实现类
@@ -40,7 +42,7 @@ class ViewHolderImpl constructor(itemView: View) {
     fun setBackgroundDrawable(viewId: Int, drawable: Drawable?) =
         findViewById<View>(viewId).setBackgroundDrawable(drawable)
 
-    @TargetApi(16)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
     fun setBackground(viewId: Int, drawable: Drawable?) {
         findViewById<View>(viewId).background = drawable
     }

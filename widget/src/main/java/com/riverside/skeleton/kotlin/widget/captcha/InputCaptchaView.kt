@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.core.view.updatePadding
 import com.riverside.skeleton.kotlin.base.utils.KeyboardHelper
 import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
@@ -49,7 +50,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     )
 
     fun setMaxLength(value: Int) {
-        if (value > 0) et_vc?.let { it.filters = arrayOf(InputFilter.LengthFilter(maxLength)) }
+        if (value > 0) et_vc?.let { it.filters = arrayOf(InputFilter.LengthFilter(value)) }
     }
 
     //设置Hint
@@ -63,17 +64,64 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
         et_vc?.let { it.hint = value }
     }
 
+
+    //输入框PaddingTop
+    @Attr(AttrType.DIMENSION)
+    private val editPaddingTop: Int by AttributeSetInfo(
+        attrs, R.styleable.ImageCaptchaView,
+        R.styleable.ImageCaptchaView_icv_editPaddingTop, -1
+    )
+
+    fun setEditPaddingTop(top: Int) {
+        if (top > -1) et_vc?.updatePadding(top = top)
+    }
+
+    //输入框PaddingBottom
+    @Attr(AttrType.DIMENSION)
+    private val editPaddingBottom: Int by AttributeSetInfo(
+        attrs, R.styleable.ImageCaptchaView,
+        R.styleable.ImageCaptchaView_icv_editPaddingBottom, -1
+    )
+
+    fun setEditPaddingBottom(bottom: Int) {
+        if (bottom > -1) et_vc?.updatePadding(bottom = bottom)
+    }
+
+    //输入框PaddingStart
+    @Attr(AttrType.DIMENSION)
+    private val editPaddingStart: Int by AttributeSetInfo(
+        attrs, R.styleable.ImageCaptchaView,
+        R.styleable.ImageCaptchaView_icv_editPaddingStart, -1
+    )
+
+    fun setEditPaddingStart(start: Int) {
+        if (start > -1) et_vc?.updatePadding(left = start)
+    }
+
+    //输入框PaddingEnd
+    @Attr(AttrType.DIMENSION)
+    private val editPaddingEnd: Int by AttributeSetInfo(
+        attrs, R.styleable.ImageCaptchaView,
+        R.styleable.ImageCaptchaView_icv_editPaddingEnd, -1
+    )
+
+    fun setEditPaddingEnd(end: Int) {
+        if (end > -1) et_vc?.updatePadding(right = end)
+    }
+
     init {
         initView()
     }
 
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.view_input_captcha, this@InputCaptchaView)
-        if (maxLength > 0)
-            et_vc.filters = arrayOf(InputFilter.LengthFilter(maxLength))
-        et_vc.hint = textHint
-
-        count = sleepSecond
+        setMaxLength(maxLength)
+        setTextHint(textHint)
+        setSleepSecond(sleepSecond)
+        setEditPaddingTop(editPaddingTop)
+        setEditPaddingBottom(editPaddingBottom)
+        setEditPaddingStart(editPaddingStart)
+        setEditPaddingEnd(editPaddingEnd)
 
         setListener()
     }

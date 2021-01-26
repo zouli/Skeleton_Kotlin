@@ -13,3 +13,6 @@ fun WidgetAccess.findInputCaptchaView(viewId: Int): Input =
 
 fun WidgetAccess.findBoxCaptchaView(viewId: Int): Input =
     WidgetProvidersExtend.boxCaptchaView(findView(viewId))
+
+fun WidgetAccess.findImageCaptchaView(viewId: Int): Input =
+    WidgetProvidersExtend.imageCaptchView((findView(viewId)))

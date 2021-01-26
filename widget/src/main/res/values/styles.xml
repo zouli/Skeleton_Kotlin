@@ -102,4 +102,11 @@
     </style>
 
     <style name="PopupWindowInOutAnimation" parent="android:Animation" />
+
+    <style name="ImageCaptcha" />
+
+    <style name="ImageCaptcha.Code">
+        <item name="android:textColorHint">#999999</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.riverside.skeleton.kotlin.widget.captcha.BoxCaptchaView
+import com.riverside.skeleton.kotlin.widget.captcha.ImageCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.containers.*
 import com.riverside.skeleton.kotlin.widget.containers.refreshview.RefreshGridView
@@ -47,6 +48,8 @@ var BoxCaptchaView.divideWidth: Int get() = 0; set(value) = setDivideWidth(value
 
 var BoxCaptchaView.itemStyle: Int get() = 0; set(value) = setItemStyle(value)
 
+inline fun ViewManager.imageCaptchaView(init: ImageCaptchaView.() -> Unit): ImageCaptchaView =
+    ankoView({ ImageCaptchaView(it) }, theme = 0, init = init)
 
 open class _CheckableLinearLayout(ctx: Context) : CheckableLinearLayout(ctx) {
 

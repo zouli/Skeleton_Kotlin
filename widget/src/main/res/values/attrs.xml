@@ -10,13 +10,6 @@
         <attr name="bcv_itemStyle" format="reference" />
     </declare-styleable>
 
-    <declare-styleable name="InputCaptchaView">
-        <attr name="icv_phoneNumberId" format="reference" />
-        <attr name="icv_textHint" format="reference|string" />
-        <attr name="icv_sleepSecond" format="integer" />
-        <attr name="icv_maxLength" format="integer" />
-    </declare-styleable>
-
     <declare-styleable name="RefreshListView">
         <attr name="rlv_direction">
             <enum name="top" value="0" />
@@ -85,5 +78,34 @@
         <attr name="pv_secondImageSize" format="dimension" />
         <attr name="pv_firstText" format="reference|string" />
         <attr name="pv_secondText" format="reference|string" />
+    </declare-styleable>
+
+    <attr name="icv_textHint" format="reference|string" />
+    <attr name="icv_maxLength" format="integer" />
+    <attr name="icv_editPaddingStart" format="dimension" />
+    <attr name="icv_editPaddingEnd" format="dimension" />
+    <attr name="icv_editPaddingTop" format="dimension" />
+    <attr name="icv_editPaddingBottom" format="dimension" />
+
+    <declare-styleable name="InputCaptchaView">
+        <attr name="icv_textHint" />
+        <attr name="icv_maxLength" />
+        <attr name="icv_phoneNumberId" format="reference" />
+        <attr name="icv_sleepSecond" format="integer" />
+        <attr name="icv_editPaddingStart" />
+        <attr name="icv_editPaddingEnd" />
+        <attr name="icv_editPaddingTop" />
+        <attr name="icv_editPaddingBottom" />
+    </declare-styleable>
+
+    <declare-styleable name="ImageCaptchaView">
+        <attr name="icv_textHint" />
+        <attr name="icv_maxLength" />
+        <attr name="icv_editTextMarginEnd" format="dimension" />
+        <attr name="icv_editBackground" format="reference" />
+        <attr name="icv_editPaddingStart" />
+        <attr name="icv_editPaddingEnd" />
+        <attr name="icv_editPaddingTop" />
+        <attr name="icv_editPaddingBottom" />
     </declare-styleable>
 </resources>
