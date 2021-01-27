@@ -133,6 +133,9 @@
                 android:name=".DbMainActivity"
                 android:screenOrientation="portrait" />
         <activity
+                android:name=".widgettest.xml.RefreshImageGridViewActivity"
+                android:screenOrientation="portrait" />
+        <activity
                 android:name=".widgettest.xml.SearchBarActivity"
                 android:screenOrientation="portrait" />
         <activity

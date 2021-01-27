@@ -19,4 +19,8 @@ dependencies {
     //UI验证框架
     implementation 'com.github.yoojia:next-inputs-android:1.7.2'
     implementation 'com.github.zouli:KotlinNextInputs:v1.0.1'
+
+    //获取网络图片尺寸
+    //https://github.com/qstumn/FastImageSize
+    implementation 'q.rorbin:FastImageSize:1.0.3'
 }

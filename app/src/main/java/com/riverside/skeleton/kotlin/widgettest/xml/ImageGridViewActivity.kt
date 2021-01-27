@@ -19,6 +19,7 @@ import com.riverside.skeleton.kotlin.util.picasso.shadow
 import com.riverside.skeleton.kotlin.widget.containers.ImageGridView
 import com.riverside.skeleton.kotlin.widget.gallery.FullScreenActivity
 import com.riverside.skeleton.kotlin.widget.gallery.imageloader.ImageLoader
+import com.riverside.skeleton.kotlin.widget.gallery.pager.DotPagerView
 import com.riverside.skeleton.kotlin.widget.gallery.pager.NumberPagerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_imagegridview.*
@@ -163,7 +164,7 @@ class ImageGridViewActivity : SBaseActivity() {
             startActivity<FullScreenActivity>(
                 FullScreenActivity.IMAGE_URL to igv_image1.imageList,
                 FullScreenActivity.DEFAULT_INDEX to position,
-                FullScreenActivity.PAGER_VIEW to NumberPagerView::class.java.name
+                FullScreenActivity.PAGER_VIEW to DotPagerView::class.java.name
             )
         }
 

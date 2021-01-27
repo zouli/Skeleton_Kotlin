@@ -11,17 +11,23 @@ import android.widget.RelativeLayout
 import com.riverside.skeleton.kotlin.util.attributeinfo.Attr
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttrType
 import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
-import com.riverside.skeleton.kotlin.util.converter.dip
+import com.riverside.skeleton.kotlin.util.screen.deviceWidth
 import com.riverside.skeleton.kotlin.widget.R
 import com.riverside.skeleton.kotlin.widget.gallery.imageloader.ImageLoader
 import com.riverside.skeleton.kotlin.widget.gallery.imageloader.PicassoImageLoader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import q.rorbin.fastimagesize.FastImageSize
 import kotlin.math.abs
 
 /**
  * 图片显示Grid控件   1.1
+ *
  * b_e  2020/11/23
  * 1.1 添加SmartColumn加载器 2020/12/05
  * 1.1 修改一个图片的显示状态  2020/12/29
+ * 1.2 显示前先计算控件大小   2021/01/25
  */
 class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context, attrs) {
     constructor(context: Context) : this(context, null)
@@ -142,18 +148,59 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             else
                 this.columnCount
 
-    private val realWidth: Int get() = width - paddingLeft - paddingRight
+    private var realWidth = 0
 
-    val realHeight: Int
-        get() = if (imageList.size > 0) {
-            val columnCount = abs(smartColumnCount)
-            val (row, col, spec) = smartColumnLoader.getCoordinate(
-                imageList.size - 1, columnCount, smartColumnCount
-            )
-            val itemWidth =
-                (realWidth - (columnCount - 1) * dividerSize) / columnCount + (spec - 1) * dividerSize
-            (row + spec) * itemWidth + (row - 1) * dividerSize
-        } else 0
+    private val realHeightCache = mutableMapOf<String, Int>()
+
+    var realHeight = 0
+
+    /**
+     * 取得网络图片大小
+     */
+    private fun getNetworkImageSize(url: String) = runBlocking {
+        withContext(Dispatchers.Default) {
+            FastImageSize.with(url).setUseCache(false).get()
+        }
+    }
+
+    /**
+     * 取得真实宽度、高度
+     */
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+        super.onMeasure(widthSpec, heightSpec)
+        val widthMode = MeasureSpec.getMode(widthSpec)
+        val widthSize = MeasureSpec.getSize(widthSpec)
+
+        val width = when (widthMode) {
+            MeasureSpec.EXACTLY -> context.deviceWidth.coerceAtMost(widthSize)
+            MeasureSpec.AT_MOST -> 0.coerceAtMost(widthSize)
+            else -> return
+        }
+
+        realWidth = width - paddingLeft - paddingRight
+        realHeight = when {
+            isMulti -> {
+                val columnCount = abs(smartColumnCount)
+                val (row, _, spec) = smartColumnLoader.getCoordinate(
+                    imageList.size - 1, columnCount, smartColumnCount
+                )
+                val itemWidth =
+                    (realWidth - (columnCount - 1) * dividerSize) / columnCount + (spec - 1) * dividerSize
+                (row + spec) * itemWidth + (row - 1) * dividerSize
+            }
+            imageList.size == 1 -> {
+                realHeightCache[imageList[0]] ?: getNetworkImageSize(imageList[0]).let { size ->
+                    ((realWidth * 2 / 3).toDouble() / size[0].toDouble() * size[1].toDouble()).toInt()
+                        .apply {
+                            realHeightCache[imageList[0]] = this
+                        }
+                }
+            }
+            else -> 0
+        }
+
+        if (realHeight > 0) setMeasuredDimension(realWidth, realHeight)
+    }
 
     /**
      * 是否为多张图片
@@ -165,13 +212,13 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     private fun showImage() {
         this.post {
-            removeAllViews()
+            removeAllViewsInLayout()
+
             columnCount = abs(smartColumnCount)
 
             (0 until imageList.count()).forEach { i ->
-                this.addView(getImageView(i).apply {
-                    getLayoutParams(layoutParams, i)
-                })
+                val view = getImageView(i)
+                this.addViewInLayout(view, i, getLayoutParams(view.layoutParams, i))
             }
 
             //判断是否显示默认添加图片按钮
@@ -186,7 +233,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     /**
      * 取得LayoutParams
      */
-    private fun getLayoutParams(layoutParams: ViewGroup.LayoutParams, position: Int) {
+    private fun getLayoutParams(layoutParams: ViewGroup.LayoutParams, position: Int) =
         with(layoutParams as LayoutParams) {
             val (row, col, spec) = smartColumnLoader.getCoordinate(
                 position, columnCount, smartColumnCount
@@ -205,8 +252,8 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
 
             if (col > 0) this.leftMargin = dividerSize
             if (row > 0) this.topMargin = dividerSize
+            this
         }
-    }
 
     /**
      * 生成图片容器
@@ -232,7 +279,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      * 取得图片控件
      */
     private fun getImageView(position: Int) = rlImage.apply {
-        val iWidth = this@ImageGridView.width / abs(smartColumnCount)
+        val iWidth = realWidth / abs(smartColumnCount)
         addView(ivImage.apply {
             if (isMulti)
                 imageLoader.loadImage(this, imageList[position], iWidth, iWidth)
