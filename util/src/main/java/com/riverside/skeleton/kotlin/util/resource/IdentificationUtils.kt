@@ -5,10 +5,11 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 
 /**
- * 标识工具    1.1
+ * 标识工具    1.2
  *
  * b_e  2019/05/13
- * 1.1  根据字符串生成UUID   2020/12/15
+ * 1.1  根据字符串生成UUID 2020/12/15
+ * 1.2  生成16位hash   2021/01/28
  */
 
 val uuid: UUID get() = UUID.randomUUID()
@@ -27,3 +28,5 @@ val String.md5: String
         } catch (_: NoSuchAlgorithmException) {
             ""
         }
+
+fun Any.hashCode16() = this.hashCode().let { (it xor (it ushr 16)) and 0xFFFF }
