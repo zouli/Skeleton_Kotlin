@@ -11,6 +11,7 @@ import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.notice.snackbar
+import com.riverside.skeleton.kotlin.util.resource.getDrawableById
 import com.riverside.skeleton.kotlin.widget.containers.ImageGridView
 import com.riverside.skeleton.kotlin.widget.gallery.FullScreenActivity
 import com.riverside.skeleton.kotlin.widget.gallery.pager.NumberPagerView
@@ -44,7 +45,7 @@ class ImageGridViewActivity : SBaseActivity() {
                     igv_image = imageGridView {
                         background = ColorDrawable(0xFFF3F3F3.toInt())
                         columnCount = 4
-                        addButtonIcon = resources.getDrawable(R.drawable.image_grid_add_image)
+                        addButtonIcon = getDrawableById(R.drawable.image_grid_add_image)
                         dividerSize = 2.dip
                     }.lparams(matchParent, wrapContent)
 

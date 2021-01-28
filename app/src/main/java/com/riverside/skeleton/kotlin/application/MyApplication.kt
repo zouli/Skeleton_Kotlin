@@ -16,6 +16,7 @@ import com.riverside.skeleton.kotlin.dbtest.C
 import com.riverside.skeleton.kotlin.util.file.createNoMediaFile
 import com.riverside.skeleton.kotlin.util.file.mkdirs
 import com.riverside.skeleton.kotlin.util.file.unaryPlus
+import com.riverside.skeleton.kotlin.util.resource.getColorById
 import com.squareup.picasso.Picasso
 
 class MyApplication : SBaseApplication() {
@@ -55,7 +56,7 @@ class MyApplication : SBaseApplication() {
                         return ImageView(context)
                     }
                 })
-                .setToolbaseColor(resources.getColor(R.color.colorPrimary))
+                .setToolbaseColor(getColorById(R.color.colorPrimary))
                 .build()
         )
     }

@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.dip
+import com.riverside.skeleton.kotlin.util.resource.getDrawableById
 import org.jetbrains.anko.*
 
 class PairViewActivity : SBaseActivity() {
@@ -21,7 +22,7 @@ class PairViewActivity : SBaseActivity() {
 
                 pairView {
                     orientation = LinearLayout.VERTICAL
-                    background = resources.getDrawable(R.drawable.imagegrid_delete_image)
+                    background = getDrawableById(R.drawable.imagegrid_delete_image)
                     padding = 32.dip
                     createFirstText("AA", R.style.PairViewFirstText)
                     createSecondText("BB", R.style.PairViewSecondText)
@@ -30,7 +31,7 @@ class PairViewActivity : SBaseActivity() {
                 pairView {
                     orientation = LinearLayout.VERTICAL
                     padding = 32.dip
-                    createSecondImage(resources.getDrawable(R.mipmap.ic_launcher), 16.dip)
+                    createSecondImage(getDrawableById(R.mipmap.ic_launcher)!!, 16.dip)
                     createFirstText("aa", R.style.PairViewFirstText)
                 }.lparams(wrapContent, wrapContent, 1.0f)
 
@@ -38,7 +39,7 @@ class PairViewActivity : SBaseActivity() {
                     orientation = LinearLayout.VERTICAL
                     padding = 32.dip
                     createFirstImage(
-                        resources.getDrawable(R.mipmap.ic_launcher),
+                        getDrawableById(R.mipmap.ic_launcher)!!,
                         48.dip, R.style.PairViewFirstText
                     )
                     createSecondText("BB", R.style.PairViewSecondText)

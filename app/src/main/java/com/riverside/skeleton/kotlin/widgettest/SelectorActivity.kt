@@ -13,6 +13,7 @@ import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.util.extras.finishResult
 import com.riverside.skeleton.kotlin.util.image.tintDrawable
 import com.riverside.skeleton.kotlin.util.notice.toast
+import com.riverside.skeleton.kotlin.util.resource.getDrawableById
 import com.riverside.skeleton.kotlin.widget.adapter.SelectorListViewAdapter
 import com.riverside.skeleton.kotlin.widget.selector.SBaseSelectorActivity
 import org.jetbrains.anko.textColor
@@ -53,15 +54,14 @@ class SelectorActivity : SBaseSelectorActivity() {
         finish()
     }
 
-    @Suppress("DEPRECATION")
     @SuppressLint("DefaultLocale")
     override val adapter = SelectorListViewAdapter<String>(
         R.layout.list_item_checkable_linearlayout
     ) { viewHolder, _, item, _ ->
         viewHolder.setText(R.id.tv_text, item)
         viewHolder.setImageDrawable(
-            R.id.iv_image, resources.getDrawable(R.mipmap.ic_launcher)
-                .tintDrawable(R.color.checkable_image_selector)
+            R.id.iv_image,
+            getDrawableById(R.mipmap.ic_launcher)!!.tintDrawable(R.color.checkable_image_selector)
         )
     }.apply {
         filter { item, prefix ->

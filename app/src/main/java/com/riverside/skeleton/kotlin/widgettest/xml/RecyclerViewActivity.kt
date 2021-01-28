@@ -6,6 +6,7 @@ import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.image.tintDrawable
 import com.riverside.skeleton.kotlin.util.recyclerview.SpacesItemDecoration
+import com.riverside.skeleton.kotlin.util.resource.getDrawableById
 import com.riverside.skeleton.kotlin.widget.adapter.RecyclerAdapter
 import kotlinx.android.synthetic.main.activity_recycler_view.*
 
@@ -26,8 +27,7 @@ class RecyclerViewActivity : SBaseActivity() {
             viewHolder.setText(R.id.tv_text, item)
             viewHolder.setImageDrawable(
                 R.id.iv_image,
-                resources.getDrawable(R.mipmap.ic_launcher)
-                    .tintDrawable(R.color.checkable_image_selector)
+                getDrawableById(R.mipmap.ic_launcher)!!.tintDrawable(R.color.checkable_image_selector)
             )
         }
 
