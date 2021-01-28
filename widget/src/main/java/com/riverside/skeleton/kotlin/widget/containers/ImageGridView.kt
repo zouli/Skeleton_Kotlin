@@ -164,6 +164,12 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
     }
 
     /**
+     * 取得Item的宽度
+     */
+    private fun getItemWidth(columnCount: Int, spec: Int) =
+        (realWidth - paddingLeft - paddingRight - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
+
+    /**
      * 取得真实宽度、高度
      */
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
@@ -177,16 +183,16 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             else -> return
         }
 
-        realWidth = width - paddingLeft - paddingRight
+        realWidth = width
         realHeight = when {
             isMulti -> {
                 val columnCount = abs(smartColumnCount)
                 val (row, _, spec) = smartColumnLoader.getCoordinate(
-                    imageList.size - 1, columnCount, smartColumnCount
+                    if (isReadOnly || imageList.size == imageCount) imageList.size - 1 else imageList.size
+                    , columnCount, smartColumnCount
                 )
-                val itemWidth =
-                    (realWidth - (columnCount - 1) * dividerSize) / columnCount + (spec - 1) * dividerSize
-                (row + spec) * itemWidth + (row - 1) * dividerSize
+                val itemWidth = getItemWidth(columnCount, spec)
+                (row + spec) * itemWidth + (if (row > 0) row else 0) * dividerSize
             }
             imageList.size == 1 -> {
                 realHeightCache[imageList[0]] ?: getNetworkImageSize(imageList[0]).let { size ->
@@ -197,7 +203,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
                 }
             }
             else -> 0
-        }
+        } + paddingTop + paddingBottom
 
         if (realHeight > 0) setMeasuredDimension(realWidth, realHeight)
     }
@@ -242,8 +248,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
             this.rowSpec = spec(row, spec)
             this.columnSpec = spec(col, spec)
 
-            val itemWidth =
-                (realWidth - (columnCount - 1) * dividerSize) / columnCount * spec + (spec - 1) * dividerSize
+            val itemWidth = getItemWidth(columnCount, spec)
 
             if (isMulti) {
                 this.width = itemWidth
