@@ -3,11 +3,13 @@ package com.riverside.skeleton.kotlin.base.fragment
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.SparseArray
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.util.extras.BundleHelper
 import com.riverside.skeleton.kotlin.util.extras.IntentsHelper
+import com.riverside.skeleton.kotlin.util.resource.hashCode16
 
 /**
  * Fragment基类 1.0
@@ -53,24 +55,23 @@ abstract class SBaseFragment : Fragment(), ISBaseFragment {
     /**
      * 封装ForResult
      */
-    var callbackIndex = mutableListOf<String>()
-    var callbackList = mutableMapOf<Int, (resultCode: Int, intent: Intent?) -> Unit>()
+    val callbacks = SparseArray<ResultCallback>()
 
     inline fun <reified T : Activity> startActivityForResult(
         vararg params: Pair<String, Any?>,
         noinline callback: (resultCode: Int, intent: Intent?) -> Unit
     ) {
-        var index = callbackIndex.indexOf(T::class.java.toString())
-        if (index < 0) {
-            callbackIndex.add(T::class.java.toString())
-            index = callbackIndex.size - 1
-            callbackList[index] = callback
-        }
-        IntentsHelper.startActivityForResult(this, T::class.java, params, index)
+        callbacks.put(callback.hashCode16(), callback)
+        IntentsHelper.startActivityForResult(this, T::class.java, params, callback.hashCode16())
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackList[requestCode]?.let { it(resultCode, data) }
+        super.onActivityResult(requestCode, resultCode, data)
+
+        callbacks[requestCode]?.let {
+            it(resultCode, data)
+            callbacks.remove(requestCode)
+        }
     }
 
     override fun onDestroyView() {

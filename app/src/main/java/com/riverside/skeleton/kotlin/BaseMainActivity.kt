@@ -1,6 +1,5 @@
 package com.riverside.skeleton.kotlin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.CheckBox
@@ -21,7 +20,6 @@ import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
 
 class BaseMainActivity : SBaseActivity() {
-    lateinit var upgradeHelper: UpgradeHelper
     lateinit var cb_all: CheckBox
     var a: Int by Preference(default = 0)
 
@@ -97,7 +95,7 @@ class BaseMainActivity : SBaseActivity() {
 
                 button("upgrade") {
                     onClick {
-                        upgradeHelper = UpgradeHelper(activity)
+                        val upgradeHelper = UpgradeHelper(activity)
                         upgradeHelper.startUpgrade(
                             "Test",
                             "Test Upgrade",
@@ -134,10 +132,5 @@ class BaseMainActivity : SBaseActivity() {
                 2 -> finish()
             }
         } || super.onKeyUp(keyCode, event)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        upgradeHelper.onActivityResult(requestCode, resultCode, data)
-        super.onActivityResult(requestCode, resultCode, data)
     }
 }

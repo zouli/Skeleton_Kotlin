@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package com.riverside.skeleton.kotlin.util.extras
 
 import android.app.Activity

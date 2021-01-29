@@ -6,17 +6,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.fragment.app.FragmentActivity
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
 import com.riverside.skeleton.kotlin.base.application.SBaseApplication
+import com.riverside.skeleton.kotlin.base.fragment.resultRequest
 import com.riverside.skeleton.kotlin.base.utils.permission.requestPermissions
 
 /**
  * 自动升级服务   1.0
  * b_e  2019/09/26
  */
-class UpgradeHelper(val activity: Activity) {
-    private val REQUEST_CODE_UNKNOWN_APP = 100
-
+class UpgradeHelper(val activity: FragmentActivity) {
     private val intent = Intent(activity, UpgradeService().javaClass)
     private lateinit var title: String
     private lateinit var message: String
@@ -45,7 +45,10 @@ class UpgradeHelper(val activity: Activity) {
                     Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
                     Uri.parse("package:${activity.packageName}")
                 )
-                activity.startActivityForResult(intent, REQUEST_CODE_UNKNOWN_APP)
+
+                activity.resultRequest(intent) { _, _ ->
+                    checkPermission()
+                }
             }
         } else {
             doUpgrade()
@@ -72,11 +75,5 @@ class UpgradeHelper(val activity: Activity) {
      */
     fun stopUpgrade() {
         activity.stopService(intent)
-    }
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_UNKNOWN_APP) {
-            checkPermission()
-        }
     }
 }
