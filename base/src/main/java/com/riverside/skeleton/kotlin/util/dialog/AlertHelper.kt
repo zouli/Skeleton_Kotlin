@@ -4,12 +4,13 @@ import android.app.AlertDialog
 import android.app.Service
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.DialogTitle
 import androidx.fragment.app.Fragment
 import com.riverside.skeleton.kotlin.base.R
@@ -73,6 +74,8 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
     private var result = Result.NO
     private lateinit var dialog: AlertDialog
     private lateinit var handler: Handler
+    private var windowSetting: Window.() -> Unit = {}
+    private var maxHeight: Int = 0
 
     var title: CharSequence
         @Deprecated(GETTER, level = DeprecationLevel.ERROR) get() = getter()
@@ -128,10 +131,23 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
             builder.setCancelable(value)
         }
 
-    fun <T> items(data: List<T>, block: (dialog: DialogInterface, item: T, index: Int) -> Unit) {
-        builder.setItems(Array(data.size) { index -> data[index].toString() }) { dialog, which ->
-            block(dialog, data[which], which)
-        }
+    fun <T> items(
+        data: List<T>, isCenterAble: Boolean = false,
+        block: (dialog: DialogInterface, item: T, index: Int) -> Unit
+    ) {
+        val array = Array(data.size) { index -> data[index].toString() }
+        if (isCenterAble) {
+            builder.setAdapter(
+                ArrayAdapter<CharSequence>(
+                    context, R.layout.select_dialog_item_center, android.R.id.text1, array
+                )
+            ) { dialog, which ->
+                block(dialog, data[which], which)
+            }
+        } else
+            builder.setItems(array) { dialog, which ->
+                block(dialog, data[which], which)
+            }
     }
 
     fun <T> singleChoice(
@@ -225,7 +241,31 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
 
     fun build(): AlertDialog = builder.create()
 
-    fun show(): AlertDialog = builder.show()
+    fun show(): AlertDialog = builder.show().apply {
+        window?.windowSetting().also {
+            this.listView?.apply {
+                addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                    if (this.height > maxHeight)
+                        this.layoutParams.apply { height = maxHeight }
+                }
+            }
+        }
+    }
+
+    fun setWindow(block: Window.() -> Unit) {
+        windowSetting = block
+    }
+
+    fun showAtBottom(maxHeight: Int = Int.MAX_VALUE, backgroundColor: Int = Color.WHITE) {
+        this.maxHeight = maxHeight
+        setWindow {
+            attributes?.apply {
+                gravity = Gravity.BOTTOM
+                width = WindowManager.LayoutParams.MATCH_PARENT
+                setBackgroundDrawable(ColorDrawable(backgroundColor))
+            }
+        }
+    }
 
     private fun setResult(result: Result) {
         this.result = result

@@ -2,6 +2,7 @@ package com.riverside.skeleton.kotlin.basetest
 
 import com.riverside.skeleton.kotlin.R
 import com.riverside.skeleton.kotlin.base.activity.SBaseActivity
+import com.riverside.skeleton.kotlin.util.converter.dip
 import com.riverside.skeleton.kotlin.util.dialog.ProgressDialog
 import com.riverside.skeleton.kotlin.util.dialog.alert
 import com.riverside.skeleton.kotlin.util.dialog.hProgressDialog
@@ -85,14 +86,23 @@ class DialogActivity : SBaseActivity() {
                             listOf(
                                 Item("aaa", "1"),
                                 Item("bbb", "2"),
+                                Item("aaa", "1"),
+                                Item("bbb", "2"),
+                                Item("aaa", "1"),
+                                Item("bbb", "2"),
+                                Item("aaa", "1"),
+                                Item("bbb", "2"),
+                                Item("aaa", "1"),
+                                Item("bbb", "2"),
                                 Item("ccc", "3")
-                            )
+                            ), true
                         ) { _, item, _ ->
                             item.key.toast(activity)
                         }
                         cancelButton { _, _ ->
                             "CANCEL".toast(activity)
                         }
+                        showAtBottom(400.dip)
                     }.show()
                 }
             }
