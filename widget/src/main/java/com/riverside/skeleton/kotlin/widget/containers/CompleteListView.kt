@@ -36,13 +36,13 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
 
     @Attr(AttrType.DRAWABLE)
     private val _divider: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.CompleteListView,
+        context, attrs, R.styleable.CompleteListView,
         R.styleable.CompleteListView_clv_divider, null
     )
 
     @Attr(AttrType.DIMENSION)
     private val _dividerHeight: Int by AttributeSetInfo(
-        attrs, R.styleable.CompleteListView,
+        context, attrs, R.styleable.CompleteListView,
         R.styleable.CompleteListView_clv_dividerHeight, 0
     )
 

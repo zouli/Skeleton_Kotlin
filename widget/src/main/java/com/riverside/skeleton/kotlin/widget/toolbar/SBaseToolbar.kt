@@ -25,7 +25,9 @@ abstract class SBaseToolbar(context: Context, attrs: AttributeSet?) : AppBarLayo
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.view_sbase_toolbar, this@SBaseToolbar)
         tb_toolbar.title = ""
-        (ActivityStackManager.currentActivity as AppCompatActivity).setSupportActionBar(tb_toolbar)
+        if (!isInEditMode)
+            (ActivityStackManager.currentActivity as AppCompatActivity)
+                .setSupportActionBar(tb_toolbar)
     }
 
     val toolbar: Toolbar = tb_toolbar

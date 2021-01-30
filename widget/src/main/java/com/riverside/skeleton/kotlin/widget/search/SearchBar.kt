@@ -32,45 +32,45 @@ class SearchBar(context: Context, attrs: AttributeSet?) : LinearLayout(context, 
     //左侧图片
     @Attr(AttrType.DRAWABLE)
     private val logo: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_logo, null
+        context, attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_logo, null
     )
 
     //hint文字
     @Attr(AttrType.STRING)
     private val hint: String by AttributeSetInfo(
-        attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_hint, ""
+        context, attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_hint, ""
     )
 
     //取消按钮文字
     @Attr(AttrType.STRING)
     private val cancelTitle: String by AttributeSetInfo(
-        attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_cancelButton, ""
+        context, attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_cancelButton, ""
     )
 
     //查询按钮文字
     @Attr(AttrType.STRING)
     private val searchTitle: String by AttributeSetInfo(
-        attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_searchButton, ""
+        context, attrs, R.styleable.SearchBar, R.styleable.SearchBar_sb_searchButton, ""
     )
 
     //输入框左侧空白
     @Attr(AttrType.DIMENSION)
     private val editTextMarginStart: Int by AttributeSetInfo(
-        attrs, R.styleable.SearchBar,
+        context, attrs, R.styleable.SearchBar,
         R.styleable.SearchBar_sb_editTextMarginStart, 0
     )
 
     //是否显示查询按钮
     @Attr(AttrType.BOOLEAN)
     private val buttonVisibility: Boolean by AttributeSetInfo(
-        attrs, R.styleable.SearchBar,
+        context, attrs, R.styleable.SearchBar,
         R.styleable.SearchBar_sb_buttonVisibility, true
     )
 
     //是否得到焦点
     @Attr(AttrType.BOOLEAN)
     private val focusable: Boolean by AttributeSetInfo(
-        attrs, R.styleable.SearchBar,
+        context, attrs, R.styleable.SearchBar,
         R.styleable.SearchBar_sb_isFocusable, true
     )
 

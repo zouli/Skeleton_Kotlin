@@ -1,5 +1,6 @@
 package com.riverside.skeleton.kotlin.util.attributeinfo
 
+import android.content.Context
 import android.util.AttributeSet
 import com.riverside.skeleton.kotlin.util.resource.ContextHolder
 import kotlin.properties.ReadOnlyProperty
@@ -13,10 +14,10 @@ import kotlin.reflect.full.findAnnotation
  */
 
 class AttributeSetInfo<T>(
+    private val context: Context,
     private val attrs: AttributeSet?, private val styleableId: IntArray,
     private val attrId: Int, private val default: T
 ) : ReadOnlyProperty<Any?, T> {
-    private val context = ContextHolder.applicationContext
     private val attrMap = mutableMapOf<Int, T>()
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {

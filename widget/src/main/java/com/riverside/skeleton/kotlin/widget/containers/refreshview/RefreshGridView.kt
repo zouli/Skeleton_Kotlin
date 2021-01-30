@@ -21,25 +21,25 @@ class RefreshGridView(context: Context, attrs: AttributeSet?) : RefreshAbsListVi
 
     @Attr(AttrType.FLAG)
     private val _direction: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshGridView,
+        context, attrs, R.styleable.RefreshGridView,
         R.styleable.RefreshGridView_rgv_direction, 2
     )
 
     @Attr(AttrType.INTEGER)
     private val _numColumns: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshGridView,
+        context, attrs, R.styleable.RefreshGridView,
         R.styleable.RefreshGridView_rgv_numColumns, 1
     )
 
     @Attr(AttrType.DIMENSION)
     private val _horizontalSpacing: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshGridView,
+        context, attrs, R.styleable.RefreshGridView,
         R.styleable.RefreshGridView_rgv_horizontalSpacing, 0
     )
 
     @Attr(AttrType.DIMENSION)
     private val _verticalSpacing: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshGridView,
+        context, attrs, R.styleable.RefreshGridView,
         R.styleable.RefreshGridView_rgv_verticalSpacing, 0
     )
 

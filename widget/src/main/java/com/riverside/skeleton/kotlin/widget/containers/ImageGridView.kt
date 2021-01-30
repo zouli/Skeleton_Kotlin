@@ -43,7 +43,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.BOOLEAN)
     private val _isReadOnly: Boolean by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_readOnly, false
     )
 
@@ -55,7 +55,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.BOOLEAN)
     private val _isSmartColumnCount: Boolean by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_smartColumnCount, false
     )
 
@@ -64,7 +64,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.DRAWABLE)
     private val _addButtonIcon: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_addButtonIcon, null
     )
 
@@ -73,7 +73,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.DRAWABLE)
     private val _deleteButtonIcon: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_deleteButtonIcon, null
     )
 
@@ -82,7 +82,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.INTEGER)
     private val _imageCount: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_imageCount, 9
     )
 
@@ -91,7 +91,7 @@ class ImageGridView(context: Context, attrs: AttributeSet?) : GridLayout(context
      */
     @Attr(AttrType.DIMENSION)
     private val _dividerSize: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageGridView,
+        context, attrs, R.styleable.ImageGridView,
         R.styleable.ImageGridView_igv_dividerSize, 0
     )
 

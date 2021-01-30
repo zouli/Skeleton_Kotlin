@@ -37,21 +37,21 @@ class RefreshCompleteListView(
     //刷新方向
     @Attr(AttrType.FLAG)
     private val _direction: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshCompleteListView,
+        context, attrs, R.styleable.RefreshCompleteListView,
         R.styleable.RefreshCompleteListView_rclv_direction, 2
     )
 
     //分割位
     @Attr(AttrType.DRAWABLE)
     private val _divider: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.RefreshCompleteListView,
+        context, attrs, R.styleable.RefreshCompleteListView,
         R.styleable.RefreshCompleteListView_rclv_divider, null
     )
 
     //分割位高度
     @Attr(AttrType.DIMENSION)
     private val _dividerHeight: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshCompleteListView,
+        context, attrs, R.styleable.RefreshCompleteListView,
         R.styleable.RefreshCompleteListView_rclv_dividerHeight, 1
     )
 

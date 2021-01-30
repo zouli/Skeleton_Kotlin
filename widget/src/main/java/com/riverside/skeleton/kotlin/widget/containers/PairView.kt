@@ -26,7 +26,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.REFERENCE)
     private val firstViewStyle: Int by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_firstViewStyle, 0
     )
 
@@ -35,7 +35,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.REFERENCE)
     private val secondViewStyle: Int by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_secondViewStyle, 0
     )
 
@@ -44,7 +44,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.DRAWABLE)
     private val firstImage: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_firstImage, null
     )
 
@@ -53,7 +53,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.DRAWABLE)
     private val secondImage: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_secondImage, null
     )
 
@@ -62,7 +62,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.DIMENSION)
     private val firstImageSize: Int by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_firstImageSize, LayoutParams.MATCH_PARENT
     )
 
@@ -71,7 +71,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.DIMENSION)
     private val secondImageSize: Int by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_secondImageSize, LayoutParams.MATCH_PARENT
     )
 
@@ -80,7 +80,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.STRING)
     private val firstText: String by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_firstText, ""
     )
 
@@ -89,7 +89,7 @@ class PairView(context: Context, attrs: AttributeSet?) : CheckableLinearLayout(c
      */
     @Attr(AttrType.STRING)
     private val secondText: String by AttributeSetInfo(
-        attrs, R.styleable.PairView,
+        context, attrs, R.styleable.PairView,
         R.styleable.PairView_pv_secondText, ""
     )
 

@@ -23,7 +23,7 @@ open class CheckableLinearLayout(context: Context, attrs: AttributeSet?) :
 
     @Attr(AttrType.BOOLEAN)
     private val mChildCheckable: Boolean by AttributeSetInfo(
-        attrs, R.styleable.CheckableLinearLayout,
+        context, attrs, R.styleable.CheckableLinearLayout,
         R.styleable.CheckableLinearLayout_cll_childCheckable, false
     )
 

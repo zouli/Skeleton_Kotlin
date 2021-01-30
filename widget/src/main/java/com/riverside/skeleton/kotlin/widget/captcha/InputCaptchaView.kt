@@ -34,7 +34,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //获取验证码间隔时间（秒）
     @Attr(AttrType.INTEGER)
     private val sleepSecond: Int by AttributeSetInfo(
-        attrs, R.styleable.InputCaptchaView,
+        context, attrs, R.styleable.InputCaptchaView,
         R.styleable.InputCaptchaView_icv_sleepSecond, 60
     )
 
@@ -45,7 +45,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //验证码输入框长度
     @Attr(AttrType.INTEGER)
     private val maxLength: Int by AttributeSetInfo(
-        attrs, R.styleable.InputCaptchaView,
+        context, attrs, R.styleable.InputCaptchaView,
         R.styleable.InputCaptchaView_icv_maxLength, 0
     )
 
@@ -56,7 +56,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //设置Hint
     @Attr(AttrType.STRING)
     private val textHint: String by AttributeSetInfo(
-        attrs, R.styleable.InputCaptchaView,
+        context, attrs, R.styleable.InputCaptchaView,
         R.styleable.InputCaptchaView_icv_textHint, ""
     )
 
@@ -68,7 +68,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框PaddingTop
     @Attr(AttrType.DIMENSION)
     private val editPaddingTop: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageCaptchaView,
+        context, attrs, R.styleable.ImageCaptchaView,
         R.styleable.ImageCaptchaView_icv_editPaddingTop, -1
     )
 
@@ -79,7 +79,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框PaddingBottom
     @Attr(AttrType.DIMENSION)
     private val editPaddingBottom: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageCaptchaView,
+        context, attrs, R.styleable.ImageCaptchaView,
         R.styleable.ImageCaptchaView_icv_editPaddingBottom, -1
     )
 
@@ -90,7 +90,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框PaddingStart
     @Attr(AttrType.DIMENSION)
     private val editPaddingStart: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageCaptchaView,
+        context, attrs, R.styleable.ImageCaptchaView,
         R.styleable.ImageCaptchaView_icv_editPaddingStart, -1
     )
 
@@ -101,7 +101,7 @@ class InputCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框PaddingEnd
     @Attr(AttrType.DIMENSION)
     private val editPaddingEnd: Int by AttributeSetInfo(
-        attrs, R.styleable.ImageCaptchaView,
+        context, attrs, R.styleable.ImageCaptchaView,
         R.styleable.ImageCaptchaView_icv_editPaddingEnd, -1
     )
 

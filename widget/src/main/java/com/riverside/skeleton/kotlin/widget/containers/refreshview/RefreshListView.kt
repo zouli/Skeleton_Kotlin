@@ -23,21 +23,21 @@ class RefreshListView(context: Context, attrs: AttributeSet?) : RefreshAbsListVi
     //刷新方向
     @Attr(AttrType.FLAG)
     private val _direction: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshListView,
+        context, attrs, R.styleable.RefreshListView,
         R.styleable.RefreshListView_rlv_direction, 2
     )
 
     //分割位
     @Attr(AttrType.DRAWABLE)
     private val _divider: Drawable? by AttributeSetInfo(
-        attrs, R.styleable.RefreshListView,
+        context, attrs, R.styleable.RefreshListView,
         R.styleable.RefreshListView_rlv_divider, null
     )
 
     //分割位高度
     @Attr(AttrType.DIMENSION)
     private val _dividerHeight: Int by AttributeSetInfo(
-        attrs, R.styleable.RefreshListView,
+        context, attrs, R.styleable.RefreshListView,
         R.styleable.RefreshListView_rlv_dividerHeight, 1
     )
 

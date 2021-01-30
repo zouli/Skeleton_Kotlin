@@ -36,7 +36,7 @@ class BoxCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框个数
     @Attr(AttrType.INTEGER)
     private val charNumber: Int by AttributeSetInfo(
-        attrs, R.styleable.BoxCaptchaView,
+        context, attrs, R.styleable.BoxCaptchaView,
         R.styleable.BoxCaptchaView_bcv_charNumber, 6
     )
 
@@ -47,7 +47,7 @@ class BoxCaptchaView(context: Context, attrs: AttributeSet?) :
     //输入框间隔
     @Attr(AttrType.DIMENSION)
     private val divideWidth: Int by AttributeSetInfo(
-        attrs, R.styleable.BoxCaptchaView,
+        context, attrs, R.styleable.BoxCaptchaView,
         R.styleable.BoxCaptchaView_bcv_divideWidth, 0
     )
 
@@ -58,7 +58,7 @@ class BoxCaptchaView(context: Context, attrs: AttributeSet?) :
     //显示框样式
     @Attr(AttrType.REFERENCE)
     private val itemStyle: Int by AttributeSetInfo(
-        attrs, R.styleable.BoxCaptchaView,
+        context, attrs, R.styleable.BoxCaptchaView,
         R.styleable.BoxCaptchaView_bcv_itemStyle, R.style.BoxCaptcha_Item
     )
 
