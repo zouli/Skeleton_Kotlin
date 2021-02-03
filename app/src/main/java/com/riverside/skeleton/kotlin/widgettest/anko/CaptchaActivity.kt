@@ -1,5 +1,6 @@
 package com.riverside.skeleton.kotlin.widgettest.anko
 
+import android.graphics.BitmapFactory
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import com.github.yoojia.inputs.StaticScheme
@@ -16,6 +17,9 @@ import com.riverside.skeleton.kotlin.widget.captcha.InputCaptchaView
 import com.riverside.skeleton.kotlin.widget.captcha.kotlinnextinputs.nextInput
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk27.coroutines.onClick
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 class CaptchaActivity : SBaseActivity() {
     lateinit var et_phone: EditText
@@ -64,9 +68,26 @@ class CaptchaActivity : SBaseActivity() {
                 setMaxLength(4)
                 setEditTextMarginEnd(8.dip)
                 setEditPaddingTop(2.dip)
-                setCaptchaUrl("http://zyln.org/zyz/code.do?t=" + System.currentTimeMillis()) {
+                Thread {
+                    try {
+                        val netUrl =
+                            URL("http://zyln.org/zyz/code.do?t=" + System.currentTimeMillis())
+                        val conn: HttpURLConnection = netUrl.openConnection() as HttpURLConnection
+                        conn.requestMethod = "GET"
+                        conn.connectTimeout = 1000
+                        if (conn.responseCode == HttpURLConnection.HTTP_OK) {
+                            val map: Map<String, List<String>> = conn.headerFields
+//                            map["Set-Cookie"]?.let { block(it) }
+                            val inputStream = conn.inputStream
+                            val bmp = BitmapFactory.decodeStream(inputStream) //读取图像数据
+                            this.setCaptchaImage(bmp)
 
-                }
+                            inputStream.close()
+                        }
+                        conn.disconnect()
+                    } catch (e: IOException) {
+                    }
+                }.start()
             }.lparams(matchParent, wrapContent)
         }
     }

@@ -1,7 +1,7 @@
 package com.riverside.skeleton.kotlin.widget.captcha
 
 import android.content.Context
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.os.Build
 import android.text.InputFilter
 import android.util.AttributeSet
@@ -14,14 +14,12 @@ import com.riverside.skeleton.kotlin.util.attributeinfo.AttributeSetInfo
 import com.riverside.skeleton.kotlin.util.looper.runOnUi
 import com.riverside.skeleton.kotlin.widget.R
 import kotlinx.android.synthetic.main.view_image_captcha.view.*
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
- * 图片验证码控件  1.0
+ * 图片验证码控件  1.1
  *
  * b_e  2021/01/26
+ * 1.1  移除访问网络功能    2021/02/03
  */
 class ImageCaptchaView(context: Context, attrs: AttributeSet?) :
     LinearLayout(context, attrs), CaptchaView {
@@ -135,28 +133,10 @@ class ImageCaptchaView(context: Context, attrs: AttributeSet?) :
         setEditPaddingEnd(editPaddingEnd)
     }
 
-    fun setCaptchaUrl(url: String, block: (cookies: List<String>) -> Unit) {
-        Thread {
-            try {
-                val netUrl = URL(url)
-                val conn: HttpURLConnection = netUrl.openConnection() as HttpURLConnection
-                conn.requestMethod = "GET"
-                conn.connectTimeout = 1000
-                if (conn.responseCode == HttpURLConnection.HTTP_OK) {
-                    val map: Map<String, List<String>> = conn.headerFields
-                    map["Set-Cookie"]?.let { block(it) }
-                    val inputStream = conn.inputStream
-                    val bmp = BitmapFactory.decodeStream(inputStream) //读取图像数据
-                    runOnUi {
-                        iv_vc.setImageBitmap(bmp)
-                    }
-
-                    inputStream.close()
-                }
-                conn.disconnect()
-            } catch (e: IOException) {
-            }
-        }.start()
+    fun setCaptchaImage(bitmap: Bitmap) {
+        runOnUi {
+            iv_vc.setImageBitmap(bitmap)
+        }
     }
 
     override val text get() = et_vc.text.toString()

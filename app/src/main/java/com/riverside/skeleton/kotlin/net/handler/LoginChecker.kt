@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.core.Flowable
 import java.util.*
 
 class LoginChecker : SessionHandler {
-    override fun canToSave(url: String): Boolean = ConstUrls2.LOGIN in url
+    override fun canToSave(url: String): Boolean = ConstUrls2.LOGIN in url || "/code.do" in url
 
     override fun reLogin(): Flowable<Any> =
         RetrofitBindHelper.getInstance().doBind(CommonRestService::class.java).login()
