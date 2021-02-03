@@ -156,6 +156,7 @@ class CompleteListView(context: Context, attrs: AttributeSet?) : LinearLayout(co
     fun clearChoices() {
         mCheckStates.clear()
         mCheckedIdStates.clear()
+        updateCheckedViews()
     }
 
     /**
