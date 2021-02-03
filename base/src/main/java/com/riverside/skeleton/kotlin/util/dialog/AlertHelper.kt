@@ -239,7 +239,7 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
         }
     }
 
-    fun build(): AlertDialog = builder.create()
+    fun build(): AlertDialog = builder.create().apply { dialog = this }
 
     fun show(): AlertDialog = builder.show().apply {
         window?.windowSetting().also {
@@ -250,6 +250,10 @@ open class AlertBuilder(val context: Context, themeResId: Int) {
                 }
             }
         }
+    }.apply { dialog = this }
+
+    fun dismiss() {
+        if (::dialog.isInitialized) dialog.dismiss()
     }
 
     fun setWindow(block: Window.() -> Unit) {
