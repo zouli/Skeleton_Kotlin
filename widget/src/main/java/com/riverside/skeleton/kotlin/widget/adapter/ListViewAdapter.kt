@@ -61,6 +61,8 @@ open class ListViewAdapter<D>() : BaseAdapter() {
         notifyDataSetChanged()
     }
 
+    fun getItems() = mDataSet
+
     fun clear() = mDataSet.clear()
 
     fun clearAndNotify() = mDataSet.clear().apply {
