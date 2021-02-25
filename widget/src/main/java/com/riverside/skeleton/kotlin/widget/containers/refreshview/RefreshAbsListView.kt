@@ -7,13 +7,12 @@ import android.view.View
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.BaseAdapter
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
-import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
 
 /**
  * 可刷新的AbsListview  1.1
+ *
  * b_e  2020/11/19
  * 1.1  抽象RefreshView   2021/01/25
  */

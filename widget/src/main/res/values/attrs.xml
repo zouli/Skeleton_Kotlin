@@ -108,4 +108,13 @@
         <attr name="icv_editPaddingTop" />
         <attr name="icv_editPaddingBottom" />
     </declare-styleable>
+
+    <declare-styleable name="AddressSelectorView">
+        <attr name="asv_selectedLayoutId" format="reference" />
+        <attr name="asv_listItemLayoutId" format="reference" />
+        <attr name="asv_selectSize" format="integer" />
+        <attr name="asv_selectHint" format="reference|string" />
+        <attr name="asv_listDivider" format="reference" />
+        <attr name="asv_listDividerHeight" format="dimension" />
+    </declare-styleable>
 </resources>

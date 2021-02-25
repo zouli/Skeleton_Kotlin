@@ -147,6 +147,9 @@
         <activity
                 android:name=".widgettest.anko.PairViewActivity"
                 android:screenOrientation="portrait" />
+        <activity
+                android:name=".widgettest.xml.AddressSelectorViewActivity"
+                android:screenOrientation="portrait" />
 
         <service android:name=".basetest.TestService" />
     </application>
