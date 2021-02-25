@@ -29,17 +29,13 @@ object PreferenceHelper {
         context.getSharedPreferences(app_home, Context.MODE_PRIVATE)
     }
 
-    fun delete(vararg key: String) {
-        if (key.isEmpty()) {
-            prefs.edit().clear().apply()
-        } else {
-            key.forEach {
-                prefs.edit().remove(it).apply()
-            }
-        }
+    fun delete(vararg key: String) = if (key.isEmpty()) {
+        prefs.edit().clear().apply()
+    } else key.forEach {
+        prefs.edit().remove(it).apply()
     }
 
-    internal fun <U> findPreference(name: String, default: U): U = with(prefs) {
+    fun <U> findPreference(name: String, default: U): U = with(prefs) {
         val res: Any = when (default) {
             is Long -> getLong(name, default)
             is String -> getString(name, default)
@@ -51,7 +47,7 @@ object PreferenceHelper {
         res as U
     }
 
-    internal fun <U> putPreference(name: String, value: U) = with(prefs.edit()) {
+    fun <U> putPreference(name: String, value: U) = with(prefs.edit()) {
         when (value) {
             is Long -> putLong(name, value)
             is String -> putString(name, value)

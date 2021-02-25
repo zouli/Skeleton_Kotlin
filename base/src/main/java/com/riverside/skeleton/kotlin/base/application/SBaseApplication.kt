@@ -63,9 +63,7 @@ open class SBaseApplication : MultiDexApplication() {
         //启动Activity状态监控
         ActivityStaticMonitor.init(instance)
 
-        moduleApplicationList.forEach {
-            it.onCreate()
-        }
+        moduleApplicationList.forEach(Application::onCreate)
     }
 
     @SuppressLint("DiscouragedPrivateApi")

@@ -29,9 +29,7 @@ class ActivityStaticMonitor private constructor() : Application.ActivityLifecycl
             transferListenerList?.let {
                 //抄袭的android的处理方式，应该是防止多线程数据混乱
                 val tmpListeners = transferListenerList?.clone() as ArrayList<TransferListener>
-                tmpListeners.forEach {
-                    it.onBecameForeground()
-                }
+                tmpListeners.forEach(TransferListener::onBecameForeground)
             }
         }
     }
@@ -49,9 +47,7 @@ class ActivityStaticMonitor private constructor() : Application.ActivityLifecycl
             transferListenerList?.let {
                 //抄袭的android的处理方式，应该是防止多线程数据混乱
                 val tmpListeners = transferListenerList?.clone() as ArrayList<TransferListener>
-                tmpListeners.forEach {
-                    it.onBecameBackground()
-                }
+                tmpListeners.forEach(TransferListener::onBecameBackground)
             }
         }
     }

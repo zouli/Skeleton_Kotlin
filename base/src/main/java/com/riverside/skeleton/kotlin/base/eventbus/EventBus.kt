@@ -95,9 +95,7 @@ object EventBus : CoroutineScope {
     fun unregisterAll() {
         coroutineContext.cancelChildren()
         contextMap.forEach { (_, eventDataList) ->
-            eventDataList.forEach {
-                it.cancel()
-            }
+            eventDataList.forEach(EventConsumer<*>::cancel)
             eventDataList.clear()
         }
         contextMap.clear()
