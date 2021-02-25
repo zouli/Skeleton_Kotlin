@@ -19,7 +19,6 @@ import com.riverside.skeleton.kotlin.widget.R
 import kotlinx.android.synthetic.main.activity_web_browser.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.system.exitProcess
 
 /**
  * 共通Web画面      1.0
@@ -109,8 +108,6 @@ class WebBrowserActivity : SBaseActivity() {
             (parent as ViewGroup).removeView(this)
             destroy()
         }
-
-        exitProcess(0)
     }
 
     /**

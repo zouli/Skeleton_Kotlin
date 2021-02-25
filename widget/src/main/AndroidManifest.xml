@@ -10,8 +10,8 @@
                 android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
+                android:launchMode="singleTask"
                 android:name=".web.WebBrowserActivity"
-                android:process=":web"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
 
