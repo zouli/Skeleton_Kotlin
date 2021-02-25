@@ -15,7 +15,7 @@ interface SessionHandler {
     /**
      * 重新登录
      */
-    fun reLogin(): Flowable<Any>
+    fun reLogin(): Flowable<*>
 
     /**
      * 跳转到登录画面

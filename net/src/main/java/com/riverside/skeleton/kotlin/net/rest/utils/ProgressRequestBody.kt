@@ -16,9 +16,7 @@ import java.io.File
 import java.io.FileInputStream
 
 class ProgressRequestBody(
-    val boundary: ByteString,
-    val type: MediaType,
-    val parts: List<Part>
+    val boundary: ByteString, val type: MediaType, val parts: List<Part>
 ) : RequestBody() {
     private lateinit var callbacks: UploadCallbacks
     private val contextType =
@@ -32,7 +30,7 @@ class ProgressRequestBody(
     override fun contentType(): MediaType? = contextType
 
     override fun writeTo(sink: BufferedSink) {
-        for (p in 0..parts.size) {
+        (parts.indices).map { p ->
             val part = parts[p]
             val headers = part.headers
             callbacks = part.callbacks
@@ -48,7 +46,7 @@ class ProgressRequestBody(
             sink.write(boundary)
             sink.write(CRLF)
 
-            for (h in 0..headers.size) {
+            (0 until headers.size).map { h ->
                 sink.writeUtf8(headers.name(h))
                     .write(COLON_SPACE)
                     .writeUtf8(headers.value(h))
@@ -132,7 +130,7 @@ class ProgressRequestBody(
 
             private fun appendQuotedString(target: StringBuilder, key: String): StringBuilder {
                 target.append('"')
-                for (i in 0..key.length) {
+                (key.indices).map { i ->
                     when (val ch = key[i]) {
                         '\n' -> target.append("%0A")
                         '\r' -> target.append("%0D")

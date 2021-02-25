@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.core.Flowable
  */
 object SessionHandlerFactory {
     val session_save_point: String by MetadataInfo("SESSION_SAVE_POINT", "")
+
     /**
      * 取得当前Session处理对象
      * 根据session_save_point中设置的类创建对象
@@ -32,7 +33,7 @@ object SessionHandlerFactory {
     /**
      * 调用当前Session处理对象的"重新登录"方法
      */
-    fun reLogin(): Flowable<Any> =
+    fun reLogin(): Flowable<*> =
         sessionHandler?.reLogin()
             ?: Flowable.error<Any>(SessionTimeoutThrowable("Session过期", "-1"))
 
