@@ -68,11 +68,15 @@ open class RecyclerAdapter<D>() : RecyclerView.Adapter<RecyclerViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun getItems() = mDataSet
+
     fun clear() = mDataSet.clear()
 
     fun clearAndNotify() = mDataSet.clear().apply {
         notifyDataSetChanged()
     }
+
+    fun getItem(position: Int) = mDataSet[position]
 
     /**
      * 根据View Type返回布局资源
